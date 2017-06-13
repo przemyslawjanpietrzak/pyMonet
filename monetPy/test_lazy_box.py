@@ -13,6 +13,9 @@ class LazyBoxSpy:
 
 
 def test_lazy_box(mocker):
+    """
+    input function and all map functions should be called during called fold method
+    """
 
     lazy_box_spy = LazyBoxSpy()
     mocker.spy(lazy_box_spy, 'fn')
