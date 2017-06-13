@@ -9,6 +9,7 @@ class Semigroup:
     def __eq__(self, other):
         return self.value == other.value
 
+
 class Sum(Semigroup):
 
     def concat(self, semigroup):

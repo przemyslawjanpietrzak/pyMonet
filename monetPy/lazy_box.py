@@ -1,10 +1,10 @@
-class LazyBox: #  TODO add unit test
+class LazyBox:  # TODO add unit test
 
-    def __init__(self, value):
-        self.value = value
+    def __init__(self, constructor_fn):
+        self.constructor_fn = constructor_fn
 
     def map(self, fn):
-        return LazyBox(lambda: fn(self.value()))
+        return LazyBox(lambda: fn(self.constructor_fn()))
 
     def fold(self, fn):
-        return lambda: fn(self.value())
+        return fn(self.constructor_fn())
