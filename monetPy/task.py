@@ -13,7 +13,7 @@ class Task:
         :param value
         :type: any
         instant rejected Task
-        :return: Task<_ -> value>
+        :return: Task<_, resolve>
         """
         def result(_, resolve):
             return resolve(value)
@@ -26,7 +26,7 @@ class Task:
         :param value
         :type: any
         instant rejected Task
-        :return: Task<_ -> value>
+        :return: Task<reject, _>
         """
         def result(reject, _):
             return reject(value)
@@ -36,8 +36,8 @@ class Task:
     def map(self, fn):
         """
         :param fn: mapper function
-        :type fn: value -> other_value
-        :return: Task<_ -> other_value>
+        :type fn: value -> mapped_value
+        :return: Task<reject -> mapped_value>
         """
         def result(reject, resolve):
             return self.fork(
@@ -51,8 +51,8 @@ class Task:
         """
         also know as flatmap
         :param fn: mapper function
-        :type fn: value -> Task<other_value>
-        :return: Task<_ -> other_value>
+        :type fn: value -> Task<reject, mapped_value>
+        :return: Task<reject, mapped_value>
         """
         def result(reject, resolve):
             return self.fork(
