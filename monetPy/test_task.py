@@ -1,4 +1,5 @@
 from monetPy.task import Task
+from monetPy.utils import identity
 
 
 class TaskSpy:
@@ -12,8 +13,11 @@ class TaskSpy:
     def mapper(self, arg):
         return arg + 1
 
-    def side_effect(self, arg):
+    def side_effect(self, arg):  # remove?
         return arg
+
+    def folder(self, arg):
+        return Task(lambda reject, resolve: resolve(arg + 1))
 
     def fork_rejected(self, reject, resolve):
         reject(0)
@@ -111,4 +115,28 @@ def test_task_resolved_fork_should_applied_map_on_his_result():
 
     task_spy = TaskSpy()
     task = Task(task_spy.fork_resolved).map(task_spy.mapper)
+    task.fork(rejected_spy, resolved_spy)
+
+
+def test_task_rejected_fork_should_not_applied_fold_on_his_result():
+    def rejected_spy(value):
+        assert value == 0
+
+    def resolved_spy(value):
+        assert False
+
+    task_spy = TaskSpy()
+    task = Task(task_spy.fork_rejected).fold(task_spy.folder)
+    task.fork(rejected_spy, resolved_spy)
+
+
+def test_task_resolved_fork_should_applied_fold_on_his_result():
+    def rejected_spy(value):
+        assert False
+
+    def resolved_spy(value):
+        assert value == 42 + 1
+
+    task_spy = TaskSpy()
+    task = Task(task_spy.fork_resolved).fold(task_spy.folder)
     task.fork(rejected_spy, resolved_spy)
