@@ -3,11 +3,11 @@ class Semigroup:
     def __init__(self, value):
         self.value = value
 
-    def fold(self, fn):
-        return fn(self.value)
-
     def __eq__(self, other):
         return self.value == other.value
+
+    def fold(self, fn):
+        return fn(self.value)
 
 
 class Sum(Semigroup):
