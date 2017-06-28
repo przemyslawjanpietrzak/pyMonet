@@ -1,13 +1,18 @@
 # pyMonet
 
-[![Build Status](https://travis-ci.org/przemyslawjanpietrzak/pymonet.svg?branch=master)](https://travis-ci.org/przemyslawjanpietrzak/pymonet)
+[![Build Status](https://travis-ci.org/przemyslawjanpietrzak/pyMonet.svg?branch=master)](https://travis-ci.org/przemyslawjanpietrzak/pyMonet)
 
 High abstract python library for functional programming.
 Contains algebraic data structures known (or unknown) from Haskell or Scala.
 With MIT licence.
+
+
+# Install:
+`pip install pymonet`
  
  
 # Content:
+
 
 ## Box
 Boxs are data-types that store values. No restriction is placed on how they store these values, though there may be restrictions on some methods if a Box is also an instance of a sub-class of Box.
