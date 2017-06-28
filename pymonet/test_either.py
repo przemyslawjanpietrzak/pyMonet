@@ -1,6 +1,6 @@
 import pytest
-from monetPy.either import Either, Left, Right
-from monetPy.utils import identity
+from pymonet.either import Either, Left, Right
+from pymonet.utils import identity
 
 
 def either_operation(either):

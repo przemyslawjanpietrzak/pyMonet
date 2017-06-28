@@ -1,6 +1,6 @@
-# monet.py
+# pyMonet
 
-[![Build Status](https://travis-ci.org/przemyslawjanpietrzak/MonetPy.svg?branch=master)](https://travis-ci.org/przemyslawjanpietrzak/MonetPy)
+[![Build Status](https://travis-ci.org/przemyslawjanpietrzak/pymonet.svg?branch=master)](https://travis-ci.org/przemyslawjanpietrzak/pymonet)
 
 High abstract python library for functional programming.
 Contains algebraic data structures known (or unknown) from Haskell or Scala.
@@ -12,7 +12,7 @@ With MIT licence.
 ## Box
 Boxs are data-types that store values. No restriction is placed on how they store these values, though there may be restrictions on some methods if a Box is also an instance of a sub-class of Box.
 ```python
-from monetPy.box import Box
+from pymonet.box import Box
 box = Box(42)  # Box<42>
 (box
     .map(lambda value: value + 1)  # Box<43>
@@ -28,7 +28,7 @@ It also (originally) generalized a group (a monoid with all inverses) to a type 
 
 #### All
 ```python
-from monetPy.semigroups import All
+from pymonet.semigroups import All
 
 All(True).concat(All(False))  # All<False>
 All(True).concat(All(True))  # All<True>
@@ -42,7 +42,7 @@ All(True) == All(False)  # False
 
 #### Sum
 ```python
-from monetPy.semigroups import Sum
+from pymonet.semigroups import Sum
 
 Sum(42).concat(Sum(1))  # Sum<43>
 Sum(42).concat(Sum(1)).concat(Sum(1))  # Sum<44>
@@ -53,7 +53,7 @@ Sum(42).fold(lambda value: value)  # 42
 
 #### First
 ```python
-from monetPy.semigroups import First
+from pymonet.semigroups import First
 
 First('first').concat(First('Second'))  # First<"first">
 First('first').fold(lambda value: value[::-1])  # "tsrif"
@@ -61,7 +61,7 @@ First('first').fold(lambda value: value[::-1])  # "tsrif"
 
 #### Map
 ```python
-from monetPy.semigroups import Sum, All, First, Map
+from pymonet.semigroups import Sum, All, First, Map
 ingredient1 = Map({'score': Sum(1), 'won': All(True), 'captain': First('captain america')})
 ingredient2 = Map({'score': Sum(2), 'won': All(True), 'captain': First('iron man')})
 ingredient1.concat(ingredient2)  # Map<{'score': Sum(3), 'won': All(True), 'captain': First('captain america')}>
@@ -70,7 +70,7 @@ ingredient1.concat(ingredient2)  # Map<{'score': Sum(3), 'won': All(True), 'capt
 ## LazyBox
 LazyBox are data-types that store functions. Stored function will not be called until call of fold method
 ```python
-from monetPy.lazy_box import LazyBox
+from pymonet.lazy_box import LazyBox
 
 def fn():
     print('fn call')
@@ -95,7 +95,7 @@ mapped_lazy_box.fold(side_effect)
 ## Task
 Task are data-type for handle execution of functions (in lazy way) transform results of this function and handle errors.
 ```python
-from monetPy.task import Task
+from pymonet.task import Task
 
 def resolvable_fn(reject, resolve):
     print('resolve side effect')

@@ -1,5 +1,5 @@
-from monetPy.task import Task
-from monetPy.utils import identity
+from pymonet.task import Task
+from pymonet.utils import identity
 
 
 class TaskSpy:

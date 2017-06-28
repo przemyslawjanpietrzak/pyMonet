@@ -1,6 +1,6 @@
 import pytest
-from monetPy.lazy_box import LazyBox
-from monetPy.utils import identity
+from pymonet.lazy_box import LazyBox
+from pymonet.utils import identity
 
 
 class LazyBoxSpy:

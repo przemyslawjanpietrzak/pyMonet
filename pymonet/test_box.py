@@ -1,5 +1,5 @@
 import pytest
-from monetPy.box import Box
+from pymonet.box import Box
 
 
 def test_eq_should_compare_only_box_value():

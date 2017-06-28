@@ -1,6 +1,6 @@
 import pytest
-from monetPy.semigroups import Sum, All, First, Map
-from monetPy.utils import identity
+from pymonet.semigroups import Sum, All, First, Map
+from pymonet.utils import identity
 
 
 ingredient1 = Map({'score': Sum(1), 'won': All(True), 'captain': First('captain america')})
