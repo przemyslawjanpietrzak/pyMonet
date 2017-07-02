@@ -13,6 +13,35 @@ With MIT licence.
  
 # Content:
 
+## Either
+The Either type represents values with two possibilities: B value of type Either<A, B> is either Left<A> or Right<B>. But not both in the same time.
+
+
+```python
+from pymonet.either import Left, Right
+from pymonet.utils import identity
+
+def divide(divided, divider):
+    if divider == 0:
+        return Left('can not devide by 0')
+    return Right(divided, divider)
+    
+def handle_error(value):
+    print ('error {}'.format(value))
+
+def handle_success(value):
+    print ('success {}'.format(value))
+        
+(divide(42, 0)
+    .map(identity, lambda value: value + 1)
+    .fold(handle_error, handle_success))
+# error 42
+
+(divide(42, 1)
+    .map(identity, lambda value: value + 1)
+    .fold(handle_error, handle_success))
+# error 43
+```
 
 ## Box
 Boxs are data-types that store values. No restriction is placed on how they store these values, though there may be restrictions on some methods if a Box is also an instance of a sub-class of Box.
