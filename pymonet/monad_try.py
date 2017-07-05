@@ -10,9 +10,10 @@ class Try:
     @classmethod
     def of(cls, fn, *args):
         try:
+            # print *args
             return cls(fn(*args), True)
         except Exception as e:
-            return cls(e, True)
+            return cls(e, False)
 
     def map(self, mapper):
         if self.is_success:
@@ -29,11 +30,23 @@ class Try:
 
     def on_success(self, success_callback):
         if self.is_success:
-            return success_callback(self.value)
+            success_callback(self.value)
+        return self
 
     def on_fail(self, fail_callback):
         if not self.is_success:
-            return fail_callback(self.value)
+            fail_callback(self.value)
+        return self
 
-    def filter(self, filterer):
-        pass
+    def filter(self, filterer):  # TODO add unit test
+        if self.is_success and filterer(self.value):
+            return Try(self.value, True)
+        return Try(self.value, False)
+
+    def get(self):
+        return self.value
+
+    def get_or_else(self, default_value):
+        if self.is_success:
+            return self.value
+        return default_value
