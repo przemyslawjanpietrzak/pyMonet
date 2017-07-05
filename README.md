@@ -14,7 +14,7 @@ With MIT licence.
 # Content:
 
 ## Either
-The Either type represents values with two possibilities: B value of type Either<A, B> is either Left<A> or Right<B>. But not both in the same time.
+The Either type represents values with two possibilities: B value of type Either<A, B> is either Left<A> or Right<B,>. But not both in the same time.
 
 
 ```python
@@ -101,10 +101,10 @@ ingredient2 = Map({'score': Sum(2), 'won': All(True), 'captain': First('iron man
 ingredient1.concat(ingredient2)  # Map<{'score': Sum(3), 'won': All(True), 'captain': First('captain america')}>
 ```
 
-## LazyBox
-LazyBox are data-types that store functions. Stored function will not be called until call of fold method
+## Applicative
+Applicative are data-types that store functions. Stored function will not be called until call of fold method
 ```python
-from pymonet.lazy_box import LazyBox
+from pymonet.applicative import Applicative
 
 def fn():
     print('fn call')
@@ -117,9 +117,9 @@ def mapper(value):
 def side_effect(value):
     print('side effect of ' + value)
     
-lazy_box = LazyBox(fn)
-mapped_lazy_box = lazy_box.map(mapper)
-mapped_lazy_box.fold(side_effect)  
+applicative = Applicative(fn)
+mapped_applicative = applicative.map(mapper)
+mapped_applicative.fold(side_effect)  
 # fn call
 # mapper side effect of 42
 # side effect of 42 
