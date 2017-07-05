@@ -1,5 +1,6 @@
+import pytest
+
 from pymonet.monad_try import Try
-from exceptions import ZeroDivisionError
 
 
 def divide(dividend, divisor):
@@ -26,7 +27,7 @@ def test_try_should_call_fail_callback_with_result_of_function_when_exception_wa
 
     def fail_callback(error):
         assert type(error) == type(ZeroDivisionError())
-        assert error.message == 'integer division or modulo by zero'
+        assert str(error) == 'division by zero'
 
     (Try.of(divide, 42, 0)
         .on_success(success_callback)
@@ -42,7 +43,7 @@ def test_try_eq_should_compare_value_and_result_of_try():
 def test_try_should_appied_map_when_exception_was_thrown():
 
     def success_callback(value):
-        assert value == 22;
+        assert value == 22
 
     def fail_callback(error):
         assert True is False
@@ -59,7 +60,7 @@ def test_try_should_not_applied_map_when_exception_thrown():
 
     def fail_callback(error):
         assert type(error) == type(ZeroDivisionError())
-        assert error.message == 'integer division or modulo by zero'
+        assert str(error) == 'division by zero'
 
     def mapper(value):
         assert True is False
@@ -83,6 +84,6 @@ def test_get_method_should_return_value_with_or_without_exception_thrown():
 
     failed_value = Try.of(divide, 42, 0).get()
     assert type(failed_value) == type(ZeroDivisionError())
-    assert failed_value.message == 'integer division or modulo by zero'
+    assert str(failed_value) == 'division by zero'
 
 

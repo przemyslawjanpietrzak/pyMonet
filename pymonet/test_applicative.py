@@ -1,4 +1,5 @@
 import pytest
+
 from pymonet.applicative import Applicative
 from pymonet.utils import identity
 
