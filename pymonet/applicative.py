@@ -1,4 +1,4 @@
-class LazyBox:
+class Applicative:
     """
      Data type for storage any type of function.
      This function (and all his mappers) will be called only during calling fold method
@@ -12,18 +12,18 @@ class LazyBox:
 
     def map(self, fn):
         """
-        takes function (A) -> A and returns new LazyBox with mapped argument of LazyBox constructor function.
+        takes function (A) -> A and returns new LazyBox with mapped argument of Applicative constructor function.
         Both mapper end constructor will be called only during calling fold method
         :param fn: mapper function
         :type   (constructor_fn) -> B
-        :return: Lazybox<() -> fn(constructor_fn)>
+        :return: Applicative<() -> fn(constructor_fn)>
         """
-        return LazyBox(lambda: fn(self.constructor_fn()))
+        return Applicative(lambda: fn(self.constructor_fn()))
 
     def fold(self, fn):
         """
         takes function and call constructor function passing returned value to fn function.
-        It's only way to call function store in LazyBox
+        It's only way to call function store in Applicative
         :param fn: (constructor_fn) -> B
         :return: B
         """

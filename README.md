@@ -13,8 +13,23 @@ With MIT licence.
  
 # Content:
 
+### [Either](#either-1)
+The Either type represents values with two possibilities: B value of type Either<A, B> is either Left<A> or Right. But not both in the same time.
+### [Box](#box-1)
+Boxs are data-types that store values. No restriction is placed on how they store these values, though there may be restrictions on some methods if a Box is also an instance of a sub-class of Box.
+### [Semigroups](#semigroups-1) 
+In mathematics, a semigroup is an algebraic structure consisting of a set together with an associative binary operation.
+A semigroup generalizes a monoid in that there might not exist an identity element.
+It also (originally) generalized a group (a monoid with all inverses) to a type where every element did not have to have an inverse, thus the name semigroup.
+### [Applicative](#applicative-1) 
+Applicative are data-types that store functions. Stored function will not be called until call of fold method 
+### [Task](#task-1) 
+Task are data-type for handle execution of functions (in lazy way) transform results of this function and handle errors.
+### [Try](#try-1) 
+The Try control gives us the ability write safe code without focusing on try-catch blocks in the presence of exceptions. 
+
 ## Either
-The Either type represents values with two possibilities: B value of type Either<A, B> is either Left<A> or Right<B>. But not both in the same time.
+The Either type represents values with two possibilities: B value of type Either<A, B> is either Left<A> or Right. But not both in the same time.
 
 
 ```python
@@ -101,10 +116,10 @@ ingredient2 = Map({'score': Sum(2), 'won': All(True), 'captain': First('iron man
 ingredient1.concat(ingredient2)  # Map<{'score': Sum(3), 'won': All(True), 'captain': First('captain america')}>
 ```
 
-## LazyBox
-LazyBox are data-types that store functions. Stored function will not be called until call of fold method
+## Applicative
+Applicative are data-types that store functions. Stored function will not be called until call of fold method
 ```python
-from pymonet.lazy_box import LazyBox
+from pymonet.applicative import Applicative
 
 def fn():
     print('fn call')
@@ -117,9 +132,9 @@ def mapper(value):
 def side_effect(value):
     print('side effect of ' + value)
     
-lazy_box = LazyBox(fn)
-mapped_lazy_box = lazy_box.map(mapper)
-mapped_lazy_box.fold(side_effect)  
+applicative = Applicative(fn)
+mapped_applicative = applicative.map(mapper)
+mapped_applicative.fold(side_effect)  
 # fn call
 # mapper side effect of 42
 # side effect of 42 
@@ -159,4 +174,54 @@ resolvable_task.fold(mapper)
 
 rejectable_task.fold(mapper)
 # reject side effect
-```    
+```
+
+## Try
+The Try control gives us the ability write safe code without focusing on try-catch blocks in the presence of exceptions.
+```python
+from pymonet.monad_try import Try
+
+def divide(dividend, divisor):
+    return dividend / divisor
+    
+def success_callback(value):
+    print('success: {}'.format(value))
+
+def fail_callback(error):
+    print('error: {}'.format(value))
+
+(Try.of(divide, 42, 2)
+    .on_success(success_callback)
+    .on_fail(fail_callback))
+# success: 21
+
+(Try.of(divide, 42, 0)
+    .on_success(success_callback)
+    .on_fail(fail_callback))
+#error: division by zero
+```
+map method will be only applied mapper when exception was not thrown
+```python
+(Try.of(divide, 42, 2)
+    .map(lambda value: value + 1)
+    .on_success(success_callback)
+    .on_fail(fail_callback))
+# success: 22
+
+(Try.of(divide, 42, 0)
+    .on_success(success_callback)
+    .map(lambda value: value + 1)
+    .on_fail(fail_callback))
+#error: division by zero
+```
+get_or_else method returns value when exception was not thrown
+```python
+Try.of(divide, 42, 2).get_or_else('Holy Grail') # 21
+Try.of(divide, 42, 0).get_or_else('Holy Grail') # 'Holy Grail'
+```
+
+get method should return value with or without exception thrown
+```python
+Try.of(divide, 42, 2).get()  # 21
+Try.of(divide, 42, 0).get()  # ZeroDivisionError<'division by zero'>
+```
