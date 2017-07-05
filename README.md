@@ -13,19 +13,19 @@ With MIT licence.
  
 # Content:
 
-### [Either](#Either)
+### [Either](#either-1)
 The Either type represents values with two possibilities: B value of type Either<A, B> is either Left<A> or Right. But not both in the same time.
-### [Box](#Box)
+### [Box](#box-1)
 Boxs are data-types that store values. No restriction is placed on how they store these values, though there may be restrictions on some methods if a Box is also an instance of a sub-class of Box.
-### [Semigroups](#Semigroups) 
+### [Semigroups](#semigroups-1) 
 In mathematics, a semigroup is an algebraic structure consisting of a set together with an associative binary operation.
 A semigroup generalizes a monoid in that there might not exist an identity element.
 It also (originally) generalized a group (a monoid with all inverses) to a type where every element did not have to have an inverse, thus the name semigroup.
-### [Applicative](#Applicative) 
+### [Applicative](#applicative-1) 
 Applicative are data-types that store functions. Stored function will not be called until call of fold method 
-### [Task](#Task) 
+### [Task](#task-1) 
 Task are data-type for handle execution of functions (in lazy way) transform results of this function and handle errors.
-### [Try](#Try) 
+### [Try](#try-1) 
 The Try control gives us the ability write safe code without focusing on try-catch blocks in the presence of exceptions. 
 
 ## Either
