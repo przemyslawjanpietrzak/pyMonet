@@ -2,11 +2,16 @@ class Maybe():
 
     def __init__(self, value, is_nothing):
         self.is_nothing = is_nothing
-        if is_nothing:
+        if not is_nothing:
             self.value = value
 
+    def __eq__(self, other):
+        return isinstance(other, Maybe) and \
+            self.is_nothing == other.is_nothing and \
+            (self.is_nothing or self.value == other.value)
+
     @classmethod
-    def just(value):
+    def just(cls, value):
         """
         creates not empty maybe
         :params value: value to store in Maybe
@@ -16,7 +21,7 @@ class Maybe():
         return Maybe(value, False)
 
     @classmethod
-    def nothing():
+    def nothing(cls):
         """
         creates empty maybe
         :return Maybe<None>
@@ -50,7 +55,19 @@ class Maybe():
             return Maybe.nothing()
         return mapper(self.value)
 
-    def get_or_else(default_value):
+    def filter(self, filterer):
+        """
+        if Maybe is empty or filterer returns False return default_value, in other case
+        return new instance of Maybe with the same value
+        :params filterer:
+        :type (A) -> Boolean
+        :returns Maybe<A> | Maybe<None>
+        """
+        if self.is_nothing or not filterer(self.value):
+            return Maybe.nothing()
+        return Maybe.just(self.value)
+
+    def get_or_else(self, default_value):
         """
         if Maybe is empty return default_value, in other case
         returns Maybe.value
