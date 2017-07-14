@@ -9,24 +9,27 @@ With MIT licence.
 
 # Install:
 `pip install pymonet`
- 
- 
+
+
 # Content:
 
 ### [Either](#either-1)
 The Either type represents values with two possibilities: B value of type Either<A, B> is either Left<A> or Right. But not both in the same time.
+### [Maybe](#maybe-1)
+Maybe type is the most common way of representing nothingness (or the null type) with making the possibilities of NullPointer issues disappear.
+Maybe is effectively abstract and has two concrete subtypes: Some (also Box) and None (also Nothing).
 ### [Box](#box-1)
 Boxs are data-types that store values. No restriction is placed on how they store these values, though there may be restrictions on some methods if a Box is also an instance of a sub-class of Box.
-### [Semigroups](#semigroups-1) 
+### [Semigroups](#semigroups-1)
 In mathematics, a semigroup is an algebraic structure consisting of a set together with an associative binary operation.
 A semigroup generalizes a monoid in that there might not exist an identity element.
 It also (originally) generalized a group (a monoid with all inverses) to a type where every element did not have to have an inverse, thus the name semigroup.
-### [Applicative](#applicative-1) 
-Applicative are data-types that store functions. Stored function will not be called until call of fold method 
-### [Task](#task-1) 
+### [Applicative](#applicative-1)
+Applicative are data-types that store functions. Stored function will not be called until call of fold method
+### [Task](#task-1)
 Task are data-type for handle execution of functions (in lazy way) transform results of this function and handle errors.
-### [Try](#try-1) 
-The Try control gives us the ability write safe code without focusing on try-catch blocks in the presence of exceptions. 
+### [Try](#try-1)
+The Try control gives us the ability write safe code without focusing on try-catch blocks in the presence of exceptions.
 
 ## Either
 The Either type represents values with two possibilities: B value of type Either<A, B> is either Left<A> or Right. But not both in the same time.
@@ -40,13 +43,13 @@ def divide(divided, divider):
     if divider == 0:
         return Left('can not devide by 0')
     return Right(divided, divider)
-    
+
 def handle_error(value):
     print ('error {}'.format(value))
 
 def handle_success(value):
     print ('success {}'.format(value))
-        
+
 (divide(42, 0)
     .map(identity, lambda value: value + 1)
     .fold(handle_error, handle_success))
@@ -57,6 +60,66 @@ def handle_success(value):
     .fold(handle_error, handle_success))
 # error 43
 ```
+
+
+## Maybe
+Maybe type is the most common way of representing nothingness (or the null type) with making the possibilities of NullPointer issues disappear.
+Maybe is effectively abstract and has two concrete subtypes: Some (also Box) and None (also Nothing).
+
+
+```python
+from pymonet.Maybe import Maybe
+
+
+def get_index(item):
+    if item in [1,2,3]:
+        return Maybe.just(42)
+    return Maybe.nothing()
+
+get_index(42).get_or_else(0)  # 0
+get_index(1).get_or_else(0)  # 3
+
+```
+
+Fold and map methods will be applied only when maybe is not empty
+```python
+from pymonet.Maybe import Maybe
+
+
+get_index(42)\
+  .map(lambda value: value + 1)\
+  .fold(lambda value: Maybe.just(value + 1))\
+  .get_or_else(0)
+# 0
+
+get_index(1)\
+  .map(lambda value: value + 1)\
+  .fold(lambda value: Maybe.just(value + 1))\
+  .get_or_else(0)
+# 3
+```
+
+Filter method will be applied on maybe value and return it with or without value, depend on filter result:
+```python
+from pymonet.Maybe import Maybe
+
+
+get_index(42)\
+    .filter(lambda value: value % 2 == 0)\
+    .get_or_else(0)
+# 0
+
+get_index(3)\
+    .filter(lambda value: value % 2 == 0)\
+    .get_or_else(0)
+# 0
+
+get_index(2)\
+    .filter(lambda value: value % 2 == 0)\
+    .get_or_else(0)
+# 2
+```
+
 
 ## Box
 Boxs are data-types that store values. No restriction is placed on how they store these values, though there may be restrictions on some methods if a Box is also an instance of a sub-class of Box.
@@ -124,20 +187,20 @@ from pymonet.applicative import Applicative
 def fn():
     print('fn call')
     return 42
-    
+
 def mapper(value):
     print('mapper side effect of ' + value)
     return value + 1
-    
+
 def side_effect(value):
     print('side effect of ' + value)
-    
+
 applicative = Applicative(fn)
 mapped_applicative = applicative.map(mapper)
 mapped_applicative.fold(side_effect)  
 # fn call
 # mapper side effect of 42
-# side effect of 42 
+# side effect of 42
 ```
 
 
@@ -149,11 +212,11 @@ from pymonet.task import Task
 def resolvable_fn(reject, resolve):
     print('resolve side effect')
     resolve(42)
- 
+
 def rejectable_fn(reject, resolve):
     print('reject side effect')
     reject(0)
-    
+
 resolvable_task = Task.of(resolvable_fn)
 rejectable_task = Task.of(rejectable_fn)
 ```
@@ -183,7 +246,7 @@ from pymonet.monad_try import Try
 
 def divide(dividend, divisor):
     return dividend / divisor
-    
+
 def success_callback(value):
     print('success: {}'.format(value))
 
