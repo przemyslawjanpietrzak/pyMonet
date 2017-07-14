@@ -7,9 +7,11 @@ class Either:
         self.value = value
 
     def __eq__(self, other):
-        return isinstance(other, Either) and self.value == other.value and self.is_right() == other.is_right()
+        return isinstance(other, Either) and\
+            self.value == other.value and\
+            self.is_right() == other.is_right()
 
-    def case(error, success):
+    def case(self, error, success):
         """
         takes 2 functions call only one of then with either value and return her result
         :params error: function to call when Either is Left
@@ -71,7 +73,7 @@ class Right(Either):
         :type (A) -> Either<B>
         :return: Either<B>
         """
-        return right_fn(self.value)
+        return mapper(self.value)
 
     def is_right(self):
         """

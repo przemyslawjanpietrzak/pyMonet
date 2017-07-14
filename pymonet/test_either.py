@@ -4,12 +4,12 @@ from pymonet.either import Either, Left, Right
 from pymonet.utils import increase
 
 
-class EitherSpy;
+class EitherSpy:
 
-    def error_handler(value):
+    def error_handler(value, *args):
         pass
 
-    def success_handler(value):
+    def success_handler(value, *args):
         pass
 
 
@@ -60,7 +60,7 @@ def test_case_method_should_call_proper_handler(mocker):
     assert either_spy.success_handler.call_count == 0
 
 
-    Roght(42).case(
+    Right(42).case(
         success=either_spy.success_handler,
         error=either_spy.error_handler
     )
