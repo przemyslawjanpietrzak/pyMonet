@@ -9,7 +9,7 @@ class Either:
     def __eq__(self, other):
         return isinstance(other, Either) and\
             self.value == other.value and\
-            self.is_right() == other.is_right()
+                self.is_right() == other.is_right()
 
     def case(self, error, success):
         """
