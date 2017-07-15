@@ -9,28 +9,28 @@ With MIT licence.
 
 # Install:
 `pip install pymonet`
- 
- 
+
+
 # Content:
 
 ### [Either](#either-1)
 The Either type represents values with two possibilities: B value of type Either<A, B> is either Left<A> or Right. But not both in the same time.
 ### [Box](#box-1)
 Boxs are data-types that store values. No restriction is placed on how they store these values, though there may be restrictions on some methods if a Box is also an instance of a sub-class of Box.
-### [Semigroups](#semigroups-1) 
+### [Semigroups](#semigroups-1)
 In mathematics, a semigroup is an algebraic structure consisting of a set together with an associative binary operation.
 A semigroup generalizes a monoid in that there might not exist an identity element.
 It also (originally) generalized a group (a monoid with all inverses) to a type where every element did not have to have an inverse, thus the name semigroup.
-### [Applicative](#applicative-1) 
-Applicative are data-types that store functions. Stored function will not be called until call of fold method 
-### [Task](#task-1) 
+### [Applicative](#applicative-1)
+Applicative are data-types that store functions. Stored function will not be called until call of fold method
+### [Task](#task-1)
 Task are data-type for handle execution of functions (in lazy way) transform results of this function and handle errors.
-### [Try](#try-1) 
-The Try control gives us the ability write safe code without focusing on try-catch blocks in the presence of exceptions. 
+### [Try](#try-1)
+The Try control gives us the ability write safe code without focusing on try-catch blocks in the presence of exceptions.
 
 ## Either
 The Either type represents values with two possibilities: B value of type Either<A, B> is either Left<A> or Right. But not both in the same time.
-
+Left represents error value so any maps and fold will NOT be applied on it.
 
 ```python
 from pymonet.either import Left, Right
@@ -38,24 +38,26 @@ from pymonet.utils import identity
 
 def divide(divided, divider):
     if divider == 0:
-        return Left('can not devide by 0')
+        return Left('can not divide by 0')
     return Right(divided, divider)
-    
+
 def handle_error(value):
     print ('error {}'.format(value))
 
 def handle_success(value):
     print ('success {}'.format(value))
-        
+
 (divide(42, 0)
-    .map(identity, lambda value: value + 1)
-    .fold(handle_error, handle_success))
+    .map(lambda value: value + 1)
+    .fold(lambda value: Right(value + 1))
+    .case(error=handle_error, success=handle_success))
 # error 42
 
 (divide(42, 1)
     .map(identity, lambda value: value + 1)
-    .fold(handle_error, handle_success))
-# error 43
+    .fold(lambda value: Right(value + 1))
+    .case(error=handle_error, success=handle_success))
+# error 44
 ```
 
 ## Box
@@ -124,20 +126,20 @@ from pymonet.applicative import Applicative
 def fn():
     print('fn call')
     return 42
-    
+
 def mapper(value):
     print('mapper side effect of ' + value)
     return value + 1
-    
+
 def side_effect(value):
     print('side effect of ' + value)
-    
+
 applicative = Applicative(fn)
 mapped_applicative = applicative.map(mapper)
 mapped_applicative.fold(side_effect)  
 # fn call
 # mapper side effect of 42
-# side effect of 42 
+# side effect of 42
 ```
 
 
@@ -149,11 +151,11 @@ from pymonet.task import Task
 def resolvable_fn(reject, resolve):
     print('resolve side effect')
     resolve(42)
- 
+
 def rejectable_fn(reject, resolve):
     print('reject side effect')
     reject(0)
-    
+
 resolvable_task = Task.of(resolvable_fn)
 rejectable_task = Task.of(rejectable_fn)
 ```
@@ -183,7 +185,7 @@ from pymonet.monad_try import Try
 
 def divide(dividend, divisor):
     return dividend / divisor
-    
+
 def success_callback(value):
     print('success: {}'.format(value))
 
