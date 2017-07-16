@@ -1,2 +1,3 @@
 pytest
 pytest-mock
+flake8==3.3.0

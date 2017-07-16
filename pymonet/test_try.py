@@ -1,5 +1,3 @@
-import pytest
-
 from pymonet.monad_try import Try
 
 
@@ -10,9 +8,9 @@ def divide(dividend, divisor):
 def test_try_should_call_success_callback_with_result_of_function_when_exception_was_not_thrown():
 
     def success_callback(value):
-        assert value == 21;
+        assert value == 21
 
-    def fail_callback(error):
+    def fail_callback(_):
         assert True is False
 
     (Try.of(divide, 42, 2)
@@ -22,11 +20,11 @@ def test_try_should_call_success_callback_with_result_of_function_when_exception
 
 def test_try_should_call_fail_callback_with_result_of_function_when_exception_was_thrown():
 
-    def success_callback(value):
+    def success_callback(_):
         assert True is False
 
     def fail_callback(error):
-        assert type(error) == type(ZeroDivisionError())
+        assert isinstance(error, ZeroDivisionError)
         assert str(error) == 'division by zero'
 
     (Try.of(divide, 42, 0)
@@ -45,7 +43,7 @@ def test_try_should_appied_map_when_exception_was_thrown():
     def success_callback(value):
         assert value == 22
 
-    def fail_callback(error):
+    def fail_callback(_):
         assert True is False
 
     (Try.of(divide, 42, 2)
@@ -55,14 +53,14 @@ def test_try_should_appied_map_when_exception_was_thrown():
 
 
 def test_try_should_not_applied_map_when_exception_thrown():
-    def success_callback(value):
+    def success_callback(_):
         assert True is False
 
     def fail_callback(error):
-        assert type(error) == type(ZeroDivisionError())
+        assert isinstance(error, ZeroDivisionError)
         assert str(error) == 'division by zero'
 
-    def mapper(value):
+    def mapper(_):
         assert True is False
 
     (Try.of(divide, 42, 0)
@@ -83,7 +81,5 @@ def test_get_method_should_return_value_with_or_without_exception_thrown():
     assert Try.of(divide, 42, 2).get() == 21
 
     failed_value = Try.of(divide, 42, 0).get()
-    assert type(failed_value) == type(ZeroDivisionError())
+    assert isinstance(failed_value, ZeroDivisionError)
     assert str(failed_value) == 'division by zero'
-
-

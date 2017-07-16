@@ -1,2 +1,6 @@
-identity = lambda value: value
-increase = lambda value: value + 1
+def identity(value):
+    return value
+
+
+def increase(value):
+    return value + 1

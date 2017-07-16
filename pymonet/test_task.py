@@ -1,5 +1,4 @@
 from pymonet.task import Task
-from pymonet.utils import identity
 
 
 class TaskSpy:
@@ -19,10 +18,10 @@ class TaskSpy:
     def folder(self, arg):
         return Task(lambda reject, resolve: resolve(arg + 1))
 
-    def fork_rejected(self, reject, resolve):
+    def fork_rejected(self, reject, _):
         reject(0)
 
-    def fork_resolved(self, reject, resolve):
+    def fork_resolved(self, _, resolve):
         resolve(42)
 
 
@@ -61,7 +60,7 @@ def test_task_rejected_fork_should_be_called_only_during_calling_fork(mocker):
 
 
 def test_task_resolved_fork_should_return_resolved_value():
-    def rejected_spy(value):
+    def rejected_spy(_):
         assert False
 
     def resolved_spy(value):
@@ -76,12 +75,13 @@ def test_task_rejected_fork_should_return_resolved_value():
     def rejected_spy(value):
         assert value == 0
 
-    def resolved_spy(value):
+    def resolved_spy(_):
         assert False
 
     task_spy = TaskSpy()
     task = Task(task_spy.fork_rejected)
     task.fork(rejected_spy, resolved_spy)
+
 
 def test_task_maper_should_be_called_during_calling_fork(mocker):
     task_spy = TaskSpy()
@@ -98,7 +98,7 @@ def test_task_rejected_fork_should_not_applied_map_on_his_result():
     def rejected_spy(value):
         assert value == 0
 
-    def resolved_spy(value):
+    def resolved_spy(_):
         assert False
 
     task_spy = TaskSpy()
@@ -107,7 +107,7 @@ def test_task_rejected_fork_should_not_applied_map_on_his_result():
 
 
 def test_task_resolved_fork_should_applied_map_on_his_result():
-    def rejected_spy(value):
+    def rejected_spy(_):
         assert False
 
     def resolved_spy(value):
@@ -122,7 +122,7 @@ def test_task_rejected_fork_should_not_applied_fold_on_his_result():
     def rejected_spy(value):
         assert value == 0
 
-    def resolved_spy(value):
+    def resolved_spy(_):
         assert False
 
     task_spy = TaskSpy()
@@ -131,7 +131,7 @@ def test_task_rejected_fork_should_not_applied_fold_on_his_result():
 
 
 def test_task_resolved_fork_should_applied_fold_on_his_result():
-    def rejected_spy(value):
+    def rejected_spy(_):
         assert False
 
     def resolved_spy(value):

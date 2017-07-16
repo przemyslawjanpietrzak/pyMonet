@@ -1,6 +1,4 @@
-import pytest
-
-from pymonet.either import Either, Left, Right
+from pymonet.either import Left, Right
 from pymonet.utils import increase
 
 
@@ -46,6 +44,7 @@ def test_fold_should_be_applied_only_on_current_value_and_return_value():
     assert Left(42).fold(increase) == 42
     assert Right(42).fold(increase) == 43
 
+
 def test_case_method_should_call_proper_handler(mocker):
     either_spy = EitherSpy()
     mocker.spy(either_spy, 'error_handler')
@@ -58,7 +57,6 @@ def test_case_method_should_call_proper_handler(mocker):
 
     assert either_spy.error_handler.call_count == 1
     assert either_spy.success_handler.call_count == 0
-
 
     Right(42).case(
         success=either_spy.success_handler,
