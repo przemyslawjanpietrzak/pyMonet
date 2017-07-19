@@ -57,7 +57,7 @@ def handle_success(value):
     .map(identity, lambda value: value + 1)
     .fold(lambda value: Right(value + 1))
     .case(error=handle_error, success=handle_success))
-# error 44
+# success 44
 ```
 
 ## Box
