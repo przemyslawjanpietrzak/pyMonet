@@ -7,32 +7,39 @@ class Either:
         self.value = value
 
     def __eq__(self, other):
-        return self.value == other.value and self.is_right() == other.is_right()
+        return isinstance(other, Either) and\
+            self.value == other.value and\
+                self.is_right() == other.is_right()
+
+    def case(self, error, success):
+        """
+        takes 2 functions call only one of then with either value and return her result
+        :params error: function to call when Either is Left
+        :type (A) -> B
+        :params success: function to call when Either is Right
+        :type (A) -> B
+        :return: B
+        """
+        if self.is_right():
+            return success(self.value)
+        return error(self.value)
 
 
 class Left(Either):
 
-    def map(self, left_fn, right_fn):
+    def map(self, _):
         """
-        takes 2 functions and applied first one on current Either value and returns new left Either mapped value
-        :param left_fn: mapper for left value of Either
-        :type (A) -> B
-        :param right_fn: mapper for right value of Either, never called
-        :type: (Any) -> Any
-        :return: Left<B>
+        takes mapper function and return new instance of Left with the same value
+        :return: Left<A>
         """
-        return Left(left_fn(self.value))
+        return Left(self.value)
 
-    def fold(self, left_fn, right_fn):
+    def fold(self, _):
         """
-        takes 2 functions and applied first one on current Either value and returns mapped value
-        :param left_fn: mapper for left value of Either
-        :type (A) -> B
-        :param right_fn: mapper for right value of Either, never called
-        :type: (Any) -> Any
-        :return: B
+        takes mapper function and return value of Left
+        :return: A
         """
-        return left_fn(self.value)
+        return self.value
 
     def is_left(self):
         """
@@ -50,27 +57,23 @@ class Left(Either):
 
 class Right(Either):
 
-    def map(self, left_fn, right_fn):
+    def map(self, mapper):
         """
-        takes 2 functions and applied second one on current Either value and returns new left Either mapped value
-        :param left_fn: mapper for left value of Either, never called
-        :type: (Any) -> Any
-        :param right_fn: mapper for right value of Either
+        takes mapper function and return new instance of Right with mapped value
+        :param mapper: function to apply on Right value
         :type (A) -> B
-        :return: Left<B>
+        :return: Right<B>
         """
-        return Right(right_fn(self.value))
+        return Right(mapper(self.value))
 
-    def fold(self, left_fn, right_fn):
+    def fold(self, mapper):
         """
-        takes 2 functions and applied second one on current Either value and returns mapped value
-        :param left_fn: mapper for left value of Either, never called
-        :type: (Any) -> Any
-        :param right_fn: mapper for right value of Either
-        :type (A) -> B
-        :return: Left<B>
+        takes mapper function and returns result of them called with Right value
+        :param mapper: function to apply on Right value
+        :type (A) -> Either<B>
+        :return: Either<B>
         """
-        return right_fn(self.value)
+        return mapper(self.value)
 
     def is_right(self):
         """
