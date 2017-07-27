@@ -15,6 +15,9 @@ With MIT licence.
 
 ### [Either](#either-1)
 The Either type represents values with two possibilities: B value of type Either<A, B> is either Left<A> or Right. But not both in the same time.
+### [Maybe](#maybe-1)
+Maybe type is the most common way of representing nothingness (or the null type) with making the possibilities of NullPointer issues disappear.
+Maybe is effectively abstract and has two concrete subtypes: Some (also Box) and None (also Nothing).
 ### [Box](#box-1)
 Boxs are data-types that store values. No restriction is placed on how they store these values, though there may be restrictions on some methods if a Box is also an instance of a sub-class of Box.
 ### [Semigroups](#semigroups-1)
@@ -59,6 +62,66 @@ def handle_success(value):
     .case(error=handle_error, success=handle_success))
 # success  44
 ```
+
+
+## Maybe
+Maybe type is the most common way of representing nothingness (or the null type) with making the possibilities of NullPointer issues disappear.
+Maybe is effectively abstract and has two concrete subtypes: Some (also Box) and None (also Nothing).
+
+
+```python
+from pymonet.Maybe import Maybe
+
+
+def get_index(item):
+    if item in [1,2,3]:
+        return Maybe.just(42)
+    return Maybe.nothing()
+
+get_index(42).get_or_else(0)  # 0
+get_index(1).get_or_else(0)  # 3
+
+```
+
+Fold and map methods will be applied only when maybe is not empty
+```python
+from pymonet.Maybe import Maybe
+
+
+get_index(42)\
+  .map(lambda value: value + 1)\
+  .fold(lambda value: Maybe.just(value + 1))\
+  .get_or_else(0)
+# 0
+
+get_index(1)\
+  .map(lambda value: value + 1)\
+  .fold(lambda value: Maybe.just(value + 1))\
+  .get_or_else(0)
+# 3
+```
+
+Filter method will be applied on maybe value and return it with or without value, depend on filter result:
+```python
+from pymonet.Maybe import Maybe
+
+
+get_index(42)\
+    .filter(lambda value: value % 2 == 0)\
+    .get_or_else(0)
+# 0
+
+get_index(3)\
+    .filter(lambda value: value % 2 == 0)\
+    .get_or_else(0)
+# 0
+
+get_index(2)\
+    .filter(lambda value: value % 2 == 0)\
+    .get_or_else(0)
+# 2
+```
+
 
 ## Box
 Boxs are data-types that store values. No restriction is placed on how they store these values, though there may be restrictions on some methods if a Box is also an instance of a sub-class of Box.
