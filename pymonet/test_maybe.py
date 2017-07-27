@@ -1,7 +1,8 @@
 from pymonet.maybe import Maybe
 from pymonet.utils import increase
 
-def wrong_mapper(value):
+
+def wrong_mapper(_):
     assert True is False
 
 
@@ -34,7 +35,7 @@ def test_maybe_get_or_else_method_should_return_maybe_value_when_monad_is_not_em
     assert Maybe.just(42).get_or_else(0) == 42
 
 
-def test_maybe_get_or_else_method_should_return_argument_when_monad_is_empy():
+def test_maybe_get_or_else_method_should_return_argument_when_monad_is_emtpy():
     assert Maybe.nothing().get_or_else(0) == 0
 
 
