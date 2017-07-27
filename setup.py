@@ -4,7 +4,7 @@ from setuptools import setup
 setup(
   name='pymonet',
   packages=['pymonet'],
-  version='0.3',
+  version='0.4.0',
   description='High abstract python library for functional programming. Contains algebraic data structures known from Haskell or Scala.',
   author='Przemyslaw Jan Pietrzak',
   author_email='przemyslaw.jan.pietrzak@gmail.com',
