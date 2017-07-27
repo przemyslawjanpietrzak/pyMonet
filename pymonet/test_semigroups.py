@@ -1,6 +1,4 @@
-import pytest
 from pymonet.semigroups import Sum, All, First, Map
-from pymonet.utils import identity
 
 
 ingredient1 = Map({'score': Sum(1), 'won': All(True), 'captain': First('captain america')})
@@ -40,7 +38,9 @@ def test_first():
 
 
 def test_map3():
-    assert ingredient1.concat(ingredient2) == Map({'score': Sum(3), 'won': All(True), 'captain': First('captain america')})
+    assert ingredient1.concat(ingredient2) == Map(
+        {'score': Sum(3), 'won': All(True), 'captain': First('captain america')}
+    )
 
 
 def test_map1():
@@ -49,5 +49,5 @@ def test_map1():
 
 
 def test_map2():
-    assert ingredient1.concat(ingredient2.concat(ingredient3))== Map(
+    assert ingredient1.concat(ingredient2.concat(ingredient3)) == Map(
         {'score': Sum(6), 'won': All(False), 'captain': First('captain america')})

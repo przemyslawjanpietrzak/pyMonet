@@ -1,7 +1,4 @@
-import pytest
-
 from pymonet.applicative import Applicative
-from pymonet.utils import identity
 
 
 class ApplicativeSpy:
@@ -36,4 +33,3 @@ def test_applicative(mocker):
     assert applicative.fold(lambda number: number + 1) == 44
     assert applicative_spy.fn.call_count == 1
     assert applicative_spy.side_effect.call_count == 1
-
