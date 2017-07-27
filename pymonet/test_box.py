@@ -1,4 +1,3 @@
-import pytest
 from pymonet.box import Box
 
 

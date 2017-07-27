@@ -32,6 +32,7 @@ def compose(value, *functions):
         value
     )
 
+
 def pipe(value, *functions):
     """
     Performs ledt-to-right function composition.
