@@ -10,11 +10,11 @@ def increase(value):
 
 
 def curried_map(mapper):
-    return lambda lst: list(map(mapper, lst))
+    return lambda collection: [mapper(item) for item in collection]
 
 
 def curried_filter(filterer):
-    return lambda lst: list(filter(filterer, lst))
+    return lambda collection: [item for item in collection if filterer(item)]
 
 
 def compose(value, *functions):
