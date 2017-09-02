@@ -4,6 +4,6 @@ install:
   - pip install -r requirements.txt
 script:
   - flake8 ./pymonet --max-line-length=120
-  - py.test ./pymonet --cov=.
-  - coverage report --omit=setup.py pymonet/test_*.py
+  - py.test ./pymonet --cov=./pymonet/
+  - coverage report  --omit=setup.py pymonet/test_*.py
   - coveralls
