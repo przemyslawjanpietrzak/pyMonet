@@ -38,7 +38,7 @@ class Try:
             fail_callback(self.value)
         return self
 
-    def filter(self, filterer):  # TODO add unit test
+    def filter(self, filterer):
         if self.is_success and filterer(self.value):
             return Try(self.value, True)
         return Try(self.value, False)
