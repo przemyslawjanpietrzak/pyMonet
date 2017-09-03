@@ -10,7 +10,7 @@ from pymonet.utils import \
 def test_identity_should_return_first_argument():
     assert identity(42) is 42
     assert identity('string') is 'string'
-    assert identity([1,2,3,4,5]) == [1,2,3,4,5]
+    assert identity([1, 2, 3, 4, 5]) == [1, 2, 3, 4, 5]
     assert identity(None) is None
 
 
