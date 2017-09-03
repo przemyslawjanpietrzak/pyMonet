@@ -5,28 +5,26 @@ class Try:
         self.is_success = is_success
 
     def __eq__(self, other):
-        return self.value == other.value and self.is_success == other.is_success
+        return isinstance(other, type(self))\
+            and self.value == other.value\
+            and self.is_success == other.is_success
 
     @classmethod
     def of(cls, fn, *args):
         try:
-            # print *args
             return cls(fn(*args), True)
         except Exception as e:
             return cls(e, False)
 
     def map(self, mapper):
         if self.is_success:
-            return Try(
-                mapper(self.value),
-                True
-            )
+            return Try(mapper(self.value), True)
         return Try(self.value, False)
 
     def fold(self, mapper):
         if self.is_success:
-            return Try.of(mapper, self.value)
-        return self.value
+            return mapper(self.value)
+        return self
 
     def on_success(self, success_callback):
         if self.is_success:
