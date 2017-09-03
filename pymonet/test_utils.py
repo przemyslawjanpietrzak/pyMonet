@@ -1,9 +1,17 @@
 from pymonet.utils import \
+    identity,\
     increase,\
     compose,\
     pipe,\
     curried_map as map,\
     curried_filter as filter
+
+
+def test_identity_should_return_first_argument():
+    assert identity(42) is 42
+    assert identity('string') is 'string'
+    assert identity([1, 2, 3, 4, 5]) == [1, 2, 3, 4, 5]
+    assert identity(None) is None
 
 
 def test_compose_should_applied_function_on_value_and_return_it_result():

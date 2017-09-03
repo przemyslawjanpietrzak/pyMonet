@@ -3,3 +3,4 @@
 .idea
 pymonet.egg-info
 dist
+.coverage
