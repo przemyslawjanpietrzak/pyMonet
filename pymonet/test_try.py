@@ -52,7 +52,49 @@ def test_try_should_appied_map_when_exception_was_thrown():
         .on_fail(fail_callback))
 
 
+def test_try_should_appied_fold_when_exception_not_was_thrown():
+
+    def fail_callback(_):
+        assert True is False
+
+    (Try.of(divide, 42, 2)
+        .fold(lambda value: Try.of(divide, 42, 3))
+        .on_success(lambda value: value == 7)
+        .on_fail(fail_callback))
+
+
+def test_try_should_not_appied_fold_when_exception_was_thrown():
+
+    def success_callback(_):
+        assert True is False
+
+    def fail_callback(error):
+        assert isinstance(error, ZeroDivisionError)
+        assert str(error) == 'division by zero'
+
+    (Try.of(divide, 42, 0)
+        .fold(lambda value: Try.of(divide, 42, 3))
+        .on_success(success_callback)
+        .on_fail(fail_callback))
+
+
+def test_when_fold_is_rejected_monad_also_should_be_rejected():
+
+    def success_callback(_):
+        assert True is False
+
+    def fail_callback(error):
+        assert isinstance(error, ZeroDivisionError)
+        assert str(error) == 'float division by zero'
+
+    (Try.of(divide, 42, 2)
+        .fold(lambda value: Try.of(divide, value, 0))
+        .on_success(success_callback)
+        .on_fail(fail_callback))
+
+
 def test_try_should_not_applied_map_when_exception_thrown():
+
     def success_callback(_):
         assert True is False
 
@@ -83,3 +125,11 @@ def test_get_method_should_return_value_with_or_without_exception_thrown():
     failed_value = Try.of(divide, 42, 0).get()
     assert isinstance(failed_value, ZeroDivisionError)
     assert str(failed_value) == 'division by zero'
+
+
+def test_filer_should_converts_to_fail_when_predicate_returns_false():
+    filtered = Try.of(divide, 42, 2).filter(lambda value: value % 2 == 0.0)
+    assert not filtered.is_success
+
+    not_filtered = Try.of(divide, 42, 2).filter(lambda value: value % 3 == 0.0)
+    assert not_filtered.is_success
