@@ -83,3 +83,12 @@ def test_get_method_should_return_value_with_or_without_exception_thrown():
     failed_value = Try.of(divide, 42, 0).get()
     assert isinstance(failed_value, ZeroDivisionError)
     assert str(failed_value) == 'division by zero'
+
+
+
+def test_filer_should_converts_to_fail_when_predicate_returns_false():
+    filtered = Try.of(divide, 42, 2).filter(lambda value: value % 2 == 0.0)
+    assert not filtered.is_success
+
+    not_filtered = Try.of(divide, 42, 2).filter(lambda value: value % 3 == 0.0)
+    assert not_filtered.is_success

@@ -15,10 +15,7 @@ class Task:
         instant rejected Task
         :return: Task<_, resolve>
         """
-        def result(_, resolve):
-            return resolve(value)
-
-        return result
+        return lambda _, resolve: resolve(value)
 
     @classmethod
     def reject(cls, value):
@@ -28,10 +25,7 @@ class Task:
         instant rejected Task
         :return: Task<reject, _>
         """
-        def result(reject, _):
-            return reject(value)
-
-        return result
+        return lambda reject, _: reject(value)
 
     def map(self, fn):
         """
