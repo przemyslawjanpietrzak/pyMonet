@@ -1,5 +1,7 @@
 from pymonet.either import Left, Right
 from pymonet.utils import increase
+from pymonet.monadlaw_tester import get_associativity_test, get_left_unit_test, get_right_unit_data
+from pymonet.utils import increase, identity
 
 
 class EitherSpy:
@@ -65,3 +67,18 @@ def test_case_method_should_call_proper_handler(mocker):
 
     assert either_spy.error_handler.call_count == 1
     assert either_spy.success_handler.call_count == 1
+
+
+def test_maybe_associativity_law():
+    get_associativity_test(Right(42), increase, identity)
+    get_associativity_test(Left(0), increase, identity)
+
+
+def test_maybe_left_unit_law():
+    get_left_unit_test(Right, 42, increase, 42)
+    get_left_unit_test(Left, 0, increase, 42)
+
+
+def test_maybe_right_unit_data_law():
+    get_right_unit_data(Right, 42)
+    get_right_unit_data(Left, 42)
