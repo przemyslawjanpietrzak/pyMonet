@@ -1,5 +1,6 @@
 from pymonet.maybe import Maybe
-from pymonet.utils import increase
+from pymonet.utils import increase, identity
+from pymonet.monadlaw_tester import get_associativity_test, get_left_unit_test, get_right_unit_data
 
 
 def wrong_mapper(_):
@@ -50,3 +51,18 @@ def test_maybe_if_filter_returns_false_method_should_return_empty_maybe():
 
 def test_maybe_if_filter_returns_true_method_should_return_self():
     assert Maybe.just(42).filter(lambda value: value % 2 == 0) == Maybe.just(42)
+
+
+def test_maybe_associativity_law():
+    get_associativity_test(Maybe.just(42), increase, identity)
+    get_associativity_test(Maybe.nothing(), increase, identity)
+
+
+def test_maybe_left_unit_law():
+    get_left_unit_test(Maybe.just, 42, increase, 42, use_constructor=False)
+    get_left_unit_test(Maybe.nothing, 42, increase, 42, use_constructor=False)
+
+
+def test_maybe_right_unit_data_law():
+    get_right_unit_data(Maybe.just, 42, use_constructor=False)
+    get_right_unit_data(Maybe.nothing, 42, use_constructor=False)
