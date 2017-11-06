@@ -1,4 +1,6 @@
 from pymonet.box import Box
+from pymonet.monadlaw_tester import get_associativity_test, get_left_unit_test, get_right_unit_data
+from pymonet.utils import increase, identity
 
 
 def test_eq_should_compare_only_box_value():
@@ -23,3 +25,16 @@ def test_map_should_return_new_instance_of_box():
 def test_fold_should_return_result_of_fold_function_called_with_box_value():
     box = Box(42)
     assert box.fold(lambda value: value + 1) == 43
+
+
+def test_maybe_associativity_law():
+    get_associativity_test(Box(42), increase, identity)
+
+
+def test_maybe_left_unit_law():
+    get_left_unit_test(Box, 42, increase, 42)
+
+
+def test_maybe_right_unit_data_law():
+    get_right_unit_data(Box, 42)
+
