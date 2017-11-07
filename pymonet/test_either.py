@@ -1,6 +1,6 @@
 from pymonet.either import Left, Right
 from pymonet.monad_law_tester import get_associativity_test, get_left_unit_test, get_right_unit_data
-from pymonet.utils import increase, identity
+from pymonet.utils import increase
 
 
 class EitherSpy:
@@ -40,8 +40,8 @@ def test_is_left_should_return_suitable_value():
     assert not Right(42).is_left()
 
 
-def test_fold_should_be_applied_only_on_current_value_and_return_value():
-    assert Left(42).bind(lambda value: Right(value + 1)),value == 42
+def test_bind_should_be_applied_only_on_current_value_and_return_value():
+    assert Left(42).bind(lambda value: Right(value + 1)).value == 42
     assert Right(42).bind(lambda value: Right(value + 1)).value == 43
     assert Right(42).bind(lambda value: Left(value + 1)).value == 43
 

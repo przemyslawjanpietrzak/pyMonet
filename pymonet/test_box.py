@@ -1,6 +1,5 @@
 from pymonet.box import Box
 from pymonet.monad_law_tester import get_associativity_test, get_left_unit_test, get_right_unit_data
-from pymonet.utils import increase, identity
 
 
 def test_eq_should_compare_only_box_value():
@@ -36,7 +35,7 @@ def test_maybe_associativity_law():
 
 
 def test_maybe_left_unit_law():
-    get_left_unit_test(Box, 42, increase, 42)()
+    get_left_unit_test(Box, 42, lambda value: Box(value + 1))()
 
 
 def test_maybe_right_unit_data_law():

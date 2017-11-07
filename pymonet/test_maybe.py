@@ -1,6 +1,6 @@
 from pymonet.maybe import Maybe
-from pymonet.utils import increase, identity
-from pymonet.monadlaw_tester import get_associativity_test, get_left_unit_test, get_right_unit_data
+from pymonet.utils import increase
+from pymonet.monad_law_tester import get_associativity_test, get_left_unit_test, get_right_unit_data
 
 
 def wrong_mapper(_):
@@ -24,12 +24,12 @@ def test_maybe_map_should_not_call_mapper_when_monad_has_nothing():
     Maybe.nothing().map(wrong_mapper)
 
 
-def test_maybe_fold_should_retrun_result_of_mapper_called_with_maybe_value():
-    assert Maybe.just(42).fold(increase) == 43
+def test_maybe_bind_should_retrun_result_of_mapper_called_with_maybe_value():
+    assert Maybe.just(42).bind(increase) == 43
 
 
-def test_maybe_fold_should_not_call_mapper_when_monad_has_nothing():
-    Maybe.nothing().fold(wrong_mapper)
+def test_maybe_bind_should_not_call_mapper_when_monad_has_nothing():
+    Maybe.nothing().bind(wrong_mapper)
 
 
 def test_maybe_get_or_else_method_should_return_maybe_value_when_monad_is_not_empy():
@@ -54,15 +54,18 @@ def test_maybe_if_filter_returns_true_method_should_return_self():
 
 
 def test_maybe_associativity_law():
-    get_associativity_test(Maybe.just(42), increase, identity)
-    get_associativity_test(Maybe.nothing(), increase, identity)
+    get_associativity_test(
+        monadic_value=Maybe.just(42),
+        mapper1=lambda value: Maybe.just(value + 1),
+        mapper2=lambda value: Maybe.just(value + 2)
+    )()
 
 
 def test_maybe_left_unit_law():
-    get_left_unit_test(Maybe.just, 42, increase, 42, use_constructor=False)
-    get_left_unit_test(Maybe.nothing, 42, increase, 42, use_constructor=False)
+    get_left_unit_test(Maybe.just, 42, lambda value: Maybe.just(value + 1))
+    get_left_unit_test(Maybe.nothing, 42, lambda value: Maybe.just(value + 1))
 
 
 def test_maybe_right_unit_data_law():
-    get_right_unit_data(Maybe.just, 42, use_constructor=False)
-    get_right_unit_data(Maybe.nothing, 42, use_constructor=False)
+    get_right_unit_data(Maybe.just, 42)
+    get_right_unit_data(Maybe.nothing, 42)
