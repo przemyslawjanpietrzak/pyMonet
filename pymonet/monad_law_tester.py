@@ -15,10 +15,10 @@ def get_associativity_test(monadic_value, mapper1, mapper2):
     return result
 
 
-def get_left_unit_test(monad, monad_value, mapper, value, use_constructor=True):
+def get_left_unit_test(monad, monad_value, mapper):
     def result():
-        monadic_value = _get_monadic_value(monad, monad_value, use_constructor)
-        assert monadic_value.bind(mapper) == mapper(value)
+        monadic_value = _get_monadic_value(monad, monad_value)
+        assert monadic_value.bind(mapper) == mapper(monad_value)
 
     return result
 
