@@ -13,22 +13,22 @@ class Box:
     def __eq__(self, other):
         return self.value == other.value
 
-    def map(self, fn):
+    def map(self, mapper):
         """
         takes function (a) -> b and applied this function on current box value and returns new box with mapped value
-        :param fn: mapper function
+        :param mapper: mapper function
         :type (a) -> b
         :return: new box with mapped value
         :type Box<b>
         """
-        return Box(fn(self.value))
+        return Box(mapper(self.value))
 
-    def fold(self, fn):
+    def bind(self, mapper):
         """
         takes function (a) -> b and applied this function on current box value and returns mapped value
-        :param fn: mapper function
+        :param mapper: mapper function
         :type (a) -> b
         :return: new box with mapped value
         :type b
         """
-        return fn(self.value)
+        return mapper(self.value)

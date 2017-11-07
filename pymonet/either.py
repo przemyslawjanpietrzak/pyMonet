@@ -34,12 +34,12 @@ class Left(Either):
         """
         return Left(self.value)
 
-    def fold(self, _):
+    def bind(self, _):
         """
         takes mapper function and return value of Left
         :return: A
         """
-        return self.value
+        return self
 
     def is_left(self):
         """
@@ -65,7 +65,7 @@ class Right(Either):
         """
         return Right(mapper(self.value))
 
-    def fold(self, mapper):
+    def bind(self, mapper):
         """
         takes mapper function and returns result of them called with Right value
         :param mapper: function to apply on Right value
