@@ -1,5 +1,5 @@
 from pymonet.semigroups import Sum, All, First, Map
-
+from pymonet.utils import identity
 
 ingredient1 = Map({'score': Sum(1), 'won': All(True), 'captain': First('captain america')})
 ingredient2 = Map({'score': Sum(2), 'won': All(True), 'captain': First('iron man')})
@@ -37,17 +37,26 @@ def test_first():
     ) == First('first')
 
 
-def test_map3():
+def test_map():
+
     assert ingredient1.concat(ingredient2) == Map(
         {'score': Sum(3), 'won': All(True), 'captain': First('captain america')}
     )
 
-
-def test_map1():
     assert ingredient1.concat(ingredient2).concat(ingredient3) == Map(
-        {'score': Sum(6), 'won': All(False), 'captain': First('captain america')})
+        {'score': Sum(6), 'won': All(False), 'captain': First('captain america')}
+    )
 
-
-def test_map2():
     assert ingredient1.concat(ingredient2.concat(ingredient3)) == Map(
-        {'score': Sum(6), 'won': All(False), 'captain': First('captain america')})
+        {'score': Sum(6), 'won': All(False), 'captain': First('captain america')}
+    )
+
+
+def test_fold():
+
+    dictionary = {'key': 'value'}
+
+    assert First('first').fold(identity) is 'first'
+    assert All('all').fold(identity) is 'all'
+    assert Sum('sum').fold(identity) is 'sum'
+    assert Map(dictionary).fold(identity) is dictionary
