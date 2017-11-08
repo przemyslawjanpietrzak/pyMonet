@@ -20,7 +20,7 @@ class Lazy:
             isinstance(other, Lazy)
             and self.is_evaluated == other.is_evaluated
             and self.value == other.value
-            and self.is_evaluated == other.is_evaluated
+            and self.constructor_fn == other.constructor_fn
         )
 
     def _compute_value(self, *args):

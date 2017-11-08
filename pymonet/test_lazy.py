@@ -1,5 +1,7 @@
 from pymonet.lazy import Lazy
 
+from random import random
+
 
 class LazySpy:
 
@@ -11,6 +13,14 @@ class LazySpy:
 
     def fold_function(self, value):
         return value + 1
+
+
+def fn():
+    return 42
+
+
+def fn1():
+    return 43
 
 
 def test_applicative_should_call_stored_function_during_fold_method_call(mocker):
@@ -56,3 +66,39 @@ def test_applicative_should_call_memoize_saved_value(mocker):
     assert lazy_spy.fn.call_count == 1
 
     assert value1 is value2
+
+
+def test_applicative_eq():
+
+    assert Lazy(fn) != {}
+    assert Lazy(fn) != []
+
+    assert Lazy(fn) != Lazy(fn1)
+    assert Lazy(fn) == Lazy(fn)
+
+
+def test_applicative_eq_evaluated():
+
+    lazy1 = Lazy(fn)
+    lazy2 = Lazy(fn)
+
+    lazy1.get()
+    assert lazy1 != lazy2
+
+    lazy2.get()
+    assert lazy1 == lazy2
+
+
+def test_applicative_eq_value():
+
+    lazy1 = Lazy(random)
+    lazy2 = Lazy(random)
+
+    lazy1.get()
+    lazy2.get()
+
+    assert lazy1 == lazy1
+    assert lazy2 == lazy2
+    assert lazy1 != lazy2
+
+
