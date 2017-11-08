@@ -16,10 +16,12 @@ class Lazy:
         """
         Two Lazy are equals where both are evaluated both have the same value and constructor functions
         """
-        return isinstance(other, Applicative)\
-               and self.is_evaluated == other.is_evaluated\
-               and self.value == other.value\
-               and self.is_evaluated == other.is_evaluated
+        return (
+            isinstance(other, Lazy)
+            and self.is_evaluated == other.is_evaluated
+            and self.value == other.value
+            and self.is_evaluated == other.is_evaluated
+        )
 
     def _compute_value(self, *args):
         self.is_evaluated = True
@@ -28,18 +30,18 @@ class Lazy:
 
     def map(self, mapper):
         """
-        takes function (A) -> A and returns new Applicative with mapped argument of Applicative constructor function.
+        takes function (A) -> A and returns new Lazy with mapped argument of Lazy constructor function.
         Both mapper end constructor will be called only during calling fold method
         :param mapper: mapper function
         :type   (constructor_mapper) -> B
-        :return: Applicative<() -> mapper(constructor_fn)>
+        :return: Lazy<() -> mapper(constructor_fn)>
         """
         return Lazy(lambda *args: mapper(self.constructor_fn(*args)))
 
     def fold(self, fn, *args):
         """
         takes function and call constructor function passing returned value to fn function.
-        It's only way to call function store in Applicative
+        It's only way to call function store in Lazy
         :param fn: (constructor_fn) -> B
         :return: B
         """
