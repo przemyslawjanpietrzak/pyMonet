@@ -1,5 +1,6 @@
 pytest==3.2.3
 pytest-mock==1.6.3
+pytest-cov==2.5.1
 flake8==3.5.0
 coverage==4.4.2
 coveralls==1.2
