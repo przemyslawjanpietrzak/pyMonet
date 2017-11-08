@@ -100,5 +100,3 @@ def test_applicative_eq_value():
     assert lazy1 == lazy1
     assert lazy2 == lazy2
     assert lazy1 != lazy2
-
-
