@@ -49,5 +49,10 @@ def pipe(value, *functions):
     )
 
 
-def cond():
-    pass
+def cond(condition_list):
+    def result(*args):
+        for (condition_function, execute_function) in condition_list:
+            if condition_function(*args):
+                return execute_function(*args)
+
+    return result
