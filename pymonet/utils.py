@@ -35,7 +35,7 @@ def compose(value, *functions):
 
 def pipe(value, *functions):
     """
-    Performs ledt-to-right function composition.
+    Performs left-to-right function composition.
     :param value - argument of first applied function
     :type Any
     :param functions - list of functions to applied from ledt-to-right
@@ -50,6 +50,16 @@ def pipe(value, *functions):
 
 
 def cond(condition_list):
+    """
+    Function for return function depended on first function argument
+    cond get list of two-item tuples,
+    first is condition_function, second is execute_function.
+    Returns this execute_function witch first condition_function return truly value
+    :param condition_list: list of two-item tuples (condition_function, execute_function)
+    :type List<(Function, Function)>
+    :return Returns this execute_function witch first condition_function return truly value
+    :type Function
+    """
     def result(*args):
         for (condition_function, execute_function) in condition_list:
             if condition_function(*args):
