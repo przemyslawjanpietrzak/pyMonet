@@ -28,6 +28,6 @@ def test_fold_should_return_result_of_fold_function_called_with_box_value():
 def test_ap_should_return_result_of_function_in_box():
 
     box = Box(42)
-    assert (box.app(
+    assert (box.ap(
         Box(lambda value: value + 1)
     )) == Box(43)

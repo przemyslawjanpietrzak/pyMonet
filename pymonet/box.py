@@ -33,7 +33,7 @@ class Box:
         """
         return fn(self.value)
 
-    def app(self, monad):
+    def ap(self, monad):
         """
         It takes as a parameter another Box type which contains a function,
         and then applies that function to the value contained in the calling Box.
