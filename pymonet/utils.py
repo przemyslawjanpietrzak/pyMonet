@@ -47,3 +47,7 @@ def pipe(value, *functions):
         functions,
         value
     )
+
+
+def cond():
+    pass
