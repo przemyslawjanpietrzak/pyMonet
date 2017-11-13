@@ -24,6 +24,17 @@ class Either:
             return success(self.value)
         return error(self.value)
 
+    def ap(self, monad):
+        """
+        It takes as a parameter another Box type which contains a function,
+        and then applies that function to the value contained in the calling Box.
+        :param monad: monad contains function
+        :type Box[A -> B]
+        :return: new Box with result of contains function
+        :type Box[B]
+        """
+        return self.map(monad.value)
+
 
 class Left(Either):
 
@@ -34,12 +45,15 @@ class Left(Either):
         """
         return Left(self.value)
 
-    def fold(self, _):
+    def bind(self, _):
         """
         takes mapper function and return value of Left
         :return: A
         """
-        return self.value
+        return self
+
+    def ap(self, monad):
+        return Left(self.value)
 
     def is_left(self):
         """
@@ -65,7 +79,7 @@ class Right(Either):
         """
         return Right(mapper(self.value))
 
-    def fold(self, mapper):
+    def bind(self, mapper):
         """
         takes mapper function and returns result of them called with Right value
         :param mapper: function to apply on Right value
