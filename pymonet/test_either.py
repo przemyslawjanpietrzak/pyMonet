@@ -31,7 +31,6 @@ def test_mapper_should_be_applied_only_on_current_value():
 
 def test_ap_method_should_be_call_on_only_right():
 
-
     assert Left(42).ap(Left(increase)) == Left(42)
     assert Right(42).ap(Left(increase)) == Right(43)
     assert Left(42).ap(Right(increase)) == Left(42)

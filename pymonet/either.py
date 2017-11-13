@@ -35,6 +35,7 @@ class Either:
         """
         return self.map(monad.value)
 
+
 class Left(Either):
 
     def map(self, _):
