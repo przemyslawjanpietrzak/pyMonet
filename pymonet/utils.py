@@ -9,6 +9,12 @@ def increase(value):
     return value + 1
 
 
+def eq(value, *args):
+    if args:
+        return value == args[0]
+    return lambda other: value == other
+
+
 def curried_map(mapper):
     return lambda collection: [mapper(item) for item in collection]
 
