@@ -43,7 +43,7 @@ class Maybe():
             mapper(self.value)
         )
 
-    def fold(self, mapper):
+    def bind(self, mapper):
         """
         if Maybe is empty return new empty Maybe, in other case
         takes mapper function and returns result of mapper

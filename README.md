@@ -26,8 +26,8 @@ Boxs are data-types that store values. No restriction is placed on how they stor
 In mathematics, a semigroup is an algebraic structure consisting of a set together with an associative binary operation.
 A semigroup generalizes a monoid in that there might not exist an identity element.
 It also (originally) generalized a group (a monoid with all inverses) to a type where every element did not have to have an inverse, thus the name semigroup.
-### [Applicative](#applicative-1)
-Applicative are data-types that store functions. Stored function will not be called until call of fold method
+### [Lazy](#lazy-1)
+Lazy are data-types that store functions. Stored function will not be called until call of fold method
 ### [Task](#task-1)
 Task are data-type for handle execution of functions (in lazy way) transform results of this function and handle errors.
 ### [Try](#try-1)
@@ -183,10 +183,10 @@ ingredient2 = Map({'score': Sum(2), 'won': All(True), 'captain': First('iron man
 ingredient1.concat(ingredient2)  # Map<{'score': Sum(3), 'won': All(True), 'captain': First('captain america')}>
 ```
 
-## Applicative
-Applicative are data-types that store functions. Stored function will not be called until call of fold method
+## Lazy
+Lazy are data-types that store functions. Stored function will not be called until call of fold method
 ```python
-from pymonet.applicative import Applicative
+from pymonet.lazy import Lazy
 
 def fn():
     print('fn call')
@@ -199,12 +199,21 @@ def mapper(value):
 def side_effect(value):
     print('side effect of ' + value)
 
-applicative = Applicative(fn)
-mapped_applicative = applicative.map(mapper)
-mapped_applicative.fold(side_effect)  
+lazy = Lazy(fn)
+mapped_lazy = lazy.map(mapper)
+mapped_lazy.fold(side_effect)  
 # fn call
 # mapper side effect of 42
 # side effect of 42
+```
+Lazy instances memoize output of constructor function
+```python
+lazy = Lazy(fn)
+value1 = lazy.get()
+# fn call
+value2 = lazy.get()
+print(value1, value2)
+# 42, 42
 ```
 
 

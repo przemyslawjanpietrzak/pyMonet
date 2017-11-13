@@ -1,4 +1,5 @@
 from pymonet.either import Left, Right
+from pymonet.monad_law_tester import get_associativity_test, get_left_unit_test, get_right_unit_data
 from pymonet.utils import increase
 
 
@@ -48,10 +49,10 @@ def test_is_left_should_return_suitable_value():
     assert not Right(42).is_left()
 
 
-def test_fold_should_be_applied_only_on_current_value_and_return_value():
-
-    assert Left(42).fold(increase) == 42
-    assert Right(42).fold(increase) == 43
+def test_bind_should_be_applied_only_on_current_value_and_return_value():
+    assert Left(42).bind(lambda value: Right(value + 1)).value == 42
+    assert Right(42).bind(lambda value: Right(value + 1)).value == 43
+    assert Right(42).bind(lambda value: Left(value + 1)).value == 43
 
 
 def test_case_method_should_call_proper_handler(mocker):
@@ -74,3 +75,29 @@ def test_case_method_should_call_proper_handler(mocker):
 
     assert either_spy.error_handler.call_count == 1
     assert either_spy.success_handler.call_count == 1
+
+
+def test_maybe_associativity_law():
+    get_associativity_test(
+        monadic_value=Right(42),
+        mapper1=lambda value: Right(value + 1),
+        mapper2=lambda value: Right(value + 2),
+    )()
+    get_associativity_test(
+        monadic_value=Left(0),
+        mapper1=lambda value: Right(value + 1),
+        mapper2=lambda value: Right(value + 2),
+    )()
+
+
+def test_maybe_left_unit_law():
+    get_left_unit_test(
+        monad=Right,
+        monad_value=42,
+        mapper=lambda value: Right(value + 1)
+    )()
+
+
+def test_maybe_right_unit_data_law():
+    get_right_unit_data(Right, 42)()
+    get_right_unit_data(Left, 42)()
