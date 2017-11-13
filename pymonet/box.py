@@ -32,3 +32,14 @@ class Box:
         :type b
         """
         return mapper(self.value)
+
+    def ap(self, monad):
+        """
+        It takes as a parameter another Box type which contains a function,
+        and then applies that function to the value contained in the calling Box.
+        :param monad: monad contains function
+        :type Box[A -> B]
+        :return: new Box with result of contains function
+        :type Box[B]
+        """
+        return self.map(monad.value)

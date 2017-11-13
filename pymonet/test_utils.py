@@ -2,6 +2,7 @@ from pymonet.utils import \
     identity,\
     increase,\
     compose,\
+    eq,\
     pipe,\
     curried_map as map,\
     curried_filter as filter
@@ -22,6 +23,11 @@ def test_compose_should_applied_function_on_value_and_return_it_result():
 
 def test_compose_should_appield_functions_from_last_to_first():
     assert compose(42, increase, lambda value: value * 2) == 85
+
+
+def test_eq():
+    assert eq(42, 42)
+    assert eq(42)(42)
 
 
 def test_compose_with_collections():

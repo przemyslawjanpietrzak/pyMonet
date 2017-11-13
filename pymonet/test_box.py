@@ -23,7 +23,15 @@ def test_map_should_return_new_instance_of_box():
 
 def test_fold_should_return_result_of_fold_function_called_with_box_value():
     box = Box(42)
-    assert box.bind(lambda value: Box(value + 1)) == Box(43)
+    assert box.bind(lambda value: value + 1) == 43
+
+
+def test_ap_should_return_result_of_function_in_box():
+
+    box = Box(42)
+    assert (box.ap(
+        Box(lambda value: value + 1)
+    )) == Box(43)
 
 
 def test_maybe_associativity_law():

@@ -24,6 +24,17 @@ class Either:
             return success(self.value)
         return error(self.value)
 
+    def ap(self, monad):
+        """
+        It takes as a parameter another Box type which contains a function,
+        and then applies that function to the value contained in the calling Box.
+        :param monad: monad contains function
+        :type Box[A -> B]
+        :return: new Box with result of contains function
+        :type Box[B]
+        """
+        return self.map(monad.value)
+
 
 class Left(Either):
 
@@ -40,6 +51,9 @@ class Left(Either):
         :return: A
         """
         return self
+
+    def ap(self, monad):
+        return Left(self.value)
 
     def is_left(self):
         """

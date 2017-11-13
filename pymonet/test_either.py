@@ -29,6 +29,14 @@ def test_mapper_should_be_applied_only_on_current_value():
     assert Right(42).map(increase) == Right(43)
 
 
+def test_ap_method_should_be_call_on_only_right():
+
+    assert Left(42).ap(Left(increase)) == Left(42)
+    assert Right(42).ap(Left(increase)) == Right(43)
+    assert Left(42).ap(Right(increase)) == Left(42)
+    assert Right(42).ap(Right(increase)) == Right(43)
+
+
 def test_is_right_should_return_suitable_value():
 
     assert Right(42).is_right()
