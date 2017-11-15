@@ -83,7 +83,7 @@ def test_task_rejected_fork_should_return_resolved_value():
     task.fork(rejected_spy, resolved_spy)
 
 
-def test_task_maper_should_be_called_during_calling_fork(mocker):
+def test_task_mapper_should_be_called_during_calling_fork(mocker):
     task_spy = TaskSpy()
     mocker.spy(task_spy, 'mapper')
 
@@ -140,3 +140,23 @@ def test_task_resolved_fork_should_applied_fold_on_his_result():
     task_spy = TaskSpy()
     task = Task(task_spy.fork_resolved).fold(task_spy.folder)
     task.fork(rejected_spy, resolved_spy)
+
+
+def test_task_of_should_applied_only_resolve_callback(mocker):
+    task_spy = TaskSpy()
+    mocker.spy(task_spy, 'resolved')
+    mocker.spy(task_spy, 'rejected')
+
+    assert Task.of(42)(task_spy.rejected, task_spy.resolved) is 42
+    assert task_spy.resolved.call_count == 1
+    assert task_spy.rejected.call_count == 0
+
+
+def test_task_of_should_applied_only_reject_callback(mocker):
+    task_spy = TaskSpy()
+    mocker.spy(task_spy, 'resolved')
+    mocker.spy(task_spy, 'rejected')
+
+    assert Task.reject(42)(task_spy.rejected, task_spy.resolved) is 42
+    assert task_spy.resolved.call_count == 0
+    assert task_spy.rejected.call_count == 1
