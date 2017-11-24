@@ -1,3 +1,6 @@
+from hypothesis import given
+from hypothesis.strategies import text, integers, booleans
+
 from pymonet.semigroups import Sum, All, First, Map
 from pymonet.utils import identity
 
@@ -6,35 +9,32 @@ ingredient2 = Map({'score': Sum(2), 'won': All(True), 'captain': First('iron man
 ingredient3 = Map({'score': Sum(3), 'won': All(False), 'captain': First('Batman')})
 
 
-def test_sum():
-    assert Sum(1).concat(Sum(2)) == Sum(3)
-    assert Sum(1).concat(
-        Sum(2).concat(Sum(3))
-    ) == Sum(6)
-    assert Sum(1).concat(Sum(2)).concat(Sum(3)) == Sum(6)
+@given(integers(), integers(), integers())
+def test_sum(x, y, z):
+    assert Sum(x).concat(Sum(y)) == Sum(x + y)
+    assert Sum(x).concat(
+        Sum(y).concat(Sum(z))
+    ) == Sum(x + y + z)
+    assert Sum(x).concat(Sum(y)).concat(Sum(z)) == Sum(x + y + z)
 
 
-def test_all():
-    assert All(True).concat(All(True)) == All(True)
-    assert All(True).concat(All(False)) == All(False)
+@given(booleans(), booleans(), booleans())
+def test_all(bool1, bool2, bool3):
 
-    assert All(True).concat(
-        All(True).concat(All(True))
-    ) == All(True)
-    assert All(True).concat(All(True)).concat(All(True)) == All(True)
-
-    assert All(True).concat(
-        All(False).concat(All(True))
-    ) == All(False)
-    assert All(True).concat(All(True)).concat(All(False)) == All(False)
+    assert All(bool1).concat(All(bool2)) == All(bool1 and bool2)
+    assert All(bool1).concat(
+        All(bool2).concat(All(bool3))
+    ) == All(bool1 and bool2 and bool3)
+    assert All(bool1).concat(All(bool2)).concat(All(bool3)) == All(bool1 and bool2 and bool3)
 
 
-def test_first():
-    assert First('first').concat(First('second')) == First('first')
-    assert First('first').concat(First('second')).concat(First('third')) == First('first')
-    assert First('first').concat(
-        First('second').concat(First('third'))
-    ) == First('first')
+@given(text(), text(), text())
+def test_first(text1, text2, text3):
+    assert First(text1).concat(First(text2)) == First(text1)
+    assert First(text1).concat(First(text2)).concat(First(text3)) == First(text1)
+    assert First(text1).concat(
+        First(text2).concat(First(text3))
+    ) == First(text1)
 
 
 def test_map():
@@ -52,11 +52,12 @@ def test_map():
     )
 
 
-def test_fold():
+@given(integers(), text(), booleans())
+def test_fold(integer, text, boolean):
 
     dictionary = {'key': 'value'}
 
-    assert First('first').fold(identity) is 'first'
-    assert All('all').fold(identity) is 'all'
-    assert Sum('sum').fold(identity) is 'sum'
+    assert First(text).fold(identity) is text
+    assert All(boolean).fold(identity) is boolean
+    assert Sum(integers).fold(identity) is integers
     assert Map(dictionary).fold(identity) is dictionary
