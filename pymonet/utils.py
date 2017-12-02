@@ -23,6 +23,12 @@ def curried_filter(filterer):
     return lambda collection: [item for item in collection if filterer(item)]
 
 
+def find(collection, key):
+    for item in collection:
+        if key(item):
+            return item
+
+
 def compose(value, *functions):
     """
     Performs right-to-left function composition.
@@ -74,5 +80,16 @@ def cond(condition_list):
     return result
 
 
+
+
 def memoize(fn, key=eq):
-    pass
+    cache = []
+    def memoized_fn(argument):
+        cached_result = find(cache, lambda cacheItem: key(cacheItem[0], argument))
+        if cached_result is not None:
+            return cached_result
+        fn_result = fn(argument)
+        cache.append((argument, fn_result))
+        return fn_result
+
+    return memoized_fn
