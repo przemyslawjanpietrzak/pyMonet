@@ -72,3 +72,7 @@ def cond(condition_list):
                 return execute_function(*args)
 
     return result
+
+
+def memoize(fn, key=eq):
+    pass
