@@ -32,13 +32,14 @@ def test_utils_memoize_should_call_fn_when_arguments_change(mocker):
     mocker.spy(memoize_spy, 'fn')
 
     momoized_function = memoize(memoize_spy.fn)
-    momoized_function(42)
+    result1 = momoized_function(42)
 
     assert memoize_spy.fn.call_count == 1
 
-    momoized_function(43)
+    result2 = momoized_function(43)
 
     assert memoize_spy.fn.call_count == 2
+    assert result1 is not result2
 
 
 def test_utils_memoize_should_cache_output_when_key_returns_truthy(mocker):
@@ -57,5 +58,3 @@ def test_utils_memoize_should_cache_output_when_key_returns_truthy(mocker):
 
     assert result3 is not result1
     assert memoize_spy.fn.call_count == 2
-
-
