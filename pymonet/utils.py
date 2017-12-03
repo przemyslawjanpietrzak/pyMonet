@@ -87,7 +87,7 @@ def memoize(fn, key=eq):
     def memoized_fn(argument):
         cached_result = find(cache, lambda cacheItem: key(cacheItem[0], argument))
         if cached_result is not None:
-            return cached_result
+            return cached_result[1]
         fn_result = fn(argument)
         cache.append((argument, fn_result))
         return fn_result

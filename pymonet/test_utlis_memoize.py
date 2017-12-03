@@ -24,7 +24,7 @@ def test_utils_memoize_should_call_fn_once_when_args_are_equal(mocker):
 
     result2 = momoized_function(42)
     assert memoize_spy.fn.call_count == 1
-    # assert result1 is result2
+    assert result1 is result2
 
 
 def test_utils_memoize_should_call_fn_when_arguments_change(mocker):
@@ -50,5 +50,12 @@ def test_utils_memoize_should_cache_output_when_key_returns_truthy(mocker):
     result1 = momoized_function({'compare_key': 42, 'other_key': 0})
     result2 = momoized_function({'compare_key': 42, 'other_key': 1})
 
-    assert result1 is not result2
+    assert result1 is result2
     assert memoize_spy.fn.call_count == 1
+
+    result3 = momoized_function({'compare_key': 41, 'other_key': 1})
+
+    assert result3 is not result1
+    assert memoize_spy.fn.call_count == 2
+
+
