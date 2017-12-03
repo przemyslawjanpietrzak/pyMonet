@@ -343,3 +343,28 @@ fn = cond([
 fn(1) #  second
 # lambda arg: arg == 2 will not be call
 ```
+
+#### memoize
+Creates a new function that, when invoked,
+caches the result of calling fn for a given argument set and returns the result.
+Subsequent calls to the memoized fn with the same argument set will not result in an additional call to fn;
+instead, the cached result for that set of arguments will be returned.
+
+```python
+from pymonet.utils import memoize, eq
+
+def fn(arg):
+    print('fn flag')
+    return arg + 1
+
+memoized_fn = memoize(fn)
+memoized_fn(42) # 43
+# fn flag
+
+memoized_fn(42) # 43
+# print to called
+
+memoized_fn(43) # 44
+# fn flag
+
+```

@@ -99,7 +99,7 @@ def memoize(fn, key=eq):
     :type (A) -> B
     :key function to decide if result should be taken from cache
     :type (A, A) -> Boolean
-    :return new fuction invoking old one
+    :return new function invoking old one
     :type (A) -> B
     """
     cache = []
