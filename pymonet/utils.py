@@ -24,6 +24,15 @@ def curried_filter(filterer):
 
 
 def find(collection, key):
+    """
+    Returns the first element of the list which matches the keys, or None if no element matches.
+    :param collection
+    :type List<A>
+    :param key: function to decide witch element should be found
+    :type (A) -> Boolean
+    :return element of collection or None
+    :type A | None
+    """
     for item in collection:
         if key(item):
             return item
@@ -80,10 +89,21 @@ def cond(condition_list):
     return result
 
 
-
-
 def memoize(fn, key=eq):
+    """
+    Creates a new function that, when invoked,
+    caches the result of calling fn for a given argument set and returns the result.
+    Subsequent calls to the memoized fn with the same argument set will not result in an additional call to fn;
+    instead, the cached result for that set of arguments will be returned.
+    :param fn: function to invoke
+    :type (A) -> B
+    :key function to decide if result should be taken from cache
+    :type (A, A) -> Boolean
+    :return new fuction invoking old one
+    :type (A) -> B
+    """
     cache = []
+
     def memoized_fn(argument):
         cached_result = find(cache, lambda cacheItem: key(cacheItem[0], argument))
         if cached_result is not None:
