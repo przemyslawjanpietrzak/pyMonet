@@ -62,5 +62,9 @@ def test_pipe_should_appield_functions_from_first_to_last(integer):
     integers()
 )
 def test_find_should_return_none_when_item_is_not_in_collection_otherwise_should_return_item(lst, integer):
-    assert find([*lst, integer], eq(integer)) == integer
+    lst_copy = []
+    lst_copy.extend(lst)
+    lst_copy.append(integer)
+
+    assert find(lst_copy, eq(integer)) == integer
     assert find(lst[1:], eq(lst[0])) is None
