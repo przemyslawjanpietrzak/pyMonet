@@ -1,9 +1,3 @@
-from pymonet.maybe import Maybe
-from pymonet.either import Right
-from pymonet.lazy import Lazy
-from pymonet.monad_try import Try
-
-
 class Box:
     """
     Data type for storage any type of data
@@ -55,6 +49,8 @@ class Box:
         :return: non empty Maybe monad with previous value
         :type Maybe[A]
         """
+        from pymonet.maybe import Maybe
+
         return Maybe.just(self.value)
 
     def to_either(self):
@@ -62,16 +58,22 @@ class Box:
         :return: right Either monad with previous value
         :type Right[A]
         """
+        from pymonet.either import Right
+
         return Right(self.value)
 
     def to_lazy(self):
         """
         :return: not folded Lazy monad with function returning previous value
         """
+        from pymonet.lazy import Lazy
+
         return Lazy(lambda: self.value)
 
     def to_try(self):
         """
         :return: successfully Try monad with previous value
         """
+        from pymonet.monad_try import Try
+
         return Try(self.value, is_success=True)

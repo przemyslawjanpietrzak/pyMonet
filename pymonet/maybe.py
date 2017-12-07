@@ -78,3 +78,32 @@ class Maybe():
         if self.is_nothing:
             return default_value
         return self.value
+
+    def to_either(self):
+        from pymonet.either import Left, Right
+
+        if self.is_nothing:
+            return Left(None)
+        return Right(self.value)
+
+
+    def to_box(self):
+        from pymonet.box import Box
+
+        if self.is_nothing:
+            return Box(None)
+        return Box(self.value)
+
+    def to_lazy(self):
+        from pymonet.lazy import Lazy
+
+        if self.is_nothing:
+            return Lazy(lambda: None)
+        return Lazy(lambda: self.value)
+
+    def to_try(self):
+        from pymonet.monad_try import Try
+
+        if self.is_nothing:
+            return Try(None, is_success=False)
+        return Try(self.value, is_success=True)
