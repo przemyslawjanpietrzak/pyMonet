@@ -1,3 +1,9 @@
+from pymonet.maybe import Maybe
+from pymonet.either import Right
+from pymonet.lazy import Lazy
+from pymonet.monad_try import Try
+
+
 class Box:
     """
     Data type for storage any type of data
@@ -43,3 +49,29 @@ class Box:
         :type Box[B]
         """
         return self.map(monad.value)
+
+    def to_maybe(self):
+        """
+        :return: non empty Maybe monad with previous value
+        :type Maybe[A]
+        """
+        return Maybe.just(self.value)
+
+    def to_either(self):
+        """
+        :return: right Either monad with previous value
+        :type Right[A]
+        """
+        return Right(self.value)
+
+    def to_lazy(self):
+        """
+        :return: not folded Lazy monad with function returning previous value
+        """
+        return Lazy(lambda: self.value)
+
+    def to_try(self):
+        """
+        :return: successfully Try monad with previous value
+        """
+        return Try(self.value, is_success=True)
