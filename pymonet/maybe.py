@@ -78,3 +78,55 @@ class Maybe():
         if self.is_nothing:
             return default_value
         return self.value
+
+    def to_either(self):
+        """
+        Transform Maybe to Either
+        :return Right monad with previous value when Maybe is not empty,
+        in other case Left with None
+        :type Either[A | None]
+        """
+        from pymonet.either import Left, Right
+
+        if self.is_nothing:
+            return Left(None)
+        return Right(self.value)
+
+    def to_box(self):
+        """
+        Transform Maybe to Box
+        :return Box monad with previous value when Maybe is not empty,
+        in other case Box with None
+        :type Box[A | None]
+        """
+        from pymonet.box import Box
+
+        if self.is_nothing:
+            return Box(None)
+        return Box(self.value)
+
+    def to_lazy(self):
+        """
+        Transform Maybe to Try
+        :return Lazy monad with function returning previous value
+        in other case Left with None
+        :type Lazy[() -> (A | None)]
+        """
+        from pymonet.lazy import Lazy
+
+        if self.is_nothing:
+            return Lazy(lambda: None)
+        return Lazy(lambda: self.value)
+
+    def to_try(self):
+        """
+        Transform Maybe to Try
+        :return successfully Try with previous value when Maybe is not empty,
+        in other case not successfully Try with None
+        :type Try[A]
+        """
+        from pymonet.monad_try import Try
+
+        if self.is_nothing:
+            return Try(None, is_success=False)
+        return Try(self.value, is_success=True)

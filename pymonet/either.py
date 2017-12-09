@@ -35,6 +35,36 @@ class Either:
         """
         return self.map(monad.value)
 
+    def to_box(self):
+        """
+        Transform Either to Box
+        :return Box monad with previous value
+        :type Box[A]
+        """
+        from pymonet.box import Box
+
+        return Box(self.value)
+
+    def to_try(self):
+        """
+        Transform Either to Try
+        :return resolved Try monad with previous value. Right is resolved successfully, Left not.
+        :type Box[A]
+        """
+        from pymonet.monad_try import Try
+
+        return Try(self.value, is_success=self.is_right())
+
+    def to_lazy(self):
+        """
+        Transform Either to Try
+        :return Lazy monad with function returning previous value
+        :type Lazy[() -> A]
+        """
+        from pymonet.lazy import Lazy
+
+        return Lazy(lambda: self.value)
+
 
 class Left(Either):
 
@@ -66,6 +96,16 @@ class Left(Either):
         :return: Boolean
         """
         return False
+
+    def to_maybe(self):
+        """
+        Transform Either to Maybe
+        :return: Empty Maybe
+        :type Maybe[None]
+        """
+        from pymonet.maybe import Maybe
+
+        return Maybe.nothing()
 
 
 class Right(Either):
@@ -99,3 +139,13 @@ class Right(Either):
         :return: Boolean
         """
         return False
+
+    def to_maybe(self):
+        """
+        Transform Either to Maybe
+        :return: Maybe with previous value
+        :type Maybe[A]
+        """
+        from pymonet.maybe import Maybe
+
+        return Maybe.just(self.value)

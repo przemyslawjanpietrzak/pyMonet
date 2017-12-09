@@ -1,6 +1,12 @@
 from pymonet.maybe import Maybe
-from pymonet.utils import increase
+from pymonet.either import Left, Right
+from pymonet.monad_try import Try
+from pymonet.box import Box
+from pymonet.utils import increase, identity
 from pymonet.monad_law_tester import get_associativity_test, get_left_unit_test, get_right_unit_data
+
+from hypothesis import given
+from hypothesis.strategies import integers
 
 
 def wrong_mapper(_):
@@ -69,3 +75,27 @@ def test_maybe_left_unit_law():
 def test_maybe_right_unit_data_law():
     get_right_unit_data(Maybe.just, 42)
     get_right_unit_data(Maybe.nothing, 42)
+
+
+@given(integers())
+def test_transform_to_box_should_return_box(integer):
+    assert Maybe.just(integer).to_box() == Box(integer)
+    assert Maybe.nothing().to_box() == Box(None)
+
+
+@given(integers())
+def test_transform_to_either_should_return_either(integer):
+    assert Maybe.just(integer).to_either() == Right(integer)
+    assert Maybe.nothing().to_either() == Left(None)
+
+
+@given(integers())
+def test_transform_to_lazy_should_return_lazy(integer):
+    assert Maybe.just(integer).to_lazy().fold(identity) == integer
+    assert Maybe.nothing().to_lazy().fold(identity) is None
+
+
+@given(integers())
+def test_transform_to_try_should_return_try(integer):
+    assert Maybe.just(integer).to_try() == Try(integer, is_success=True)
+    assert Maybe.nothing().to_try() == Try(None, is_success=False)
