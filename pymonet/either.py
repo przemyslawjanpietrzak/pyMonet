@@ -35,7 +35,6 @@ class Either:
         """
         return self.map(monad.value)
 
-
     def to_box(self):
         """
         Transform Either to Box
@@ -49,7 +48,7 @@ class Either:
     def to_try(self):
         """
         Transform Either to Try
-        :return resolved Try monad with previous value. Right is resolved successfully, Left not.  
+        :return resolved Try monad with previous value. Right is resolved successfully, Left not.
         :type Box[A]
         """
         from pymonet.monad_try import Try
@@ -101,7 +100,7 @@ class Left(Either):
     def to_maybe(self):
         """
         Transform Either to Maybe
-        :return: Empty Maybe 
+        :return: Empty Maybe
         :type Maybe[None]
         """
         from pymonet.maybe import Maybe
@@ -144,7 +143,7 @@ class Right(Either):
     def to_maybe(self):
         """
         Transform Either to Maybe
-        :return: Maybe with previous value 
+        :return: Maybe with previous value
         :type Maybe[A]
         """
         from pymonet.maybe import Maybe

@@ -1,6 +1,5 @@
 from pymonet.maybe import Maybe
 from pymonet.either import Left, Right
-from pymonet.lazy import Lazy
 from pymonet.monad_try import Try
 from pymonet.box import Box
 from pymonet.utils import increase

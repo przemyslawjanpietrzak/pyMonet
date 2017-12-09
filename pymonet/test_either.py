@@ -108,7 +108,6 @@ def test_maybe_right_unit_data_law():
     get_right_unit_data(Left, 42)()
 
 
-
 @given(integers())
 def test_transform_to_box_should_return_box(integer):
     assert Right(integer).to_box() == Box(integer)

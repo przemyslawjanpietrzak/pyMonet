@@ -86,7 +86,6 @@ class Maybe():
             return Left(None)
         return Right(self.value)
 
-
     def to_box(self):
         from pymonet.box import Box
 
