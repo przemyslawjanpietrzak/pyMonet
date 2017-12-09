@@ -33,8 +33,8 @@ class Lazy:
         takes function (A) -> A and returns new Lazy with mapped argument of Lazy constructor function.
         Both mapper end constructor will be called only during calling fold method
         :param mapper: mapper function
-        :type   (constructor_mapper) -> B
-        :return: Lazy<() -> mapper(constructor_fn)>
+        :type mapper: (constructor_mapper) -> B
+        :returns: Lazy<() -> mapper(constructor_fn)>
         """
         return Lazy(lambda *args: mapper(self.constructor_fn(*args)))
 
@@ -43,14 +43,14 @@ class Lazy:
         takes function and call constructor function passing returned value to fn function.
         It's only way to call function store in Lazy
         :param fn: (constructor_fn) -> B
-        :return: B
+        :returns: B
         """
         return fn(self._compute_value(*args))
 
     def get(self, *args):
         """
         Evaluate function and memoize her output or return memoized value when function was evaluated
-        :return: A
+        :returns: A
         """
         if self.is_evaluated:
             return self.value
