@@ -1,5 +1,6 @@
 # pyMonet
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://travis-ci.org/przemyslawjanpietrzak/pyMonet.svg?branch=develop)](https://travis-ci.org/przemyslawjanpietrzak/pyMonet)
 [![Coverage Status](https://coveralls.io/repos/github/przemyslawjanpietrzak/pyMonet/badge.svg?branch=develop)](https://coveralls.io/github/przemyslawjanpietrzak/pyMonet?branch=develop)
 [![PyPI version](https://badge.fury.io/py/pymonet.svg)](https://badge.fury.io/py/pymonet)
@@ -32,6 +33,8 @@ Lazy are data-types that store functions. Stored function will not be called unt
 Task are data-type for handle execution of functions (in lazy way) transform results of this function and handle errors.
 ### [Try](#try-1)
 The Try control gives us the ability write safe code without focusing on try-catch blocks in the presence of exceptions.
+### [Utils](#utils-1)
+Set of functional programming helpers
 
 ## Either
 The Either type represents values with two possibilities: B value of type Either<A, B> is either Left<A> or Right. But not both in the same time.
@@ -300,4 +303,68 @@ get method should return value with or without exception thrown
 ```python
 Try.of(divide, 42, 2).get()  # 21
 Try.of(divide, 42, 0).get()  # ZeroDivisionError<'division by zero'>
+```
+
+## Utils
+#### compose
+Compose: performs right-to-left function composition.
+```python
+from pymonet.utils import \
+    increase,\
+    compose,\
+    curried_map as map,\
+    curried_filter as filter
+
+compose(
+    list(range(10)),
+    map(increase),
+    filter(is_odd)
+)
+#[1, 3, 5, 7, 9]
+```
+#### pipe
+Pipe: performs left-to-right function composition.
+```python
+from pymonet.utils import increase, pipe
+
+pipe(42, increase, lambda value: value * 2)
+#86
+```
+#### cond
+Returns a function which encapsulates if/else, if/else, ... logic. cond takes a list of (predicate, transformer) pairs. All of the arguments to fn are applied to each of the predicates in turn until one returns a truthy value, at which point fn returns the result of applying its arguments to the corresponding transformer.
+```python
+from pymonet.utils import cond
+
+fn = cond([
+    (lambda arg: arg == 0, lambda: 'first'),
+    (lambda arg: arg == 1, lambda: 'second'),
+    (lambda arg: arg == 2, lambda: 'third').
+])
+fn(1) #  second
+# lambda arg: arg == 2 will not be call
+```
+
+#### memoize
+Creates a new function that, when invoked,
+caches the result of calling fn for a given argument set and returns the result.
+Subsequent calls to the memoized fn with the same argument set will not result in an additional call to fn;
+instead, the cached result for that set of arguments will be returned.
+
+```python
+from pymonet.utils import memoize, eq
+
+def fn(arg):
+    print('fn flag')
+    return arg + 1
+
+memoized_fn = memoize(fn)
+memoized_fn(42) # 43
+# fn flag
+
+memoized_fn(42) # 43
+# print to called
+
+memoized_fn(43) # 44
+# fn flag
+
 ```
