@@ -3,7 +3,7 @@ class Task:
     def __init__(self, fork):
         """
         :param fork: function to call during fork
-         :type: (reject, resolve) -> any
+        :type fork: (reject, resolve) -> any
         """
         self.fork = fork
 
@@ -13,7 +13,7 @@ class Task:
         :param value
         :type: any
         instant rejected Task
-        :return: Task<_, resolve>
+        :returns: Task<_, resolve>
         """
         return lambda _, resolve: resolve(value)
 
@@ -23,7 +23,7 @@ class Task:
         :param value
         :type: any
         instant rejected Task
-        :return: Task<reject, _>
+        :returns: Task<reject, _>
         """
         return lambda reject, _: reject(value)
 
@@ -31,7 +31,7 @@ class Task:
         """
         :param fn: mapper function
         :type fn: value -> mapped_value
-        :return: Task<reject -> mapped_value>
+        :returns: Task<reject -> mapped_value>
         """
         def result(reject, resolve):
             return self.fork(
@@ -46,7 +46,7 @@ class Task:
         also know as flatmap
         :param fn: mapper function
         :type fn: value -> Task<reject, mapped_value>
-        :return: Task<reject, mapped_value>
+        :returns: Task<reject, mapped_value>
         """
         def result(reject, resolve):
             return self.fork(

@@ -26,12 +26,12 @@ def curried_filter(filterer):
 def find(collection, key):
     """
     Returns the first element of the list which matches the keys, or None if no element matches.
-    :param collection
-    :type List<A>
+    :param collection: collection to search
+    :type collection: List<A>
     :param key: function to decide witch element should be found
-    :type (A) -> Boolean
-    :return element of collection or None
-    :type A | None
+    :type key: (A) -> Boolean
+    :returns: element of collection or None
+    :rtype: A | None
     """
     for item in collection:
         if key(item):
@@ -41,11 +41,12 @@ def find(collection, key):
 def compose(value, *functions):
     """
     Performs right-to-left function composition.
-    :param value - argument of first applied function
-    :type Any
-    :param functions - list of functions to applied from right-to-left
-    :return result of all functions
-    :typa Any
+    :param value: argument of first applied function
+    :type value: Any
+    :param functions: list of functions to applied from right-to-left
+    :type functions: List<Function>
+    :returns: result of all functions
+    :rtype: Any
     """
     return reduce(
         lambda current_value, function: function(current_value),
@@ -57,11 +58,12 @@ def compose(value, *functions):
 def pipe(value, *functions):
     """
     Performs left-to-right function composition.
-    :param value - argument of first applied function
-    :type Any
-    :param functions - list of functions to applied from ledt-to-right
-    :return result of all functions
-    :typa Any
+    :param value: argument of first applied function
+    :type value: Any
+    :param functions: list of functions to applied from ledt-to-right
+    :type functions: List<Function>
+    :returns: result of all functions
+    :rtype: Any
     """
     return reduce(
         lambda current_value, function: function(current_value),
@@ -78,8 +80,8 @@ def cond(condition_list):
     Returns this execute_function witch first condition_function return truly value
     :param condition_list: list of two-item tuples (condition_function, execute_function)
     :type List<(Function, Function)>
-    :return Returns this execute_function witch first condition_function return truly value
-    :type Function
+    :returns: Returns this execute_function witch first condition_function return truly value
+    :rtype: Function
     """
     def result(*args):
         for (condition_function, execute_function) in condition_list:
@@ -96,11 +98,11 @@ def memoize(fn, key=eq):
     Subsequent calls to the memoized fn with the same argument set will not result in an additional call to fn;
     instead, the cached result for that set of arguments will be returned.
     :param fn: function to invoke
-    :type (A) -> B
-    :key function to decide if result should be taken from cache
-    :type (A, A) -> Boolean
-    :return new function invoking old one
-    :type (A) -> B
+    :type fn: (A) -> B
+    :param key: function to decide if result should be taken from cache
+    :type key: (A, A) -> Boolean
+    :returns: new function invoking old one
+    :rtype: (A) -> B
     """
     cache = []
 

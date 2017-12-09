@@ -1,6 +1,12 @@
 from pymonet.either import Left, Right
+from pymonet.box import Box
+from pymonet.maybe import Maybe
+from pymonet.monad_try import Try
 from pymonet.monad_law_tester import get_associativity_test, get_left_unit_test, get_right_unit_data
-from pymonet.utils import increase
+from pymonet.utils import increase, identity
+
+from hypothesis import given
+from hypothesis.strategies import integers
 
 
 class EitherSpy:
@@ -100,3 +106,27 @@ def test_maybe_left_unit_law():
 def test_maybe_right_unit_data_law():
     get_right_unit_data(Right, 42)()
     get_right_unit_data(Left, 42)()
+
+
+@given(integers())
+def test_transform_to_box_should_return_box(integer):
+    assert Right(integer).to_box() == Box(integer)
+    assert Left(integer).to_box() == Box(integer)
+
+
+@given(integers())
+def test_transform_to_maybe_should_return_maybe(integer):
+    assert Right(integer).to_maybe() == Maybe.just(integer)
+    assert Left(integer).to_maybe() == Maybe.nothing()
+
+
+@given(integers())
+def test_transform_to_lazy_should_return_lazy(integer):
+    assert Right(integer).to_lazy().fold(identity) == integer
+    assert Left(integer).to_lazy().fold(identity) == integer
+
+
+@given(integers())
+def test_transform_to_try_should_return_try(integer):
+    assert Right(integer).to_try() == Try(integer, is_success=True)
+    assert Left(integer).to_try() == Try(integer, is_success=False)
