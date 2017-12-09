@@ -2,7 +2,7 @@ from pymonet.maybe import Maybe
 from pymonet.either import Left, Right
 from pymonet.monad_try import Try
 from pymonet.box import Box
-from pymonet.utils import increase
+from pymonet.utils import increase, identity
 from pymonet.monad_law_tester import get_associativity_test, get_left_unit_test, get_right_unit_data
 
 from hypothesis import given
@@ -91,8 +91,8 @@ def test_transform_to_either_should_return_either(integer):
 
 @given(integers())
 def test_transform_to_lazy_should_return_lazy(integer):
-    assert Maybe.just(integer).to_either() == Right(integer)
-    assert Maybe.nothing().to_either() == Left(None)
+    assert Maybe.just(integer).to_lazy().fold(identity) == integer
+    assert Maybe.nothing().to_lazy().fold(identity) is None
 
 
 @given(integers())
