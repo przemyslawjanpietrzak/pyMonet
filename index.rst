@@ -3,34 +3,37 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to pyMonet's documentation!
+Welcome to pyMonet's documentation
 ===================================
 
 
-
 .. autoclass:: pymonet.maybe.Maybe
-    :members: just, nothing, map, bind, filter, get_or_else
+    :members: just, nothing, map, bind, filter, get_or_else, to_either, to_lazy, to_try, to_box
 
 .. autoclass:: pymonet.box.Box
-    :members: bind, map
-
-.. autofunction:: pymonet.utils.pipe
-.. autofunction:: pymonet.utils.cond
+    :members: map, bind, ap, to_maybe, to_either, to_lazy, to_try
 
 .. autoclass:: pymonet.either.Left
-    :members: bind, map
+    :members: map, bind, ap, is_left, is_right, to_maybe, to_either, to_lazy, to_try
+.. autoclass:: pymonet.either.Right
+    :members: map, bind, ap, is_left, is_right, to_maybe, to_either, to_lazy, to_try
 
-.. function:: format_exception(etype, value, tb[, limit=None])
+.. autoclass:: pymonet.lazy.Lazy
+    :members: __init__, __eq__, map, fold, get
 
-    Format the exception with a traceback.
+.. autoclass:: pymonet.monad_try.Try
+    :members: of, map, fold, filter, get_or_else, get, on_success, on_fail
 
-    :param etype: exception type
-    :param value: exception value
-    :param tb: traceback object
-    :param limit: maximum number of stack frames to show
-    :type limit: integer or None
-    :param condition_list: list of two-item tuples (condition_function, execute_function)
-    :type condition_list: List<(Function, Function)>
-    :returns: Returns this execute_function witch first condition_function return truly value
-    :rtype: Function
-    
+.. autoclass:: pymonet.task.Task
+    :members: __init__, of, reject, map, fold
+
+.. autofunction:: pymonet.utils.identity
+.. autofunction:: pymonet.utils.increase
+.. autofunction:: pymonet.utils.eq
+.. autofunction:: pymonet.utils.curried_map
+.. autofunction:: pymonet.utils.curried_filter
+.. autofunction:: pymonet.utils.compose
+.. autofunction:: pymonet.utils.pipe
+.. autofunction:: pymonet.utils.cond
+.. autofunction:: pymonet.utils.memoize
+
