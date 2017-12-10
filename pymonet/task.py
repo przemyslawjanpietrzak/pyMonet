@@ -1,27 +1,31 @@
 class Task:
+    """
+    Task are data-type for handle execution of functions (in lazy way)
+    transform results of this function and handle errors.
+    """
 
     def __init__(self, fork):
         """
         :param fork: function to call during fork
-        :type fork: (reject, resolve) -> any
+        :type fork: Function(reject, resolve) -> any
         """
         self.fork = fork
 
     @classmethod
     def of(cls, value):
         """
-        :param value
-        :type: any
-        instant rejected Task
-        :returns: Task<_, resolve>
+        :param value:
+        :type value: Any
+        :returns: instant resolved Task
+        :rtype: Task<_, resolve>
         """
         return lambda _, resolve: resolve(value)
 
     @classmethod
     def reject(cls, value):
         """
-        :param value
-        :type: any
+        :param value:
+        :type value: Any
         instant rejected Task
         :returns: Task<reject, _>
         """
@@ -30,7 +34,7 @@ class Task:
     def map(self, fn):
         """
         :param fn: mapper function
-        :type fn: value -> mapped_value
+        :type fn: Function(value) -> mapped_value
         :returns: Task<reject -> mapped_value>
         """
         def result(reject, resolve):
@@ -43,9 +47,10 @@ class Task:
 
     def fold(self, fn):
         """
-        also know as flatmap
+        Also know as flatmap.
+
         :param fn: mapper function
-        :type fn: value -> Task<reject, mapped_value>
+        :type fn: Function(value) -> Task<reject, mapped_value>
         :returns: Task<reject, mapped_value>
         """
         def result(reject, resolve):

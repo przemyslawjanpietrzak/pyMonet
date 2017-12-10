@@ -4,3 +4,8 @@
 pymonet.egg-info
 dist
 .coverage
+_build
+.hypothesis
+.vscode
+docs
+monet

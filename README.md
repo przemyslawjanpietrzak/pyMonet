@@ -26,7 +26,7 @@ Boxs are data-types that store values. No restriction is placed on how they stor
 ### [Semigroups](#semigroups-1)
 In mathematics, a semigroup is an algebraic structure consisting of a set together with an associative binary operation.
 A semigroup generalizes a monoid in that there might not exist an identity element.
-It also (originally) generalized a group (a monoid with all inverses) to a type where every element did not have to have an inverse, thus the name semigroup.
+It also (originally) generalized a group (a monoid with all inverses) to a type where every element did not have to have an inverse, this the name semigroup.
 ### [Lazy](#lazy-1)
 Lazy are data-types that store functions. Stored function will not be called until call of fold method
 ### [Task](#task-1)
@@ -143,7 +143,7 @@ box = Box(42)  # Box<42>
 ## Semigroups
 In mathematics, a semigroup is an algebraic structure consisting of a set together with an associative binary operation.
 A semigroup generalizes a monoid in that there might not exist an identity element.
-It also (originally) generalized a group (a monoid with all inverses) to a type where every element did not have to have an inverse, thus the name semigroup.
+It also (originally) generalized a group (a monoid with all inverses) to a type where every element did not have to have an inverse, this the name semigroup.
 
 #### All
 ```python

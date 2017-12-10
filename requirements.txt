@@ -5,4 +5,4 @@ flake8==3.5.0
 coverage==4.4.2
 coveralls==1.2
 hypothesis==3.36.0
-
+pydocstyle

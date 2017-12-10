@@ -1,4 +1,9 @@
 class Maybe():
+    """
+    Maybe type is the most common way of representing nothingness (or the null type)
+    with making the possibilities of NullPointer issues disappear.
+    Maybe is effectively abstract and has two concrete subtypes: Some (also Box) and None (also Nothing).
+    """
 
     def __init__(self, value, is_nothing):
         self.is_nothing = is_nothing
@@ -13,8 +18,9 @@ class Maybe():
     @classmethod
     def just(cls, value):
         """
-        creates not empty maybe
-        :params mapper: value to store in Maybe
+        Create not empty maybe.
+
+        :param mapper: value to store in Maybe
         :type mapper: Any
         :returns: Maybe<Any>
         """
@@ -23,18 +29,20 @@ class Maybe():
     @classmethod
     def nothing(cls):
         """
-        creates empty maybe
+        Create empty maybe.
+
         :returns: Maybe<None>
         """
         return Maybe(None, True)
 
     def map(self, mapper):
         """
-        if Maybe is empty return new empty Maybe, in other case
+        If Maybe is empty return new empty Maybe, in other case
         takes mapper function and returns new instance of Maybe
-        with result of mapper
-        :params mapper: function to call with Maybe value
-        :type (A) -> B
+        with result of mapper.
+
+        :param mapper: function to call with Maybe value
+        :type mapper: Function(A) -> B
         :returns: Maybe<B | None>
         """
         if self.is_nothing:
@@ -45,10 +53,11 @@ class Maybe():
 
     def bind(self, mapper):
         """
-        if Maybe is empty return new empty Maybe, in other case
-        takes mapper function and returns result of mapper
-        :params mapper: function to call with Maybe.value
-        :type (A) -> Maybe<B>
+        If Maybe is empty return new empty Maybe, in other case
+        takes mapper function and returns result of mapper.
+
+        :param mapper: function to call with Maybe.value
+        :type mapper: Function(A) -> Maybe<B>
         :returns: Maybe<B | None>
         """
         if self.is_nothing:
@@ -57,10 +66,11 @@ class Maybe():
 
     def filter(self, filterer):
         """
-        if Maybe is empty or filterer returns False return default_value, in other case
-        return new instance of Maybe with the same value
-        :params filterer:
-        :type (A) -> Boolean
+        If Maybe is empty or filterer returns False return default_value, in other case
+        return new instance of Maybe with the same value.
+
+        :param filterer:
+        :type filterer: Function(A) -> Boolean
         :returns Maybe<A> | Maybe<None>
         """
         if self.is_nothing or not filterer(self.value):
@@ -69,11 +79,12 @@ class Maybe():
 
     def get_or_else(self, default_value):
         """
-        if Maybe is empty return default_value, in other case
-        returns Maybe.value
-        :params default_value: value to return if Maybe is empty
+        If Maybe is empty return default_value, in other case.
+
+        :param default_value: value to return if Maybe is empty
         :type default_value: Any
-        :returns A | Any
+        returns: Maybe value
+        :rtype: A | Any
         """
         if self.is_nothing:
             return default_value
@@ -81,10 +92,11 @@ class Maybe():
 
     def to_either(self):
         """
-        Transform Maybe to Either
+        Transform Maybe to Either.
+
         :returns: Right monad with previous value when Maybe is not empty,
         in other case Left with None
-        :type Either[A | None]
+        :type Either<A | None>
         """
         from pymonet.either import Left, Right
 
@@ -94,10 +106,11 @@ class Maybe():
 
     def to_box(self):
         """
-        Transform Maybe to Box
+        Transform Maybe to Box.
+
         :returns: Box monad with previous value when Maybe is not empty,
         in other case Box with None
-        :type Box[A | None]
+        :rtype: Box<A | None>
         """
         from pymonet.box import Box
 
@@ -107,10 +120,11 @@ class Maybe():
 
     def to_lazy(self):
         """
-        Transform Maybe to Try
+        Transform Maybe to Try.
+
         :returns: Lazy monad with function returning previous value
         in other case Left with None
-        :rtype: Lazy[() -> (A | None)]
+        :rtype: Lazy<Function() -> (A | None)>
         """
         from pymonet.lazy import Lazy
 
@@ -120,10 +134,11 @@ class Maybe():
 
     def to_try(self):
         """
-        Transform Maybe to Try
+        Transform Maybe to Try.
+
         :returns: successfully Try with previous value when Maybe is not empty,
         in other case not successfully Try with None
-        :rtype: Try[A]
+        :rtype: Try<A>
         """
         from pymonet.monad_try import Try
 

@@ -14,7 +14,7 @@ class Lazy:
 
     def __eq__(self, other):
         """
-        Two Lazy are equals where both are evaluated both have the same value and constructor functions
+        Two Lazy are equals where both are evaluated both have the same value and constructor functions.
         """
         return (
             isinstance(other, Lazy)
@@ -30,26 +30,29 @@ class Lazy:
 
     def map(self, mapper):
         """
-        takes function (A) -> A and returns new Lazy with mapped argument of Lazy constructor function.
-        Both mapper end constructor will be called only during calling fold method
+        Take function (A) -> A and returns new Lazy with mapped argument of Lazy constructor function.
+        Both mapper end constructor will be called only during calling fold method.
+
         :param mapper: mapper function
-        :type mapper: (constructor_mapper) -> B
-        :returns: Lazy<() -> mapper(constructor_fn)>
+        :type mapper: Function(constructor_mapper) -> B
+        :returns: Lazy<Function() -> mapper(constructor_fn)>
         """
         return Lazy(lambda *args: mapper(self.constructor_fn(*args)))
 
     def fold(self, fn, *args):
         """
-        takes function and call constructor function passing returned value to fn function.
+        Take function and call constructor function passing returned value to fn function.
+
         It's only way to call function store in Lazy
-        :param fn: (constructor_fn) -> B
+        :param fn: Function(constructor_fn) -> B
         :returns: B
         """
         return fn(self._compute_value(*args))
 
     def get(self, *args):
         """
-        Evaluate function and memoize her output or return memoized value when function was evaluated
+        Evaluate function and memoize her output or return memoized value when function was evaluated.
+
         :returns: A
         """
         if self.is_evaluated:
