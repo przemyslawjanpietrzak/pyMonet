@@ -121,7 +121,7 @@ def memoize(fn, key=eq):
     :param fn: function to invoke
     :type fn: Function(A) -> B
     :param key: function to decide if result should be taken from cache
-    :type key: (A, A) -> Boolean
+    :type key: Function(A, A) -> Boolean
     :returns: new function invoking old one
     :rtype: Function(A) -> B
     """
