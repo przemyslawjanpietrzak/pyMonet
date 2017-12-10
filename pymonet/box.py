@@ -15,21 +15,23 @@ class Box:
 
     def map(self, mapper):
         """
-        takes function (a) -> b and applied this function on current box value and returns new box with mapped value
+        Take function (A) -> b and applied this function on current box value and returns new box with mapped value.
+
         :param mapper: mapper function
-        :type mapper: (a) -> b
+        :type mapper: Function(A) -> B
         :returns: new box with mapped value
-        :rtype: Box<b>
+        :rtype: Box<B>
         """
         return Box(mapper(self.value))
 
     def bind(self, mapper):
         """
-        takes function (a) -> b and applied this function on current box value and returns mapped value
+        Take function and applied this function on current box value and returns mapped value.
+
         :param mapper: mapper function
-        :type mapper: (a) -> b
+        :type mapper: Function(A) -> B
         :returns: new box with mapped value
-        :rtype: b
+        :rtype: B
         """
         return mapper(self.value)
 
@@ -37,17 +39,18 @@ class Box:
         """
         It takes as a parameter another Box type which contains a function,
         and then applies that function to the value contained in the calling Box.
+
         :param monad: monad contains function
-        :type monad: Box[A -> B]
+        :type monad: Box<Function(A) -> B>
         :returns: new Box with result of contains function
-        :rtype: Box[B]
+        :rtype: Box<B>
         """
         return self.map(monad.value)
 
     def to_maybe(self):
         """
         :returns: non empty Maybe monad with previous value
-        :rtype: Maybe[A]
+        :rtype: Maybe<A>
         """
         from pymonet.maybe import Maybe
 
@@ -56,7 +59,7 @@ class Box:
     def to_either(self):
         """
         :returns: right Either monad with previous value
-        :rtype: Right[A]
+        :rtype: Right<A>
         """
         from pymonet.either import Right
 
@@ -65,6 +68,7 @@ class Box:
     def to_lazy(self):
         """
         :returns: not folded Lazy monad with function returning previous value
+        :rtype: Lazy<Function(() -> A)
         """
         from pymonet.lazy import Lazy
 
@@ -73,6 +77,7 @@ class Box:
     def to_try(self):
         """
         :returns: successfully Try monad with previous value
+        :rtype: Try<A>
         """
         from pymonet.monad_try import Try
 

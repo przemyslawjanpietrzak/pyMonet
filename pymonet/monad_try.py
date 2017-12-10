@@ -1,4 +1,8 @@
 class Try:
+    """
+    The Try control gives us the ability write safe code
+    without focusing on try-catch blocks in the presence of exceptions.
+    """
 
     def __init__(self, value, is_success):
         self.value = value

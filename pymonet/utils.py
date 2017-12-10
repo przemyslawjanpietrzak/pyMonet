@@ -2,10 +2,26 @@ from functools import reduce
 
 
 def identity(value):
+    """
+    Return first argument.
+
+    :param value:
+    :type value: Any
+    :returns:
+    :rtype: Any
+    """
     return value
 
 
 def increase(value):
+    """
+    Return increased by 1 argument.
+
+    :param value:
+    :type value: Int
+    :returns:
+    :rtype: Int
+    """
     return value + 1
 
 
@@ -25,11 +41,12 @@ def curried_filter(filterer):
 
 def find(collection, key):
     """
-    Returns the first element of the list which matches the keys, or None if no element matches.
+    Return the first element of the list which matches the keys, or None if no element matches.
+
     :param collection: collection to search
     :type collection: List<A>
     :param key: function to decide witch element should be found
-    :type key: (A) -> Boolean
+    :type key: Function(A) -> Boolean
     :returns: element of collection or None
     :rtype: A | None
     """
@@ -40,7 +57,8 @@ def find(collection, key):
 
 def compose(value, *functions):
     """
-    Performs right-to-left function composition.
+    Perform right-to-left function composition.
+
     :param value: argument of first applied function
     :type value: Any
     :param functions: list of functions to applied from right-to-left
@@ -57,10 +75,11 @@ def compose(value, *functions):
 
 def pipe(value, *functions):
     """
-    Performs left-to-right function composition.
+    Perform left-to-right function composition.
+
     :param value: argument of first applied function
     :type value: Any
-    :param functions: list of functions to applied from ledt-to-right
+    :param functions: list of functions to applied from left-to-right
     :type functions: List<Function>
     :returns: result of all functions
     :rtype: Any
@@ -77,9 +96,10 @@ def cond(condition_list):
     Function for return function depended on first function argument
     cond get list of two-item tuples,
     first is condition_function, second is execute_function.
-    Returns this execute_function witch first condition_function return truly value
+    Returns this execute_function witch first condition_function return truly value.
+
     :param condition_list: list of two-item tuples (condition_function, execute_function)
-    :type List<(Function, Function)>
+    :type condition_list: List<(Function, Function)>
     :returns: Returns this execute_function witch first condition_function return truly value
     :rtype: Function
     """
@@ -93,16 +113,17 @@ def cond(condition_list):
 
 def memoize(fn, key=eq):
     """
-    Creates a new function that, when invoked,
+    Create a new function that, when invoked,
     caches the result of calling fn for a given argument set and returns the result.
     Subsequent calls to the memoized fn with the same argument set will not result in an additional call to fn;
     instead, the cached result for that set of arguments will be returned.
+
     :param fn: function to invoke
-    :type fn: (A) -> B
+    :type fn: Function(A) -> B
     :param key: function to decide if result should be taken from cache
-    :type key: (A, A) -> Boolean
+    :type key: Function(A, A) -> Boolean
     :returns: new function invoking old one
-    :rtype: (A) -> B
+    :rtype: Function(A) -> B
     """
     cache = []
 

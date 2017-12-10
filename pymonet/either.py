@@ -13,7 +13,8 @@ class Either:
 
     def case(self, error, success):
         """
-        takes 2 functions call only one of then with either value and return her result
+        Take 2 functions call only one of then with either value and return her result
+
         :params error: function to call when Either is Left
         :type error: (A) -> B
         :params success: function to call when Either is Right
@@ -26,8 +27,9 @@ class Either:
 
     def ap(self, monad):
         """
-        It takes as a parameter another Box type which contains a function,
+        Take as a parameter another Box type which contains a function,
         and then applies that function to the value contained in the calling Box.
+
         :param monad: monad contains function
         :type monad: Box[A -> B]
         :returns: new Box with result of contains function
@@ -48,6 +50,7 @@ class Either:
     def to_try(self):
         """
         Transform Either to Try
+
         :returns: resolved Try monad with previous value. Right is resolved successfully, Left not.
         :rtype: Box[A]
         """
@@ -67,39 +70,53 @@ class Either:
 
 
 class Left(Either):
+    """
+    Successfully Either
+    """
 
     def map(self, _):
         """
-        takes mapper function and return new instance of Left with the same value
-        :returns: Left<A>
+        Take mapper function and return new instance of Left with the same value.
+
+        :returns: Copy of self
+        :rtype: Left<A>
         """
         return Left(self.value)
 
     def bind(self, _):
         """
-        takes mapper function and return value of Left
-        :returns: A
+        Take mapper function and return value of Left.
+
+        :returns: Stored value
+        :rtype: A
         """
         return self
 
     def ap(self, monad):
+        """
+        :returns: Copy of self
+        :rtype: Left<A>
+        """
         return Left(self.value)
 
     def is_left(self):
         """
-        :returns: Boolean
+        :returns: True
+        :rtype: Boolean
         """
         return True
 
     def is_right(self):
         """
-        :returns: Boolean
+        :returns: False
+        :rtype: Boolean
         """
         return False
 
     def to_maybe(self):
         """
-        Transform Either to Maybe
+        Transform Either to Maybe.
+
         :returns: Empty Maybe
         :rtype: Maybe<None>
         """
@@ -109,40 +126,48 @@ class Left(Either):
 
 
 class Right(Either):
+    """
+    Not successfully Either
+    """
 
     def map(self, mapper):
         """
-        takes mapper function and return new instance of Right with mapped value
+        Take mapper function and return new instance of Right with mapped value.
+|
         :param mapper: function to apply on Right value
-        :type mapper: (A) -> B
+        :type mapper: Function(A) -> B
         :returns: Right<B>
         """
         return Right(mapper(self.value))
 
     def bind(self, mapper):
         """
-        takes mapper function and returns result of them called with Right value
+        Take mapper function and returns result of them called with Right value.
+
         :param mapper: function to apply on Right value
-        :type mapper: (A) -> Either<B>
+        :type mapper: Function(A) -> Either<B>
         :returns: Either<B>
         """
         return mapper(self.value)
 
     def is_right(self):
         """
-        :returns: Boolean
+        :returns: True
+        :rtype: Boolean
         """
         return True
 
     def is_left(self):
         """
-        :returns: Boolean
+        :returns: False
+        :rtype: Boolean
         """
         return False
 
     def to_maybe(self):
         """
-        Transform Either to Maybe
+        Transform Either to Maybe.
+
         :returns: Maybe with previous value
         :type Maybe<A>
         """
