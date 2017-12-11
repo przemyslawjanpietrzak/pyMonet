@@ -4,6 +4,7 @@
 [![Build Status](https://travis-ci.org/przemyslawjanpietrzak/pyMonet.svg?branch=develop)](https://travis-ci.org/przemyslawjanpietrzak/pyMonet)
 [![Coverage Status](https://coveralls.io/repos/github/przemyslawjanpietrzak/pyMonet/badge.svg?branch=develop)](https://coveralls.io/github/przemyslawjanpietrzak/pyMonet?branch=develop)
 [![PyPI version](https://badge.fury.io/py/pymonet.svg)](https://badge.fury.io/py/pymonet)
+[![Documentation Status](https://readthedocs.org/projects/pymonet/badge/?version=latest)](http://pymonet.readthedocs.io/en/latest/?badge=latest)
 
 High abstract python library for functional programming.
 Contains algebraic data structures known (or unknown) from Haskell or Scala.
