@@ -6,34 +6,25 @@
 Welcome to pyMonet's documentation
 ===================================
 
+.. image:: https://travis-ci.org/przemyslawjanpietrzak/pyMonet.svg?branch=develop
+    :target: https://travis-ci.org/przemyslawjanpietrzak/pyMonet
 
-.. autoclass:: pymonet.maybe.Maybe
-    :members: just, nothing, map, bind, filter, get_or_else, to_either, to_lazy, to_try, to_box
+.. image:: https://coveralls.io/repos/github/przemyslawjanpietrzak/pyMonet/badge.svg?branch=develop
+    :target: https://coveralls.io/github/przemyslawjanpietrzak/pyMonet?branch=develop
 
-.. autoclass:: pymonet.box.Box
-    :members: map, bind, ap, to_maybe, to_either, to_lazy, to_try
+.. image:: https://badge.fury.io/py/pymonet.svg
+    :target: https://badge.fury.io/py/pymonet
 
-.. autoclass:: pymonet.either.Left
-    :members: map, bind, ap, is_left, is_right, to_maybe, to_either, to_lazy, to_try
-.. autoclass:: pymonet.either.Right
-    :members: map, bind, ap, is_left, is_right, to_maybe, to_either, to_lazy, to_try
+.. image:: https://readthedocs.org/projects/pymonet/badge/?version=latest
+    :target: http://pymonet.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 
-.. autoclass:: pymonet.lazy.Lazy
-    :members: __init__, __eq__, map, fold, get
+.. toctree::
 
-.. autoclass:: pymonet.monad_try.Try
-    :members: of, map, fold, filter, get_or_else, get, on_success, on_fail
-
-.. autoclass:: pymonet.task.Task
-    :members: __init__, of, reject, map, fold
-
-.. autofunction:: pymonet.utils.identity
-.. autofunction:: pymonet.utils.increase
-.. autofunction:: pymonet.utils.eq
-.. autofunction:: pymonet.utils.curried_map
-.. autofunction:: pymonet.utils.curried_filter
-.. autofunction:: pymonet.utils.compose
-.. autofunction:: pymonet.utils.pipe
-.. autofunction:: pymonet.utils.cond
-.. autofunction:: pymonet.utils.memoize
-
+    ./docs/box
+    ./docs/either
+    ./docs/maybe
+    ./docs/lazy
+    ./docs/try
+    ./docs/task
+    ./docs/utils

@@ -1,11 +1,10 @@
 *.pyc
 .cache
 .idea
-pymonet.egg-info
-dist
 .coverage
-_build
 .hypothesis
 .vscode
-docs
+pymonet.egg-info
+dist
+docs/dist
 monet

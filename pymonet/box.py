@@ -20,7 +20,7 @@ class Box:
         :param mapper: mapper function
         :type mapper: Function(A) -> B
         :returns: new box with mapped value
-        :rtype: Box<B>
+        :rtype: Box[B]
         """
         return Box(mapper(self.value))
 
@@ -41,16 +41,16 @@ class Box:
         and then applies that function to the value contained in the calling Box.
 
         :param monad: monad contains function
-        :type monad: Box<Function(A) -> B>
+        :type monad: Box[Function(A) -> B]
         :returns: new Box with result of contains function
-        :rtype: Box<B>
+        :rtype: Box[B]
         """
         return self.map(monad.value)
 
     def to_maybe(self):
         """
         :returns: non empty Maybe monad with previous value
-        :rtype: Maybe<A>
+        :rtype: Maybe[A]
         """
         from pymonet.maybe import Maybe
 
@@ -59,7 +59,7 @@ class Box:
     def to_either(self):
         """
         :returns: right Either monad with previous value
-        :rtype: Right<A>
+        :rtype: Right[A]
         """
         from pymonet.either import Right
 
@@ -68,7 +68,7 @@ class Box:
     def to_lazy(self):
         """
         :returns: not folded Lazy monad with function returning previous value
-        :rtype: Lazy<Function(() -> A)
+        :rtype: Lazy[Function(() -> A)]
         """
         from pymonet.lazy import Lazy
 
@@ -77,7 +77,7 @@ class Box:
     def to_try(self):
         """
         :returns: successfully Try monad with previous value
-        :rtype: Try<A>
+        :rtype: Try[A]
         """
         from pymonet.monad_try import Try
 
