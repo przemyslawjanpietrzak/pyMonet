@@ -3,6 +3,7 @@ class Either:
     The Either type represents values with two possibilities: B value of type Either[A, B> is either Left[A> or Right[B]
     But not both in the same time.
     """
+
     def __init__(self, value):
         self.value = value
 
@@ -73,9 +74,7 @@ class Either:
 
 
 class Left(Either):
-    """
-    Successfully Either
-    """
+    """Not successfully Either"""
 
     def map(self, _):
         """
@@ -129,14 +128,12 @@ class Left(Either):
 
 
 class Right(Either):
-    """
-    Not successfully Either
-    """
+    """Not successfully Either"""
 
     def map(self, mapper):
         """
         Take mapper function and return new instance of Right with mapped value.
-|
+
         :param mapper: function to apply on Right value
         :type mapper: Function(A) -> B
         :returns: new Right with result of mapper
