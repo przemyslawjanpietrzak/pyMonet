@@ -9,5 +9,4 @@ script:
   - make lint
   - make lint-docs
   - make test-with-coverage
-  - coverage report --omit=setup.py pymonet/test_*.py
   - coveralls
