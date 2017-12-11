@@ -35,7 +35,7 @@ class Lazy:
 
         :param mapper: mapper function
         :type mapper: Function(constructor_mapper) -> B
-        :returns: Lazy<Function() -> mapper(constructor_fn)>
+        :returns: Lazy[Function() -> mapper(constructor_fn)]
         """
         return Lazy(lambda *args: mapper(self.constructor_fn(*args)))
 
