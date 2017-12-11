@@ -4,9 +4,10 @@ python:
   - "3.5"
   - "3.6"
 install:
-  - pip install -r requirements.txt
+  - make install
 script:
-  - flake8 ./pymonet --max-line-length=120
-  - py.test ./pymonet --cov=./pymonet/
+  - make lint
+  - make lint-docs
+  - make test-with-coverage
   - coverage report --omit=setup.py pymonet/test_*.py
   - coveralls

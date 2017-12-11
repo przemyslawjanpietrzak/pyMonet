@@ -1,8 +1,8 @@
 class Lazy:
     """
-     Data type for storage any type of function.
-     This function (and all his mappers) will be called only during calling fold method
-     """
+    Data type for storage any type of function.
+    This function (and all his mappers) will be called only during calling fold method
+    """
 
     def __init__(self, constructor_fn):
         """
