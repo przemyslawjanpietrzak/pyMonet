@@ -1,6 +1,6 @@
 class Either:
     """
-    The Either type represents values with two possibilities: B value of type Either[A, B> is either Left[A> or Right[B]
+    The Either type represents values with two possibilities: B value of type Either[A, B] is either Left[A or Right[B]
     But not both in the same time.
     """
 
