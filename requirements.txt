@@ -1,8 +1,13 @@
 pytest==3.2.3
 pytest-mock==1.6.3
-pytest-cov==2.5.1
+hypothesis==3.36.0
+
 flake8==3.5.0
+pydocstyle==2.1.1
+
+pytest-cov==2.5.1
 coverage==4.4.2
 coveralls==1.2
-hypothesis==3.36.0
-pydocstyle
+
+sphinx==1.6.5
+sphinx_rtd_theme==0.2.4

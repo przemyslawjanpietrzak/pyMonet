@@ -1,8 +1,9 @@
 class Either:
     """
-    The Either type represents values with two possibilities: B value of type Either<A, B> is either Left<A> or Right<B>
+    The Either type represents values with two possibilities: B value of type Either[A, B] is either Left[A or Right[B]
     But not both in the same time.
     """
+
     def __init__(self, value):
         self.value = value
 
@@ -13,13 +14,14 @@ class Either:
 
     def case(self, error, success):
         """
-        Take 2 functions call only one of then with either value and return her result
+        Take 2 functions call only one of then with either value and return her result.
 
         :params error: function to call when Either is Left
-        :type error: (A) -> B
+        :type error: Function(A) -> B
         :params success: function to call when Either is Right
-        :type success: (A) -> B
-        :returns: B
+        :type success: Function(A) -> B
+        :returns: result of success handler when Eihter is Right, result of error handler when Eihter is Left
+        :rtpye: B
         """
         if self.is_right():
             return success(self.value)
@@ -31,7 +33,7 @@ class Either:
         and then applies that function to the value contained in the calling Box.
 
         :param monad: monad contains function
-        :type monad: Box[A -> B]
+        :type monad: Box[Function(A) -> B]
         :returns: new Box with result of contains function
         :rtype: Box[B]
         """
@@ -39,7 +41,8 @@ class Either:
 
     def to_box(self):
         """
-        Transform Either to Box
+        Transform Either to Box.
+
         :returns: Box monad with previous value
         :rtype: Box[A]
         """
@@ -49,7 +52,7 @@ class Either:
 
     def to_try(self):
         """
-        Transform Either to Try
+        Transform Either to Try.
 
         :returns: resolved Try monad with previous value. Right is resolved successfully, Left not.
         :rtype: Box[A]
@@ -60,9 +63,10 @@ class Either:
 
     def to_lazy(self):
         """
-        Transform Either to Try
+        Transform Either to Try.
+
         :returns: Lazy monad with function returning previous value
-        :type Lazy[() -> A]
+        :rtype Lazy[Function() -> A]
         """
         from pymonet.lazy import Lazy
 
@@ -70,16 +74,14 @@ class Either:
 
 
 class Left(Either):
-    """
-    Successfully Either
-    """
+    """Not successfully Either"""
 
     def map(self, _):
         """
         Take mapper function and return new instance of Left with the same value.
 
         :returns: Copy of self
-        :rtype: Left<A>
+        :rtype: Left[A]
         """
         return Left(self.value)
 
@@ -95,7 +97,7 @@ class Left(Either):
     def ap(self, monad):
         """
         :returns: Copy of self
-        :rtype: Left<A>
+        :rtype: Left[A]
         """
         return Left(self.value)
 
@@ -118,7 +120,7 @@ class Left(Either):
         Transform Either to Maybe.
 
         :returns: Empty Maybe
-        :rtype: Maybe<None>
+        :rtype: Maybe[None]
         """
         from pymonet.maybe import Maybe
 
@@ -126,17 +128,16 @@ class Left(Either):
 
 
 class Right(Either):
-    """
-    Not successfully Either
-    """
+    """Not successfully Either"""
 
     def map(self, mapper):
         """
         Take mapper function and return new instance of Right with mapped value.
-|
+
         :param mapper: function to apply on Right value
         :type mapper: Function(A) -> B
-        :returns: Right<B>
+        :returns: new Right with result of mapper
+        :rtype: Right[B]
         """
         return Right(mapper(self.value))
 
@@ -145,8 +146,9 @@ class Right(Either):
         Take mapper function and returns result of them called with Right value.
 
         :param mapper: function to apply on Right value
-        :type mapper: Function(A) -> Either<B>
-        :returns: Either<B>
+        :type mapper: Function(A) -> Either[B]
+        :returns: result of mapper
+        :rtype:Either[B]
         """
         return mapper(self.value)
 
@@ -169,7 +171,7 @@ class Right(Either):
         Transform Either to Maybe.
 
         :returns: Maybe with previous value
-        :type Maybe<A>
+        :rtype: Maybe[A]
         """
         from pymonet.maybe import Maybe
 

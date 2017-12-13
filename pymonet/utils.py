@@ -44,7 +44,7 @@ def find(collection, key):
     Return the first element of the list which matches the keys, or None if no element matches.
 
     :param collection: collection to search
-    :type collection: List<A>
+    :type collection: List[A]
     :param key: function to decide witch element should be found
     :type key: Function(A) -> Boolean
     :returns: element of collection or None
@@ -62,7 +62,7 @@ def compose(value, *functions):
     :param value: argument of first applied function
     :type value: Any
     :param functions: list of functions to applied from right-to-left
-    :type functions: List<Function>
+    :type functions: List[Function]
     :returns: result of all functions
     :rtype: Any
     """
@@ -80,7 +80,7 @@ def pipe(value, *functions):
     :param value: argument of first applied function
     :type value: Any
     :param functions: list of functions to applied from left-to-right
-    :type functions: List<Function>
+    :type functions: List[Function]
     :returns: result of all functions
     :rtype: Any
     """
@@ -99,7 +99,7 @@ def cond(condition_list):
     Returns this execute_function witch first condition_function return truly value.
 
     :param condition_list: list of two-item tuples (condition_function, execute_function)
-    :type condition_list: List<(Function, Function)>
+    :type condition_list: List[(Function, Function)]
     :returns: Returns this execute_function witch first condition_function return truly value
     :rtype: Function
     """

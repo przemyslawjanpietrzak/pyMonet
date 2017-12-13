@@ -1,8 +1,8 @@
 class Lazy:
     """
-     Data type for storage any type of function.
-     This function (and all his mappers) will be called only during calling fold method
-     """
+    Data type for storage any type of function.
+    This function (and all his mappers) will be called only during calling fold method
+    """
 
     def __init__(self, constructor_fn):
         """
@@ -35,7 +35,7 @@ class Lazy:
 
         :param mapper: mapper function
         :type mapper: Function(constructor_mapper) -> B
-        :returns: Lazy<Function() -> mapper(constructor_fn)>
+        :returns: Lazy[Function() -> mapper(constructor_fn)]
         """
         return Lazy(lambda *args: mapper(self.constructor_fn(*args)))
 
