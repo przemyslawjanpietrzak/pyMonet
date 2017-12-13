@@ -25,9 +25,9 @@ Try
         .on_success(success_callback)
         .on_fail(fail_callback))
     #error: division by zero
-    ```
-    map method will be only applied mapper when exception was not thrown
-    ```python
+
+    # map method will be only applied mapper when exception was not thrown
+
     (Try.of(divide, 42, 2)
         .map(lambda value: value + 1)
         .on_success(success_callback)
@@ -39,15 +39,14 @@ Try
         .map(lambda value: value + 1)
         .on_fail(fail_callback))
     #error: division by zero
-    ```
-    get_or_else method returns value when exception was not thrown
-    ```python
+    
+    # get_or_else method returns value when exception was not thrown
+    
     Try.of(divide, 42, 2).get_or_else('Holy Grail') # 21
     Try.of(divide, 42, 0).get_or_else('Holy Grail') # 'Holy Grail'
-    ```
-
-    get method should return value with or without exception thrown
-    ```python
+    
+    # get method should return value with or without exception thrown
+    
     Try.of(divide, 42, 2).get()  # 21
     Try.of(divide, 42, 0).get()  # ZeroDivisionError<'division by zero'>
 

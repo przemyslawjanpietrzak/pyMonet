@@ -6,6 +6,8 @@
 Welcome to pyMonet's documentation
 ===================================
 
+High abstract python library for functional programming. Contains algebraic data structures known (or unknown) from Haskell or Scala. With MIT licence.
+
 .. image:: https://travis-ci.org/przemyslawjanpietrzak/pyMonet.svg?branch=develop
     :target: https://travis-ci.org/przemyslawjanpietrzak/pyMonet
 
