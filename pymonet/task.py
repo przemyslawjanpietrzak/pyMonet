@@ -14,7 +14,7 @@ class Task:
     @classmethod
     def of(cls, value):
         """
-        Return resolved Task with stored value argument. 
+        Return resolved Task with stored value argument.
 
         :param value: value to store in Task
         :type value: A
@@ -26,7 +26,7 @@ class Task:
     @classmethod
     def reject(cls, value):
         """
-        Return rejected Task with stored value argument. 
+        Return rejected Task with stored value argument.
 
         :param value: value to store in Task
         :type value: Any
