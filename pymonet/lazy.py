@@ -47,7 +47,7 @@ class Lazy:
 
         It's only way to call function store in Lazy
         :param fn: Function(constructor_fn) -> B
-        :returns: result od folder function 
+        :returns: result od folder function
         :rtype: B
         """
         return fn(self._compute_value(*args))
@@ -56,7 +56,7 @@ class Lazy:
         """
         Evaluate function and memoize her output or return memoized value when function was evaluated.
 
-        :returns: result of function in Lazy 
+        :returns: result of function in Lazy
         :rtype: A
         """
         if self.is_evaluated:
