@@ -66,7 +66,7 @@ class Either:
         Transform Either to Try.
 
         :returns: Lazy monad with function returning previous value
-        :rtype Lazy[Function() -> A]
+        :rtype: Lazy[Function() -> A]
         """
         from pymonet.lazy import Lazy
 
@@ -148,7 +148,7 @@ class Right(Either):
         :param mapper: function to apply on Right value
         :type mapper: Function(A) -> Either[B]
         :returns: result of mapper
-        :rtype:Either[B]
+        :rtype: Either[B]
         """
         return mapper(self.value)
 
