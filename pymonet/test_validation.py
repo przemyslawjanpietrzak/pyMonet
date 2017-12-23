@@ -1,5 +1,5 @@
 from pymonet.validation import Validation
-from pymonet.utils import increase
+from pymonet.utils import increase, identity
 from pymonet.monad_law_tester import get_associativity_test, get_left_unit_test, get_right_unit_data
 
 from hypothesis import given
