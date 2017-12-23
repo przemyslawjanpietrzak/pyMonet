@@ -1,13 +1,13 @@
 class Validation:
-    
+
     def __init__(self, value, errors):
         self.value = value
         self.errors = errors
 
     def __eq__(self, other):
-        return (isinstance(other, Validation) and 
-            self.errors == other.errors and
-            self.value == other.value)
+        return (isinstance(other, Validation) and
+                self.errors == other.errors and
+                self.value == other.value)
 
     def __str__(self):
         if self.is_success():

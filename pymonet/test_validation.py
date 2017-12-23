@@ -3,7 +3,6 @@ from pymonet.maybe import Maybe
 from pymonet.either import Left, Right
 from pymonet.monad_try import Try
 from pymonet.box import Box
-from pymonet.monad_try import Try
 from pymonet.utils import increase, identity
 from pymonet.monad_law_tester import get_associativity_test, get_left_unit_test, get_right_unit_data
 
@@ -19,8 +18,8 @@ def test_validation_map():
 
 def test_validation_bind():
     assert (Validation
-        .success(42)
-        .bind(lambda value: Validation.success(value + 1))) == Validation.success(43)
+            .success(42)
+            .bind(lambda value: Validation.success(value + 1))) == Validation.success(43)
 
 
 def test_validation_is_success():
@@ -51,9 +50,9 @@ def validate_contains_special_character(value):
 
 def validate(value):
     return (Validation.success(value)
-        .ap(validate_length)
-        .ap(validate_uppercase)
-        .ap(validate_contains_special_character))
+            .ap(validate_length)
+            .ap(validate_uppercase)
+            .ap(validate_contains_special_character))
 
 
 def test_validation_applicative():
@@ -76,7 +75,7 @@ def test_validation_applicative():
         'value not uppercase',
         'value not contains special character'
     ])
-    
+
     assert validate('s') == Validation(value='s', errors=[
         'value not long enough',
         'value not uppercase',
@@ -117,7 +116,7 @@ def test_transform_to_either_should_return_either(integer):
 @given(text())
 def test_transform_to_lazy_should_return_lazy(integer):
     assert Validation.success(integer).to_lazy().fold(identity) == integer
-    assert Validation.fail(['fail']).to_lazy().fold(identity) == None
+    assert Validation.fail(['fail']).to_lazy().fold(identity) is None
 
 
 @given(text())
