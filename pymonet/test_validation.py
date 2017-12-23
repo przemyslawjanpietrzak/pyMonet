@@ -114,6 +114,12 @@ def test_transform_to_either_should_return_either(integer):
 
 
 @given(text())
+def test_transform_to_maybe_should_return_maybe(integer):
+    assert Validation.success(integer).to_maybe() == Maybe.just(integer)
+    assert Validation.fail(['fail']).to_maybe() == Maybe.nothing()
+
+
+@given(text())
 def test_transform_to_lazy_should_return_lazy(integer):
     assert Validation.success(integer).to_lazy().fold(identity) == integer
     assert Validation.fail(['fail']).to_lazy().fold(identity) is None

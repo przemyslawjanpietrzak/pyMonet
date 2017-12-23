@@ -49,6 +49,13 @@ class Validation:
             return Right(self.value)
         return Left(self.errors)
 
+    def to_maybe(self):
+        from pymonet.maybe import Maybe
+
+        if self.is_success():
+            return Maybe.just(self.value)
+        return Maybe.nothing()
+
     def to_box(self):
         from pymonet.box import Box
 
