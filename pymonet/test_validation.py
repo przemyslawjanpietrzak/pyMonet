@@ -1,4 +1,9 @@
 from pymonet.validation import Validation
+from pymonet.maybe import Maybe
+from pymonet.either import Left, Right
+from pymonet.monad_try import Try
+from pymonet.box import Box
+from pymonet.monad_try import Try
 from pymonet.utils import increase, identity
 from pymonet.monad_law_tester import get_associativity_test, get_left_unit_test, get_right_unit_data
 
@@ -9,36 +14,38 @@ import re
 
 
 def test_validation_map():
-    assert Validation.success(42).map(increase) == 43
+    assert Validation.success(42).map(increase) == Validation.success(43)
 
 
-def test_validation_fold():
+def test_validation_bind():
     assert (Validation
         .success(42)
-        .fold(lambda value: Validation.success(value + 1))) == Validation.success(43)
+        .bind(lambda value: Validation.success(value + 1))) == Validation.success(43)
 
 
 def test_validation_is_success():
-    assert Validation.success().is_success
+    assert Validation.success().is_success()
 
 
 def test_validation_is_fail():
-    assert not Validation.fail([]).is_fail
+    assert Validation.fail([]).is_fail()
 
 
 def validate_length(value):
-    if value > 5:
-        return Validation.fail('value not long enough')
+    if len(value) > 5:
+        return Validation.fail(['value not long enough'])
     return Validation.success()
+
 
 def validate_uppercase(value):
     if value[0].upper != value[0]:
-        return Validation.fail('value not uppercase')
+        return Validation.fail(['value not uppercase'])
     return Validation.success()
 
+
 def validate_contains_special_character(value):
-    if not re.match(r'^\w+$', s):
-        return Validation.fail('value not contains special character')
+    if not re.match(r'^\w+$', value):
+        return Validation.fail(['value not contains special character'])
     return Validation.success()
 
 
@@ -47,6 +54,7 @@ def validate(value):
         .ap(validate_length)
         .ap(validate_uppercase)
         .ap(validate_contains_special_character))
+
 
 def test_validation_applicative():
     assert validate('Success$') == Validation.success('Success$')
@@ -108,7 +116,7 @@ def test_transform_to_either_should_return_either(integer):
 @given(text())
 def test_transform_to_lazy_should_return_lazy(integer):
     assert Validation.success(integer).to_lazy().fold(identity) == integer
-    assert Validation.fail(['fail']).to_lazy().fold(identity) is ['fail']
+    assert Validation.fail(['fail']).to_lazy().fold(identity) == ['fail']
 
 
 @given(text())

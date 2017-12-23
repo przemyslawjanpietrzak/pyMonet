@@ -4,9 +4,13 @@ class Validation:
         self.value = value
         self.success = success
 
+    def __eq__(self, other):
+        return (isinstance(other, Validation) and 
+            self.success == other.success and
+            self.value == other.value)
 
     @classmethod
-    def success(cls, value):
+    def success(cls, value=None):
         return Validation(value, True)
 
     @classmethod
@@ -24,7 +28,7 @@ class Validation:
             return Validation.success(mapper(self.value))
         return Validation.fail(self.value)
 
-    def fold(self, folder):
+    def bind(self, folder):
         if self.success:
             return folder(self.value)
         return Validation.fail(self.value)
@@ -34,8 +38,10 @@ class Validation:
         if fn_result.is_success():
             if self.success:
                 return Validation.success(self.value)
-            return Validation.fail(fn_result)
-        return Validation.fail(self.value + fn_result)
+            return Validation.fail(fn_result.value)
+        if self.success:
+            return Validation.fail(fn_result.value)
+        return Validation.fail(self.value + fn_result.value)
 
     def to_either(self):
         from pymonet.either import Left, Right
