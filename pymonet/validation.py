@@ -1,27 +1,32 @@
 class Validation:
     
-    def __init__(self, value, success):
+    def __init__(self, value, errors):
         self.value = value
-        self.success = success
+        self.errors = errors
 
     def __eq__(self, other):
         return (isinstance(other, Validation) and 
-            self.success == other.success and
+            self.errors == other.errors and
             self.value == other.value)
+
+    def __str__(self):
+        if self.is_success():
+            return 'Validation.success[{}]'.format(self.value)
+        return 'Validation.fail[{}, {}]'.format(self.value, self.errors)
 
     @classmethod
     def success(cls, value=None):
-        return Validation(value, True)
+        return Validation(value, [])
 
     @classmethod
-    def fail(cls, value):
-        return Validation(value, False)
+    def fail(cls, errors=[]):
+        return Validation(None, errors)
 
     def is_success(self):
-        return self.success
+        return len(self.errors) == 0
 
     def is_fail(self):
-        return not self.success
+        return len(self.errors) != 0
 
     def map(self, mapper):
         if self.success:
@@ -35,20 +40,14 @@ class Validation:
 
     def ap(self, fn):
         fn_result = fn(self.value)
-        if fn_result.is_success():
-            if self.success:
-                return Validation.success(self.value)
-            return Validation.fail(fn_result.value)
-        if self.success:
-            return Validation.fail(fn_result.value)
-        return Validation.fail(self.value + fn_result.value)
+        return Validation(self.value, self.errors + fn_result.errors)
 
     def to_either(self):
         from pymonet.either import Left, Right
 
-        if self.success:
+        if self.is_success():
             return Right(self.value)
-        return Left(self.value)
+        return Left(self.errors)
 
     def to_box(self):
         from pymonet.box import Box
@@ -63,6 +62,6 @@ class Validation:
     def to_try(self):
         from pymonet.monad_try import Try
 
-        if self.success:
+        if self.is_success():
             return Try(self.value, is_success=True)
         return Try(self.value, is_success=False)

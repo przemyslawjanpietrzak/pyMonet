@@ -28,29 +28,29 @@ def test_validation_is_success():
 
 
 def test_validation_is_fail():
-    assert Validation.fail([]).is_fail()
+    assert Validation.fail(['fail']).is_fail()
 
 
 def validate_length(value):
-    if len(value) > 5:
+    if len(value) < 5:
         return Validation.fail(['value not long enough'])
     return Validation.success()
 
 
 def validate_uppercase(value):
-    if value[0].upper != value[0]:
+    if value[0].upper() != value[0]:
         return Validation.fail(['value not uppercase'])
     return Validation.success()
 
 
 def validate_contains_special_character(value):
-    if not re.match(r'^\w+$', value):
+    if re.match(r'^[a-zA-Z0-9_]*$', value):
         return Validation.fail(['value not contains special character'])
     return Validation.success()
 
 
 def validate(value):
-    return (Validation.success('Success$')
+    return (Validation.success(value)
         .ap(validate_length)
         .ap(validate_uppercase)
         .ap(validate_contains_special_character))
@@ -59,25 +59,26 @@ def validate(value):
 def test_validation_applicative():
     assert validate('Success$') == Validation.success('Success$')
 
-    assert validate('Success') == Validation.fail(['value not contains special character'])
-    assert validate('success$') == Validation.fail(['value not uppercase'])
-    assert validate('S$') == Validation.fail(['value not long enough'])
+    assert validate('Success') == Validation(value='Success', errors=['value not contains special character'])
 
-    assert validate('success') == Validation.fail([
+    assert validate('success$') == Validation(value='success$', errors=['value not uppercase'])
+    assert validate('S$') == Validation(value='S$', errors=['value not long enough'])
+
+    assert validate('success') == Validation(value='success', errors=[
         'value not uppercase',
         'value not contains special character'
     ])
-    assert validate('S$') == Validation.fail([
+    assert validate('s$') == Validation(value='s$', errors=[
         'value not long enough',
         'value not uppercase'
     ])
-    assert validate('success') == Validation.fail([
+    assert validate('success') == Validation(value='success', errors=[
         'value not uppercase',
         'value not contains special character'
     ])
-
-    assert validate('s') == Validation.fail([
-        'value not long enough'
+    
+    assert validate('s') == Validation(value='s', errors=[
+        'value not long enough',
         'value not uppercase',
         'value not contains special character'
     ])
@@ -104,7 +105,7 @@ def test_Validation_right_unit_data_law():
 @given(text())
 def test_transform_to_box_should_return_box(integer):
     assert Validation.success(integer).to_box() == Box(integer)
-    assert Validation.fail(['fail']).to_box() == Box(['fail'])
+    assert Validation.fail(['fail']).to_box() == Box(None)
 
 
 @given(text())
@@ -116,10 +117,10 @@ def test_transform_to_either_should_return_either(integer):
 @given(text())
 def test_transform_to_lazy_should_return_lazy(integer):
     assert Validation.success(integer).to_lazy().fold(identity) == integer
-    assert Validation.fail(['fail']).to_lazy().fold(identity) == ['fail']
+    assert Validation.fail(['fail']).to_lazy().fold(identity) == None
 
 
 @given(text())
 def test_transform_to_try_should_return_try(integer):
     assert Validation.success(integer).to_try() == Try(integer, is_success=True)
-    assert Validation.fail(['fail']).to_try() == Try(['fail'], is_success=False)
+    assert Validation.fail(['fail']).to_try() == Try(None, is_success=False)
