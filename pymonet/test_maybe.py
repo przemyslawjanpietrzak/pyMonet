@@ -3,7 +3,7 @@ from pymonet.either import Left, Right
 from pymonet.monad_try import Try
 from pymonet.box import Box
 from pymonet.utils import increase, identity
-from pymonet.monad_law_tester import get_associativity_test, get_left_unit_test, get_right_unit_data
+from pymonet.monad_law_tester import MonadLawTester
 
 from hypothesis import given
 from hypothesis.strategies import integers
@@ -59,22 +59,14 @@ def test_maybe_if_filter_returns_true_method_should_return_self():
     assert Maybe.just(42).filter(lambda value: value % 2 == 0) == Maybe.just(42)
 
 
-def test_maybe_associativity_law():
-    get_associativity_test(
-        monadic_value=Maybe.just(42),
+@given(integers())
+def test_maybe_monad_law(integer):
+    MonadLawTester(
+        monad=Maybe.just,
+        value=integer,
         mapper1=lambda value: Maybe.just(value + 1),
         mapper2=lambda value: Maybe.just(value + 2)
-    )()
-
-
-def test_maybe_left_unit_law():
-    get_left_unit_test(Maybe.just, 42, lambda value: Maybe.just(value + 1))
-    get_left_unit_test(Maybe.nothing, 42, lambda value: Maybe.just(value + 1))
-
-
-def test_maybe_right_unit_data_law():
-    get_right_unit_data(Maybe.just, 42)
-    get_right_unit_data(Maybe.nothing, 42)
+    ).test()
 
 
 @given(integers())

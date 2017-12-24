@@ -2,7 +2,7 @@ from pymonet.box import Box
 from pymonet.maybe import Maybe
 from pymonet.either import Right
 from pymonet.monad_try import Try
-from pymonet.monad_law_tester import get_associativity_test, get_left_unit_test, get_right_unit_data
+from pymonet.monad_law_tester import MonadLawTester
 from pymonet.utils import identity, increase
 
 from hypothesis import given
@@ -41,20 +41,14 @@ def test_ap_should_return_result_of_function_in_box():
     )) == Box(43)
 
 
-def test_box_associativity_law():
-    get_associativity_test(
-        monadic_value=Box(42),
+@given(integers())
+def test_box_monad_law(integer):
+    MonadLawTester(
+        monad=Box,
+        value=integer,
         mapper1=lambda value: Box(value + 1),
         mapper2=lambda value: Box(value + 2)
-    )()
-
-
-def test_box_left_unit_law():
-    get_left_unit_test(Box, 42, lambda value: Box(value + 1))()
-
-
-def test_box_right_unit_data_law():
-    get_right_unit_data(Box, 42)()
+    ).test()
 
 
 @given(integers())

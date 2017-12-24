@@ -2,7 +2,7 @@ from pymonet.either import Left, Right
 from pymonet.box import Box
 from pymonet.maybe import Maybe
 from pymonet.monad_try import Try
-from pymonet.monad_law_tester import get_associativity_test, get_left_unit_test, get_right_unit_data
+from pymonet.monad_law_tester import MonadLawTester
 from pymonet.utils import increase, identity
 
 from hypothesis import given
@@ -82,30 +82,21 @@ def test_case_method_should_call_proper_handler(mocker):
     assert either_spy.success_handler.call_count == 1
 
 
-def test_maybe_associativity_law():
-    get_associativity_test(
-        monadic_value=Right(42),
-        mapper1=lambda value: Right(value + 1),
-        mapper2=lambda value: Right(value + 2),
-    )()
-    get_associativity_test(
-        monadic_value=Left(0),
-        mapper1=lambda value: Right(value + 1),
-        mapper2=lambda value: Right(value + 2),
-    )()
-
-
-def test_maybe_left_unit_law():
-    get_left_unit_test(
+@given(integers())
+def test_either_monad_law(integer):
+    MonadLawTester(
         monad=Right,
-        monad_value=42,
-        mapper=lambda value: Right(value + 1)
-    )()
+        value=integer,
+        mapper1=lambda value: Right(value + 1),
+        mapper2=lambda value: Right(value + 2),
+    ).test()
 
-
-def test_maybe_right_unit_data_law():
-    get_right_unit_data(Right, 42)()
-    get_right_unit_data(Left, 42)()
+    MonadLawTester(
+        monad=Left,
+        value=integer,
+        mapper1=lambda value: Left(value + 1),
+        mapper2=lambda value: Left(value + 2),
+    ).test(run_left_law_test=False)
 
 
 @given(integers())

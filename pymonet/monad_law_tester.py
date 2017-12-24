@@ -1,27 +1,30 @@
-def get_associativity_test(monadic_value, mapper1, mapper2):
-    def result():
-        value1 = (monadic_value
-                  .bind(mapper1)).bind(mapper2)
-        value2 = (monadic_value
-                  .bind(mapper2)
-                  .bind(mapper1))
+class MonadLawTester:
+
+    def __init__(self, monad, value, mapper1, mapper2):
+        self.monad = monad
+        self.value = value
+        self.mapper1 = mapper1
+        self.mapper2 = mapper2
+
+    def associativity_test(self):
+        value1 = (self.monad(self.value)
+                .bind(self.mapper1)).bind(self.mapper2)
+        value2 = (self.monad(self.value)
+                .bind(self.mapper2)
+                .bind(self.mapper1))
 
         assert value1 == value2
 
-    return result
+    def left_unit_test(self):
+        assert self.monad(self.value).bind(self.mapper1) == self.mapper1(self.value)
 
+    def right_unit_test(self):
+        self.monad(self.value).bind(self.mapper1) == self.monad(self.value)
 
-def get_left_unit_test(monad, monad_value, mapper):
-    def result():
-        monadic_value = monad(monad_value)
-        assert monadic_value.bind(mapper) == mapper(monad_value)
-
-    return result
-
-
-def get_right_unit_data(monad, monad_value):
-    def result():
-        monadic_value = monad(monad_value)
-        monadic_value.bind(lambda value: monad(monad_value)) == monadic_value
-
-    return result
+    def test(self, run_associativity_law_test=True, run_left_law_test=True, run_right_law_test=True):
+        if run_associativity_law_test:
+            self.associativity_test()
+        if run_left_law_test:
+            self.left_unit_test()
+        if run_right_law_test:
+            self.right_unit_test()
