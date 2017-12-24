@@ -2,6 +2,7 @@ from pymonet.box import Box
 from pymonet.maybe import Maybe
 from pymonet.either import Right
 from pymonet.monad_try import Try
+from pymonet.validation import Validation
 from pymonet.monad_law_tester import get_associativity_test, get_left_unit_test, get_right_unit_data
 from pymonet.utils import identity, increase
 
@@ -75,3 +76,8 @@ def test_transform_to_lazy_should_lazy(integer):
 @given(integers())
 def test_transform_to_try_should_try(integer):
     assert Box(integer).to_try() == Try(integer, is_success=True)
+
+
+@given(integers())
+def test_transform_to_validation_should_validation(integer):
+    assert Box(integer).to_validation() == Validation.success(integer)

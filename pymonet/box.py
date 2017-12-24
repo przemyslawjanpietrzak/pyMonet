@@ -49,6 +49,8 @@ class Box:
 
     def to_maybe(self):
         """
+        Transform Box into not empty Maybe.
+
         :returns: non empty Maybe monad with previous value
         :rtype: Maybe[A]
         """
@@ -58,6 +60,8 @@ class Box:
 
     def to_either(self):
         """
+        Transform Box into Right either.
+
         :returns: right Either monad with previous value
         :rtype: Right[A]
         """
@@ -67,6 +71,8 @@ class Box:
 
     def to_lazy(self):
         """
+        Transform Box into Lazy with returning value function.
+
         :returns: not folded Lazy monad with function returning previous value
         :rtype: Lazy[Function(() -> A)]
         """
@@ -76,9 +82,22 @@ class Box:
 
     def to_try(self):
         """
-        :returns: successfully Try monad with previous value
+        Transform Box into successfull Try.
+
+        :returns: successfull Try monad with previous value
         :rtype: Try[A]
         """
         from pymonet.monad_try import Try
 
         return Try(self.value, is_success=True)
+
+    def to_validation(self):
+        """
+        Transform Box into Validation.
+
+        :returns: successfull Validation monad with previous value
+        :rtype: Validation[A, []]
+        """
+        from pymonet.validation import Validation
+
+        return Validation.success(self.value)
