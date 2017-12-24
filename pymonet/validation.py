@@ -1,4 +1,5 @@
 class Validation:
+    """It that can hold either a success value or a failure value and has methods for accumulating errors"""
 
     def __init__(self, value, errors):
         self.value = value
