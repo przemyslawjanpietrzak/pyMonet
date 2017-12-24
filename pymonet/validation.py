@@ -13,7 +13,7 @@ class Validation:
                 self.errors == other.errors and
                 self.value == other.value)
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         if self.is_success():
             return 'Validation.success[{}]'.format(self.value)
         return 'Validation.fail[{}, {}]'.format(self.value, self.errors)
