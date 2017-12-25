@@ -2,13 +2,13 @@ install:
 	pip install -r requirements.txt
 
 test:
-	pytest ./pymonet
+	pytest ./tests
 
 test-with-coverage:
-	py.test ./pymonet --cov=./pymonet/
+	py.test ./tests --cov=./pymonet/
 
 lint:
-	flake8 ./pymonet --max-line-length=120
+	flake8 ./pymonet ./tests --max-line-length=120
 
 lint-docs:
 	pydocstyle ./pymonet --add-ignore=D100,D101,D102,D103,D104,D105,D107,D200,D205,D400,D401
