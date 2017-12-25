@@ -100,7 +100,7 @@ def test_either_monad_law(integer):
 
 
 @given(integers())
-def test_either_monad_law(integer):
+def test_either_functor_law(integer):
     FunctorLawTester(
         functor=Right(integer),
         mapper1=lambda value: value + 1,
@@ -112,7 +112,6 @@ def test_either_monad_law(integer):
         mapper1=lambda value: value + 1,
         mapper2=lambda value: value + 2,
     ).test()
-
 
 
 @given(integers())
