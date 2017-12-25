@@ -1,10 +1,11 @@
 from pymonet.validation import Validation
 from pymonet.utils import increase, identity
 from pymonet.monad_law_tester import MonadLawTester
+from pymonet.functor_law_tester import FunctorLawTester
 from pymonet.transform_monad_tester import TransformMonadTester
 
 from hypothesis import given
-from hypothesis.strategies import text
+from hypothesis.strategies import text, integers
 
 import re
 
@@ -80,6 +81,25 @@ def test_validation_applicative():
     ])
 
 
-@given(text())
+@given(integers())
+def test_validation_monad_law(integer):
+    MonadLawTester(
+        monad=Validation.success,
+        value=integer,
+        mapper1=lambda value: Validation.success(value + 1),
+        mapper2=lambda value: Validation.success(value + 2)
+    ).test()
+
+
+@given(integers())
+def test_validation_functor_law(integer):
+    FunctorLawTester(
+        functor=Validation.success(integer),
+        mapper1=lambda value: value + 1,
+        mapper2=lambda value: value + 2
+    ).test()
+
+
+@given(integers())
 def test_validation_transform(integer):
-    TransformMonadTester(monad=Validation.success, value=integer).test()
+    TransformMonadTester(monad=Validation.success, value=integer).test(run_to_validation_test=False)

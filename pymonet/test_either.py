@@ -4,7 +4,6 @@ from pymonet.functor_law_tester import FunctorLawTester
 from pymonet.transform_monad_tester import TransformMonadTester
 from pymonet.utils import increase
 
-
 from hypothesis import given
 from hypothesis.strategies import integers
 
@@ -113,3 +112,7 @@ def test_either_functor_law(integer):
     ).test()
 
 
+@given(integers())
+def test_either_transform(integer):
+    TransformMonadTester(monad=Right, value=integer).test(run_to_either_test=False)
+    TransformMonadTester(monad=Left, value=integer, is_fail=True).test(run_to_either_test=False)
