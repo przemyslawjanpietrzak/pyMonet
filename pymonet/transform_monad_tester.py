@@ -1,6 +1,8 @@
 from pymonet.box import Box
 from pymonet.either import Left, Right
 from pymonet.maybe import Maybe
+from pymonet.monad_try import Try
+from pymonet.utils import identity
 
 
 class TransformMonadTester:
@@ -17,12 +19,29 @@ class TransformMonadTester:
         assert self.monad(self.value).to_maybe() == Maybe.just(self.value) if not self.is_fail else Maybe.nothing()
 
     def to_either_test(self):
-        assert self.monad(self.value).to_maybe() == Right(self.value) if not self.is_fail else Left(self.value)
+        assert self.monad(self.value).to_either() == Right(self.value) if not self.is_fail else Left(self.value)
 
-    def test(self, run_to_box_test, run_to_maybe_test, run_to_either_test):
+    def to_lazy_test(self):
+        assert self.monad(self.value).to_lazy().fold(identity) == self.value
+
+    def to_try_test(self):
+        assert self.monad(self.value).to_try() == Try(self.value, is_success=not self.is_fail)
+ 
+    def test(
+        self,
+        run_to_box_test=True,
+        run_to_maybe_test=True,
+        run_to_either_test=True,
+        run_to_lazy_test=True,
+        run_to_try_test=True
+    ):
         if run_to_box_test:
             self.to_box_test()
         if run_to_maybe_test:
             self.to_maybe_test()
         if run_to_either_test:
             self.to_either_test()
+        if run_to_lazy_test:
+            self.to_lazy_test()
+        if run_to_try_test:
+            self.to_try_test()       

@@ -1,9 +1,7 @@
 from pymonet.either import Left, Right
-from pymonet.box import Box
-from pymonet.maybe import Maybe
-from pymonet.monad_try import Try
 from pymonet.monad_law_tester import MonadLawTester
 from pymonet.functor_law_tester import FunctorLawTester
+from pymonet.transform_monad_tester import TransformMonadTester
 from pymonet.utils import increase, identity
 
 from hypothesis import given
@@ -114,25 +112,8 @@ def test_either_functor_law(integer):
     ).test()
 
 
-@given(integers())
-def test_transform_to_box_should_return_box(integer):
-    assert Right(integer).to_box() == Box(integer)
-    assert Left(integer).to_box() == Box(integer)
-
 
 @given(integers())
-def test_transform_to_maybe_should_return_maybe(integer):
-    assert Right(integer).to_maybe() == Maybe.just(integer)
-    assert Left(integer).to_maybe() == Maybe.nothing()
-
-
-@given(integers())
-def test_transform_to_lazy_should_return_lazy(integer):
-    assert Right(integer).to_lazy().fold(identity) == integer
-    assert Left(integer).to_lazy().fold(identity) == integer
-
-
-@given(integers())
-def test_transform_to_try_should_return_try(integer):
-    assert Right(integer).to_try() == Try(integer, is_success=True)
-    assert Left(integer).to_try() == Try(integer, is_success=False)
+def test_transform_either(integer):
+    TransformMonadTester(monad=Right, value=integer).test(run_to_either_test=False)
+    TransformMonadTester(monad=Left, value=integer, is_fail=True).test(run_to_either_test=False)

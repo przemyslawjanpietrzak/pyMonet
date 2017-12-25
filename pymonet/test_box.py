@@ -1,10 +1,8 @@
 from pymonet.box import Box
-from pymonet.maybe import Maybe
-from pymonet.either import Right
-from pymonet.monad_try import Try
 from pymonet.monad_law_tester import MonadLawTester
 from pymonet.functor_law_tester import FunctorLawTester
-from pymonet.utils import identity, increase
+from pymonet.transform_monad_tester import TransformMonadTester
+from pymonet.utils import increase
 
 from hypothesis import given
 from hypothesis.strategies import integers
@@ -62,20 +60,8 @@ def test_box_functor_law(integer):
 
 
 @given(integers())
-def test_transform_to_maybe_should_maybe(integer):
-    assert Box(integer).to_maybe() == Maybe.just(integer)
-
-
-@given(integers())
-def test_transform_to_either_should_either(integer):
-    assert Box(integer).to_either() == Right(integer)
-
-
-@given(integers())
-def test_transform_to_lazy_should_lazy(integer):
-    assert Box(integer).to_lazy().fold(identity) == integer
-
-
-@given(integers())
-def test_transform_to_try_should_try(integer):
-    assert Box(integer).to_try() == Try(integer, is_success=True)
+def test_box_transform_monad(integer):
+    TransformMonadTester(
+        monad=Box,
+        value=integer
+    ).test(run_to_box_test=False)
