@@ -43,4 +43,4 @@ Maybe
     # 2
 
 .. autoclass:: pymonet.maybe.Maybe
-    :members: just, nothing, map, bind, filter, get_or_else, to_either, to_lazy, to_try, to_box
+    :members: just, nothing, map, bind, filter, get_or_else, to_either, to_lazy, to_try, to_box, to_validation

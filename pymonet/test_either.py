@@ -1,8 +1,17 @@
 from pymonet.either import Left, Right
+<<<<<<< HEAD
 from pymonet.monad_law_tester import MonadLawTester
 from pymonet.functor_law_tester import FunctorLawTester
 from pymonet.transform_monad_tester import TransformMonadTester
 from pymonet.utils import increase
+=======
+from pymonet.box import Box
+from pymonet.maybe import Maybe
+from pymonet.monad_try import Try
+from pymonet.validation import Validation
+from pymonet.monad_law_tester import get_associativity_test, get_left_unit_test, get_right_unit_data
+from pymonet.utils import increase, identity
+>>>>>>> develop
 
 from hypothesis import given
 from hypothesis.strategies import integers
@@ -113,6 +122,18 @@ def test_either_functor_law(integer):
 
 
 @given(integers())
+<<<<<<< HEAD
 def test_transform_either(integer):
     TransformMonadTester(monad=Right, value=integer).test(run_to_either_test=False)
     TransformMonadTester(monad=Left, value=integer, is_fail=True).test(run_to_either_test=False)
+=======
+def test_transform_to_try_should_return_try(integer):
+    assert Right(integer).to_try() == Try(integer, is_success=True)
+    assert Left(integer).to_try() == Try(integer, is_success=False)
+
+
+@given(integers())
+def test_transform_to_validation_should_return_validation(integer):
+    assert Right(integer).to_validation() == Validation.success(integer)
+    assert Left(integer).to_validation() == Validation.fail([integer])
+>>>>>>> develop

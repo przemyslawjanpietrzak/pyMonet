@@ -142,3 +142,16 @@ class Maybe():
         if self.is_nothing:
             return Try(None, is_success=False)
         return Try(self.value, is_success=True)
+
+    def to_validation(self):
+        """
+        Transform Maybe into Validation.
+
+        :returns: successfull Validation monad with previous value or None when Maybe is empty
+        :rtype: Validation[A, []]
+        """
+        from pymonet.validation import Validation
+
+        if self.is_nothing:
+            return Validation.success(None)
+        return Validation.success(self.value)
