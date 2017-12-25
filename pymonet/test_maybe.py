@@ -1,4 +1,7 @@
 from pymonet.maybe import Maybe
+from pymonet.box import Box
+from pymonet.either import Left
+from pymonet.monad_try import Try
 from pymonet.utils import increase, identity
 from pymonet.monad_law_tester import MonadLawTester
 from pymonet.functor_law_tester import FunctorLawTester
@@ -80,28 +83,8 @@ def test_maybe_functor_law(integer):
 @given(integers())
 def test_maybe_transform(integer):
     TransformMonadTester(monad=Maybe.just, value=integer).test(run_to_maybe_test=False)
-    # TransformMonadTester(monad=Maybe.nothing, value=integer, is_fail=True).test(run_to_maybe_test=False)
 
-
-# @given(integers())
-# def test_transform_to_box_should_return_box(integer):
-#     assert Maybe.just(integer).to_box() == Box(integer)
-#     assert Maybe.nothing().to_box() == Box(None)
-
-
-# @given(integers())
-# def test_transform_to_either_should_return_either(integer):
-#     assert Maybe.just(integer).to_either() == Right(integer)
-#     assert Maybe.nothing().to_either() == Left(None)
-
-
-# @given(integers())
-# def test_transform_to_lazy_should_return_lazy(integer):
-#     assert Maybe.just(integer).to_lazy().fold(identity) == integer
-#     assert Maybe.nothing().to_lazy().fold(identity) is None
-
-
-# @given(integers())
-# def test_transform_to_try_should_return_try(integer):
-#     assert Maybe.just(integer).to_try() == Try(integer, is_success=True)
-#     assert Maybe.nothing().to_try() == Try(None, is_success=False)
+    assert Maybe.nothing().to_box() == Box(None)
+    assert Maybe.nothing().to_either() == Left(None)
+    assert Maybe.nothing().to_lazy().fold(identity) is None
+    assert Maybe.nothing().to_try() == Try(None, is_success=False)
