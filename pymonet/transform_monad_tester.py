@@ -26,7 +26,7 @@ class TransformMonadTester:
 
     def to_try_test(self):
         assert self.monad(self.value).to_try() == Try(self.value, is_success=not self.is_fail)
- 
+
     def test(
         self,
         run_to_box_test=True,
@@ -44,4 +44,4 @@ class TransformMonadTester:
         if run_to_lazy_test:
             self.to_lazy_test()
         if run_to_try_test:
-            self.to_try_test()       
+            self.to_try_test()

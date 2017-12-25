@@ -2,7 +2,7 @@ from pymonet.either import Left, Right
 from pymonet.monad_law_tester import MonadLawTester
 from pymonet.functor_law_tester import FunctorLawTester
 from pymonet.transform_monad_tester import TransformMonadTester
-from pymonet.utils import increase, identity
+from pymonet.utils import increase
 
 from hypothesis import given
 from hypothesis.strategies import integers
@@ -110,7 +110,6 @@ def test_either_functor_law(integer):
         mapper1=lambda value: value + 1,
         mapper2=lambda value: value + 2,
     ).test()
-
 
 
 @given(integers())
