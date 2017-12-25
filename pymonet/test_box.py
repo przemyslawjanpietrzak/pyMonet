@@ -2,6 +2,7 @@ from pymonet.box import Box
 from pymonet.monad_law_tester import MonadLawTester
 from pymonet.functor_law_tester import FunctorLawTester
 from pymonet.transform_monad_tester import TransformMonadTester
+from pymonet.utils import increase
 
 from hypothesis import given
 from hypothesis.strategies import integers

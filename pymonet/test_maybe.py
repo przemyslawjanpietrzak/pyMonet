@@ -1,11 +1,8 @@
 from pymonet.maybe import Maybe
 from pymonet.box import Box
-<<<<<<< HEAD
 from pymonet.either import Left
 from pymonet.monad_try import Try
-=======
 from pymonet.validation import Validation
->>>>>>> develop
 from pymonet.utils import increase, identity
 from pymonet.monad_law_tester import MonadLawTester
 from pymonet.functor_law_tester import FunctorLawTester
@@ -92,9 +89,3 @@ def test_maybe_transform(integer):
     assert Maybe.nothing().to_either() == Left(None)
     assert Maybe.nothing().to_lazy().fold(identity) is None
     assert Maybe.nothing().to_try() == Try(None, is_success=False)
-
-
-@given(integers())
-def test_transform_to_validation_should_return_validation(integer):
-    assert Maybe.just(integer).to_validation() == Validation.success(integer)
-    assert Maybe.nothing().to_validation() == Validation.success(None)
