@@ -6,7 +6,7 @@ from pymonet.validation import Validation
 from pymonet.utils import identity
 
 
-class TransformMonadTester:
+class MonadTransformTester:  # pragma: no cover
 
     def __init__(self, monad, value, is_fail=False):
         self.monad = monad
@@ -17,10 +17,16 @@ class TransformMonadTester:
         assert self.monad(self.value).to_box() == Box(self.value)
 
     def to_maybe_test(self):
-        assert self.monad(self.value).to_maybe() == Maybe.just(self.value) if not self.is_fail else Maybe.nothing()
+        if self.is_fail:
+            assert self.monad(self.value).to_maybe() == Maybe.nothing()
+        else:
+            assert self.monad(self.value).to_maybe() == Maybe.just(self.value)
 
     def to_either_test(self):
-        assert self.monad(self.value).to_either() == Right(self.value) if not self.is_fail else Left(self.value)
+        if self.is_fail:
+            assert self.monad(self.value).to_either() == Left(self.value)
+        else:
+            assert self.monad(self.value).to_either() == Right(self.value)
 
     def to_lazy_test(self):
         assert self.monad(self.value).to_lazy().fold(identity) == self.value
@@ -29,11 +35,10 @@ class TransformMonadTester:
         assert self.monad(self.value).to_try() == Try(self.value, is_success=not self.is_fail)
 
     def to_validation_test(self):
-        assert (
-            self.monad(self.value).to_validation()
-            ==
-            Validation.success(self.value) if not self.is_fail else Validation.fail(self.value)
-        )
+        if self.is_fail:
+            assert self.monad(self.value).to_validation() == Validation.fail([self.value])
+        else:
+            assert self.monad(self.value).to_validation() == Validation.success(self.value)
 
     def test(
         self,

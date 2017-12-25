@@ -1,4 +1,4 @@
-class MonadLawTester:
+class MonadLawTester:  # pragma: no cover
 
     def __init__(self, monad, value, mapper1, mapper2):
         self.monad = monad

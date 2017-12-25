@@ -1,12 +1,13 @@
+from tests.monad_law_tester import MonadLawTester
+from tests.functor_law_tester import FunctorLawTester
+from tests.monad_transform_tester import MonadTransformTester
+
 from pymonet.maybe import Maybe
 from pymonet.box import Box
 from pymonet.either import Left
 from pymonet.monad_try import Try
 from pymonet.validation import Validation
 from pymonet.utils import increase, identity
-from pymonet.monad_law_tester import MonadLawTester
-from pymonet.functor_law_tester import FunctorLawTester
-from pymonet.transform_monad_tester import TransformMonadTester
 
 from hypothesis import given
 from hypothesis.strategies import integers
@@ -83,7 +84,7 @@ def test_maybe_functor_law(integer):
 
 @given(integers())
 def test_maybe_transform(integer):
-    TransformMonadTester(monad=Maybe.just, value=integer).test(run_to_maybe_test=False)
+    MonadTransformTester(monad=Maybe.just, value=integer).test(run_to_maybe_test=False)
 
     assert Maybe.nothing().to_box() == Box(None)
     assert Maybe.nothing().to_either() == Left(None)
