@@ -4,6 +4,8 @@ from pymonet.monad_try import Try
 from pymonet.box import Box
 from pymonet.utils import increase, identity
 from pymonet.monad_law_tester import MonadLawTester
+from pymonet.functor_law_tester import FunctorLawTester
+
 
 from hypothesis import given
 from hypothesis.strategies import integers
@@ -66,6 +68,15 @@ def test_maybe_monad_law(integer):
         value=integer,
         mapper1=lambda value: Maybe.just(value + 1),
         mapper2=lambda value: Maybe.just(value + 2)
+    ).test()
+
+
+@given(integers())
+def test_maybe_functor_law(integer):
+    FunctorLawTester(
+        functor=Maybe.just(integer),
+        mapper1=lambda value: value + 1,
+        mapper2=lambda value: value + 2
     ).test()
 
 

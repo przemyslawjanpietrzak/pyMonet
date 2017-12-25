@@ -3,6 +3,7 @@ from pymonet.box import Box
 from pymonet.maybe import Maybe
 from pymonet.monad_try import Try
 from pymonet.monad_law_tester import MonadLawTester
+from pymonet.functor_law_tester import FunctorLawTester
 from pymonet.utils import increase, identity
 
 from hypothesis import given
@@ -44,7 +45,6 @@ def test_ap_method_should_be_call_on_only_right():
 
 
 def test_is_right_should_return_suitable_value():
-
     assert Right(42).is_right()
     assert not Left(42).is_right()
 
@@ -97,6 +97,22 @@ def test_either_monad_law(integer):
         mapper1=lambda value: Left(value + 1),
         mapper2=lambda value: Left(value + 2),
     ).test(run_left_law_test=False)
+
+
+@given(integers())
+def test_either_monad_law(integer):
+    FunctorLawTester(
+        functor=Right(integer),
+        mapper1=lambda value: value + 1,
+        mapper2=lambda value: value + 2,
+    ).test()
+
+    FunctorLawTester(
+        functor=Left(integer),
+        mapper1=lambda value: value + 1,
+        mapper2=lambda value: value + 2,
+    ).test()
+
 
 
 @given(integers())

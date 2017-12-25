@@ -7,11 +7,8 @@ class MonadLawTester:
         self.mapper2 = mapper2
 
     def associativity_test(self):
-        value1 = (self.monad(self.value)
-                .bind(self.mapper1)).bind(self.mapper2)
-        value2 = (self.monad(self.value)
-                .bind(self.mapper2)
-                .bind(self.mapper1))
+        value1 = self.monad(self.value).bind(self.mapper1).bind(self.mapper2)
+        value2 = self.monad(self.value).bind(lambda value: self.mapper2(value).bind(self.mapper1))
 
         assert value1 == value2
 
