@@ -1,4 +1,9 @@
 from pymonet.lazy import Lazy
+from pymonet.validation import Validation
+
+from hypothesis import given
+from hypothesis.strategies import integers
+
 
 from random import random
 
@@ -100,3 +105,8 @@ def test_applicative_eq_value():
     assert lazy1 == lazy1
     assert lazy2 == lazy2
     assert lazy1 != lazy2
+
+
+@given(integers())
+def test_transform_to_validation_should_validation(integer):
+    assert Lazy(lambda: integer).to_validation() == Validation.success(integer)

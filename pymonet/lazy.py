@@ -62,3 +62,14 @@ class Lazy:
         if self.is_evaluated:
             return self.value
         return self._compute_value(*args)
+
+    def to_validation(self, *args):
+        """
+        Transform Lazy into successful Validation with constructor_fn result.
+
+        :returns: successfull Validation monad with previous value
+        :rtype: Validation[A, []]
+        """
+        from pymonet.validation import Validation
+
+        return Validation.success(self.get(*args))
