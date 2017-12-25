@@ -1,10 +1,9 @@
+from tests.monad_law_tester import MonadLawTester
+from tests.functor_law_tester import FunctorLawTester
+from tests.monad_transform_tester import MonadTransformTester
+
 from pymonet.either import Left, Right
-from pymonet.box import Box
-from pymonet.maybe import Maybe
-from pymonet.monad_try import Try
-from pymonet.validation import Validation
-from pymonet.monad_law_tester import get_associativity_test, get_left_unit_test, get_right_unit_data
-from pymonet.utils import increase, identity
+from pymonet.utils import increase
 
 from hypothesis import given
 from hypothesis.strategies import integers
@@ -45,7 +44,6 @@ def test_ap_method_should_be_call_on_only_right():
 
 
 def test_is_right_should_return_suitable_value():
-
     assert Right(42).is_right()
     assert not Left(42).is_right()
 
@@ -83,57 +81,39 @@ def test_case_method_should_call_proper_handler(mocker):
     assert either_spy.success_handler.call_count == 1
 
 
-def test_maybe_associativity_law():
-    get_associativity_test(
-        monadic_value=Right(42),
-        mapper1=lambda value: Right(value + 1),
-        mapper2=lambda value: Right(value + 2),
-    )()
-    get_associativity_test(
-        monadic_value=Left(0),
-        mapper1=lambda value: Right(value + 1),
-        mapper2=lambda value: Right(value + 2),
-    )()
-
-
-def test_maybe_left_unit_law():
-    get_left_unit_test(
+@given(integers())
+def test_either_monad_law(integer):
+    MonadLawTester(
         monad=Right,
-        monad_value=42,
-        mapper=lambda value: Right(value + 1)
-    )()
+        value=integer,
+        mapper1=lambda value: Right(value + 1),
+        mapper2=lambda value: Right(value + 2),
+    ).test()
 
-
-def test_maybe_right_unit_data_law():
-    get_right_unit_data(Right, 42)()
-    get_right_unit_data(Left, 42)()
-
-
-@given(integers())
-def test_transform_to_box_should_return_box(integer):
-    assert Right(integer).to_box() == Box(integer)
-    assert Left(integer).to_box() == Box(integer)
+    MonadLawTester(
+        monad=Left,
+        value=integer,
+        mapper1=lambda value: Left(value + 1),
+        mapper2=lambda value: Left(value + 2),
+    ).test(run_left_law_test=False)
 
 
 @given(integers())
-def test_transform_to_maybe_should_return_maybe(integer):
-    assert Right(integer).to_maybe() == Maybe.just(integer)
-    assert Left(integer).to_maybe() == Maybe.nothing()
+def test_either_functor_law(integer):
+    FunctorLawTester(
+        functor=Right(integer),
+        mapper1=lambda value: value + 1,
+        mapper2=lambda value: value + 2,
+    ).test()
+
+    FunctorLawTester(
+        functor=Left(integer),
+        mapper1=lambda value: value + 1,
+        mapper2=lambda value: value + 2,
+    ).test()
 
 
 @given(integers())
-def test_transform_to_lazy_should_return_lazy(integer):
-    assert Right(integer).to_lazy().fold(identity) == integer
-    assert Left(integer).to_lazy().fold(identity) == integer
-
-
-@given(integers())
-def test_transform_to_try_should_return_try(integer):
-    assert Right(integer).to_try() == Try(integer, is_success=True)
-    assert Left(integer).to_try() == Try(integer, is_success=False)
-
-
-@given(integers())
-def test_transform_to_validation_should_return_validation(integer):
-    assert Right(integer).to_validation() == Validation.success(integer)
-    assert Left(integer).to_validation() == Validation.fail([integer])
+def test_either_transform(integer):
+    MonadTransformTester(monad=Right, value=integer).test(run_to_either_test=False)
+    MonadTransformTester(monad=Left, value=integer, is_fail=True).test(run_to_either_test=False)

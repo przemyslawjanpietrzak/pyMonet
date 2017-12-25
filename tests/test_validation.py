@@ -1,13 +1,14 @@
+from tests.monad_law_tester import MonadLawTester
+from tests.functor_law_tester import FunctorLawTester
+from tests.monad_transform_tester import MonadTransformTester
+
 from pymonet.validation import Validation
+from pymonet.either import Left
 from pymonet.maybe import Maybe
-from pymonet.either import Left, Right
-from pymonet.monad_try import Try
-from pymonet.box import Box
-from pymonet.utils import increase, identity
-from pymonet.monad_law_tester import get_associativity_test, get_left_unit_test, get_right_unit_data
+from pymonet.utils import increase
 
 from hypothesis import given
-from hypothesis.strategies import text
+from hypothesis.strategies import integers
 
 import re
 
@@ -83,49 +84,28 @@ def test_validation_applicative():
     ])
 
 
-def test_Validation_associativity_law():
-    get_associativity_test(
-        monadic_value=Validation.success(42),
+@given(integers())
+def test_validation_monad_law(integer):
+    MonadLawTester(
+        monad=Validation.success,
+        value=integer,
         mapper1=lambda value: Validation.success(value + 1),
         mapper2=lambda value: Validation.success(value + 2)
-    )()
+    ).test()
 
 
-def test_Validation_left_unit_law():
-    get_left_unit_test(Validation.success, 42, lambda value: Validation.success(value + 1))
-    get_left_unit_test(Validation.fail, [42], lambda value: Validation.success(value + 1))
+@given(integers())
+def test_validation_functor_law(integer):
+    FunctorLawTester(
+        functor=Validation.success(integer),
+        mapper1=lambda value: value + 1,
+        mapper2=lambda value: value + 2
+    ).test()
 
 
-def test_Validation_right_unit_data_law():
-    get_right_unit_data(Validation.success, 42)
-    get_right_unit_data(Validation.fail, [42])
+@given(integers())
+def test_validation_transform(integer):
+    MonadTransformTester(monad=Validation.success, value=integer).test(run_to_validation_test=False)
 
-
-@given(text())
-def test_transform_to_box_should_return_box(integer):
-    assert Validation.success(integer).to_box() == Box(integer)
-    assert Validation.fail(['fail']).to_box() == Box(None)
-
-
-@given(text())
-def test_transform_to_either_should_return_either(integer):
-    assert Validation.success(integer).to_either() == Right(integer)
-    assert Validation.fail(['fail']).to_either() == Left(['fail'])
-
-
-@given(text())
-def test_transform_to_maybe_should_return_maybe(integer):
-    assert Validation.success(integer).to_maybe() == Maybe.just(integer)
-    assert Validation.fail(['fail']).to_maybe() == Maybe.nothing()
-
-
-@given(text())
-def test_transform_to_lazy_should_return_lazy(integer):
-    assert Validation.success(integer).to_lazy().fold(identity) == integer
-    assert Validation.fail(['fail']).to_lazy().fold(identity) is None
-
-
-@given(text())
-def test_transform_to_try_should_return_try(integer):
-    assert Validation.success(integer).to_try() == Try(integer, is_success=True)
-    assert Validation.fail(['fail']).to_try() == Try(None, is_success=False)
+    Validation.fail([integer]).to_maybe() == Maybe.nothing()
+    Validation.fail([integer]).to_either() == Left([integers])
