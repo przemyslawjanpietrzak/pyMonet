@@ -1,11 +1,13 @@
 from pymonet.validation import Validation
-from pymonet.utils import increase, identity
+from pymonet.either import Left
+from pymonet.maybe import Maybe
+from pymonet.utils import increase
 from pymonet.monad_law_tester import MonadLawTester
 from pymonet.functor_law_tester import FunctorLawTester
 from pymonet.transform_monad_tester import TransformMonadTester
 
 from hypothesis import given
-from hypothesis.strategies import text, integers
+from hypothesis.strategies import integers
 
 import re
 
@@ -103,3 +105,6 @@ def test_validation_functor_law(integer):
 @given(integers())
 def test_validation_transform(integer):
     TransformMonadTester(monad=Validation.success, value=integer).test(run_to_validation_test=False)
+
+    Validation.fail([integer]).to_maybe() == Maybe.nothing()
+    Validation.fail([integer]).to_either() == Left([integers])

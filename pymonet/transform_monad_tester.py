@@ -29,7 +29,11 @@ class TransformMonadTester:
         assert self.monad(self.value).to_try() == Try(self.value, is_success=not self.is_fail)
 
     def to_validation_test(self):
-        assert self.monad(self.value).to_validation() == Validation.success(self.value) if not self.is_fail else Validation.fail(self.value)
+        assert (
+            self.monad(self.value).to_validation()
+            ==
+            Validation.success(self.value) if not self.is_fail else Validation.fail(self.value)
+        )
 
     def test(
         self,

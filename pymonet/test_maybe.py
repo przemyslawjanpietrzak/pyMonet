@@ -89,3 +89,4 @@ def test_maybe_transform(integer):
     assert Maybe.nothing().to_either() == Left(None)
     assert Maybe.nothing().to_lazy().fold(identity) is None
     assert Maybe.nothing().to_try() == Try(None, is_success=False)
+    assert Maybe.nothing().to_validation() == Validation.success(None)
