@@ -1,11 +1,10 @@
-Box
+Validation
 *********
 
 .. code-block:: python
    :caption: example_validation.py
    :name: example_validation-py
 
-    from pymonet.box import Validation
     from pymonet.validation import Validation
 
 
@@ -44,5 +43,5 @@ Box
     validate('s$') # Validation['Success$', ['value not long enough', 'value not uppercase']]
     validate('s') # Validation['Success$', ['value not long enough', 'value not uppercase', 'value not contains special character']]
 
-.. autoclass:: pymonet.balidation.Validation
+.. autoclass:: pymonet.validation.Validation
     :members: __eq__, success, fail, is_success, is_fail, map, bind, ap, to_box, to_either, to_maybe, to_lazy, to_try
