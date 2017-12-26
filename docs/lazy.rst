@@ -34,4 +34,4 @@ Lazy
     # 42, 42
 
 .. autoclass:: pymonet.lazy.Lazy
-    :members: __init__, __eq__, map, fold, get
+    :members: __init__, __eq__, map, fold, get, to_validation

@@ -8,3 +8,4 @@ pymonet.egg-info
 dist
 docs/dist
 monet
+_build

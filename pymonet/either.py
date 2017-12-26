@@ -66,7 +66,7 @@ class Either:
         Transform Either to Try.
 
         :returns: Lazy monad with function returning previous value
-        :rtype Lazy[Function() -> A]
+        :rtype: Lazy[Function() -> A]
         """
         from pymonet.lazy import Lazy
 
@@ -126,6 +126,17 @@ class Left(Either):
 
         return Maybe.nothing()
 
+    def to_validation(self):
+        """
+        Transform Box into Validation.
+
+        :returns: failed Validation monad with previous value as error
+        :rtype: Validation[None, [A]]
+        """
+        from pymonet.validation import Validation
+
+        return Validation.fail([self.value])
+
 
 class Right(Either):
     """Not successfully Either"""
@@ -148,7 +159,7 @@ class Right(Either):
         :param mapper: function to apply on Right value
         :type mapper: Function(A) -> Either[B]
         :returns: result of mapper
-        :rtype:Either[B]
+        :rtype: Either[B]
         """
         return mapper(self.value)
 
@@ -176,3 +187,14 @@ class Right(Either):
         from pymonet.maybe import Maybe
 
         return Maybe.just(self.value)
+
+    def to_validation(self):
+        """
+        Transform Either into Validation.
+
+        :returns: successfull Validation monad with previous value
+        :rtype: Validation[A, []]
+        """
+        from pymonet.validation import Validation
+
+        return Validation.success(self.value)

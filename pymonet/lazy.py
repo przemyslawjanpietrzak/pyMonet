@@ -7,6 +7,7 @@ class Lazy:
     def __init__(self, constructor_fn):
         """
         :param constructor_fn: function to call during fold method call
+        :type constructor_fn: Function() -> A
         """
         self.constructor_fn = constructor_fn
         self.is_evaluated = False
@@ -35,7 +36,8 @@ class Lazy:
 
         :param mapper: mapper function
         :type mapper: Function(constructor_mapper) -> B
-        :returns: Lazy[Function() -> mapper(constructor_fn)]
+        :returns: Lazy with mapped value
+        :rtype: Lazy[Function() -> mapper(constructor_fn)]
         """
         return Lazy(lambda *args: mapper(self.constructor_fn(*args)))
 
@@ -45,7 +47,8 @@ class Lazy:
 
         It's only way to call function store in Lazy
         :param fn: Function(constructor_fn) -> B
-        :returns: B
+        :returns: result od folder function
+        :rtype: B
         """
         return fn(self._compute_value(*args))
 
@@ -53,8 +56,20 @@ class Lazy:
         """
         Evaluate function and memoize her output or return memoized value when function was evaluated.
 
-        :returns: A
+        :returns: result of function in Lazy
+        :rtype: A
         """
         if self.is_evaluated:
             return self.value
         return self._compute_value(*args)
+
+    def to_validation(self, *args):
+        """
+        Transform Lazy into successful Validation with constructor_fn result.
+
+        :returns: successfull Validation monad with previous value
+        :rtype: Validation[A, []]
+        """
+        from pymonet.validation import Validation
+
+        return Validation.success(self.get(*args))

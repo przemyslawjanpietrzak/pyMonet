@@ -72,7 +72,7 @@ class Maybe():
         :param filterer:
         :type filterer: Function(A) -> Boolean
         :returns: copy of self when filterer returns True, in other case empty Maybe
-        :rtype: Maybe[A> | Maybe[None]
+        :rtype: Maybe[A] | Maybe[None]
         """
         if self.is_nothing or not filterer(self.value):
             return Maybe.nothing()
@@ -84,7 +84,7 @@ class Maybe():
 
         :param default_value: value to return if Maybe is empty
         :type default_value: Any
-        returns: Maybe value
+        :returns: value of Maybe or default_value
         :rtype: A
         """
         if self.is_nothing:
@@ -95,9 +95,8 @@ class Maybe():
         """
         Transform Maybe to Either.
 
-        :returns: Right monad with previous value when Maybe is not empty,
-        in other case Left with None
-        :type Either[A | None]
+        :returns: Right monad with previous value when Maybe is not empty, in other case Left with None
+        :rtype: Either[A | None]
         """
         from pymonet.either import Left, Right
 
@@ -109,8 +108,7 @@ class Maybe():
         """
         Transform Maybe to Box.
 
-        :returns: Box monad with previous value when Maybe is not empty,
-        in other case Box with None
+        :returns: Box monad with previous value when Maybe is not empty, in other case Box with None
         :rtype: Box[A | None]
         """
         from pymonet.box import Box
@@ -123,8 +121,7 @@ class Maybe():
         """
         Transform Maybe to Try.
 
-        :returns: Lazy monad with function returning previous value
-        in other case Left with None
+        :returns: Lazy monad with function returning previous value in other case Left with None
         :rtype: Lazy[Function() -> (A | None)]
         """
         from pymonet.lazy import Lazy
@@ -137,8 +134,7 @@ class Maybe():
         """
         Transform Maybe to Try.
 
-        :returns: successfully Try with previous value when Maybe is not empty,
-        in other case not successfully Try with None
+        :returns: successfully Try with previous value when Maybe is not empty, othercase not successfully Try with None
         :rtype: Try[A]
         """
         from pymonet.monad_try import Try
@@ -146,3 +142,16 @@ class Maybe():
         if self.is_nothing:
             return Try(None, is_success=False)
         return Try(self.value, is_success=True)
+
+    def to_validation(self):
+        """
+        Transform Maybe into Validation.
+
+        :returns: successfull Validation monad with previous value or None when Maybe is empty
+        :rtype: Validation[A, []]
+        """
+        from pymonet.validation import Validation
+
+        if self.is_nothing:
+            return Validation.success(None)
+        return Validation.success(self.value)

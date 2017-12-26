@@ -29,8 +29,7 @@ class Task:
         Return rejected Task with stored value argument.
 
         :param value: value to store in Task
-        :type value: Any
-        instant rejected Task
+        :type value: A
         :returns: rejected Task
         :rtype: Task[Function(reject, _) -> A]
         """
