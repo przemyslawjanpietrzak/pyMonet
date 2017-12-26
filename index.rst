@@ -29,5 +29,5 @@ High abstract python library for functional programming. Contains algebraic data
     ./docs/lazy
     ./docs/try
     ./docs/task
-    ./doc/validation
+    ./docs/validation
     ./docs/utils
