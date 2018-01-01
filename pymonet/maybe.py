@@ -1,8 +1,7 @@
 class Maybe():
     """
-    Maybe type is the most common way of representing nothingness (or the null type)
-    with making the possibilities of NullPointer issues disappear.
-    Maybe is effectively abstract and has two concrete subtypes: Some (also Box) and None (also Nothing).
+    Maybe type is the most common way of representing nothingness (or the null type).
+    Maybe is effectively abstract and has two concrete subtypes: Box (also Some) and Nothing.
     """
 
     def __init__(self, value, is_nothing):

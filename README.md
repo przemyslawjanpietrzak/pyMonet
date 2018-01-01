@@ -20,8 +20,8 @@ With MIT licence. [Docs](http://pymonet.readthedocs.io/en/latest/?badge=latest)
 ### [Either](#either-1)
 The Either type represents values with two possibilities: B value of type Either<A, B> is either Left<A> or Right. But not both in the same time.
 ### [Maybe](#maybe-1)
-Maybe type is the most common way of representing nothingness (or the null type) with making the possibilities of NullPointer issues disappear.
-Maybe is effectively abstract and has two concrete subtypes: Some (also Box) and None (also Nothing).
+Maybe type is the most common way of representing nothingness (or the null type).
+Maybe is effectively abstract and has two concrete subtypes: Box (also Some) and Nothing.
 ### [Box](#box-1)
 Boxs are data-types that store values. No restriction is placed on how they store these values, though there may be restrictions on some methods if a Box is also an instance of a sub-class of Box.
 ### [Semigroups](#semigroups-1)
