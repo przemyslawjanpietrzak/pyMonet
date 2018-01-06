@@ -1,3 +1,7 @@
+from tests.monad_law_tester import MonadLawTester
+from tests.functor_law_tester import FunctorLawTester
+from tests.monad_transform_tester import MonadTransformTester
+
 from pymonet.reader import Reader
 
 from hypothesis import given
@@ -56,6 +60,25 @@ def test_reader_of_should_return_reader_with_function_returning_of_argument(inte
     assert Reader.of(integer).get() == integer
 
 
+@given(integers())
+def test_reader_transform(integer):
+    MonadTransformTester(monad=Reader.of, value=integer).test(run_to_reader_test=False)
 
 
+@given(integers())
+def test_maybe_monad_law(integer):
+    MonadLawTester(
+        monad=Reader.of,
+        value=integer,
+        mapper1=lambda value: Reader.of(value + 1),
+        mapper2=lambda value: Reader.of(value + 2)
+    ).test()
 
+
+@given(integers())
+def test_maybe_functor_law(integer):
+    FunctorLawTester(
+        functor=Reader.of(integer),
+        mapper1=lambda value: value + 1,
+        mapper2=lambda value: value + 2
+    ).test()
