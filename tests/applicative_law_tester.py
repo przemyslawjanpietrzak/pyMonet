@@ -17,13 +17,13 @@ class ApplicativeLawTester:
     def composition_test(self):
         def lambda_fn(fn1):
             return lambda fn2: lambda value: fn1(fn2(value))
-        
-        x = (self.applicative(lambda_fn)
-            .ap(self.applicative(self.mapper1))
-            .ap(self.applicative(self.mapper2))
-            .ap(self.applicative(self.value)))
+
+        x = self.applicative(lambda_fn)\
+                .ap(self.applicative(self.mapper1))\
+                .ap(self.applicative(self.mapper2))\
+                .ap(self.applicative(self.value))
         y = self.applicative(self.mapper1).ap(
-                self.applicative(self.mapper2).ap(self.applicative(self.value))
+            self.applicative(self.mapper2).ap(self.applicative(self.value))
             )
 
         assert x == y
