@@ -45,7 +45,7 @@ class Box:
         :returns: new Box with result of contains function
         :rtype: Box[B]
         """
-        return self.map(monad.value)
+        return monad.map(self.value)
 
     def to_maybe(self):
         """
