@@ -24,3 +24,11 @@ class Reader:
 
     def get(self, *args):
         return self.fn(*args)
+
+    def ap(self, applicative):
+        def lambda_fn(fn):
+            return Reader(lambda value: fn(self.get(value)))
+        # def lambda_fn(*args):
+        #     return applicative.get(self.get(*args)
+
+        return applicative.bind(lambda_fn)
