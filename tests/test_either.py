@@ -1,6 +1,7 @@
 from tests.monad_law_tester import MonadLawTester
 from tests.functor_law_tester import FunctorLawTester
 from tests.monad_transform_tester import MonadTransformTester
+from tests.applicative_law_tester import ApplicativeLawTester
 
 from pymonet.either import Left, Right
 from pymonet.utils import increase
@@ -35,12 +36,12 @@ def test_mapper_should_be_applied_only_on_current_value():
     assert Right(42).map(increase) == Right(43)
 
 
-def test_ap_method_should_be_call_on_only_right():
+# def test_ap_method_should_be_call_on_only_right():
 
-    assert Left(42).ap(Left(increase)) == Left(42)
-    assert Right(42).ap(Left(increase)) == Right(43)
-    assert Left(42).ap(Right(increase)) == Left(42)
-    assert Right(42).ap(Right(increase)) == Right(43)
+#     assert Left(42).ap(Left(increase)) == Left(42)
+#     assert Right(42).ap(Left(increase)) == Right(43)
+#     assert Left(42).ap(Right(increase)) == Left(42)
+#     assert Right(42).ap(Right(increase)) == Right(43)
 
 
 def test_is_right_should_return_suitable_value():
@@ -117,3 +118,13 @@ def test_either_functor_law(integer):
 def test_either_transform(integer):
     MonadTransformTester(monad=Right, value=integer).test(run_to_either_test=False)
     MonadTransformTester(monad=Left, value=integer, is_fail=True).test(run_to_either_test=False)
+
+
+@given(integers())
+def test_either_applicative_law(integer):
+    ApplicativeLawTester(
+        applicative=Right,
+        value=integer,
+        mapper1=lambda value: value + 1,
+        mapper2=lambda value: value + 2
+    ).test()

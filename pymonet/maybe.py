@@ -63,6 +63,11 @@ class Maybe():
             return Maybe.nothing()
         return mapper(self.value)
 
+    def ap(self, applicative):
+        if self.is_nothing:
+            return Maybe.nothing()
+        return applicative.map(self.value)
+
     def filter(self, filterer):
         """
         If Maybe is empty or filterer returns False return default_value, in other case

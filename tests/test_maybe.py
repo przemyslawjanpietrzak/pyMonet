@@ -1,6 +1,7 @@
 from tests.monad_law_tester import MonadLawTester
 from tests.functor_law_tester import FunctorLawTester
 from tests.monad_transform_tester import MonadTransformTester
+from tests.applicative_law_tester import ApplicativeLawTester
 
 from pymonet.maybe import Maybe
 from pymonet.box import Box
@@ -91,3 +92,13 @@ def test_maybe_transform(integer):
     assert Maybe.nothing().to_lazy().fold(identity) is None
     assert Maybe.nothing().to_try() == Try(None, is_success=False)
     assert Maybe.nothing().to_validation() == Validation.success(None)
+
+
+@given(integers())
+def test_maybe_applicative_law(integer):
+    ApplicativeLawTester(
+        applicative=Maybe.just,
+        value=integer,
+        mapper1=lambda value: value + 1,
+        mapper2=lambda value: value + 2,
+    ).test()
