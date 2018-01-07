@@ -27,10 +27,7 @@ class ApplicativeLawTester:
 
         assert x == y
 
-        # x = (A.of (f) -> (g) -> (x) -> f (g x)).ap(A.of g).ap(A.of h).ap(A.of a)
-        # y = (A.of g).ap((A.of h).ap(A.of a))
-
-    def get_homomorphism_test():
+    def get_homomorphism_test(self):
         x = self.applicative(self.mapper1).ap(self.applicative(self.value))
         y = self.applicative(
             self.mapper1(self.value)
@@ -38,7 +35,8 @@ class ApplicativeLawTester:
         assert x == y
 
     def get_interchange_test(self):
-        x = self.applicative(self.mapper1)).ap(self.monad(self.value))
-        y = self.applicative(lambda fn: fn(self.value).ap(self.applicative(self.mapper1)
+        x = self.applicative(self.mapper1).ap(self.applicative(self.value))
+        y = self.applicative(
+            lambda fn: fn(self.value).ap(self.applicative(self.mapper1))
+        )
         assert x == y
-
