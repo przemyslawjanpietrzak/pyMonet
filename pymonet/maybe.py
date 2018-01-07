@@ -64,6 +64,15 @@ class Maybe():
         return mapper(self.value)
 
     def ap(self, applicative):
+        """
+        Applies the function inside the Maybe[A] structure to another applicative type for notempty Maybe.
+        For empty returns copy of itself
+
+        :param applicative: applicative contains function
+        :type applicative: Maybe[B]
+        :returns: new Maybe with result of contains function
+        :rtype: Maybe[A(B) | None]
+        """
         if self.is_nothing:
             return Maybe.nothing()
         return applicative.map(self.value)

@@ -27,17 +27,16 @@ class Either:
             return success(self.value)
         return error(self.value)
 
-    def ap(self, monad):
+    def ap(self, applicative):
         """
-        Take as a parameter another Box type which contains a function,
-        and then applies that function to the value contained in the calling Box.
+        Applies the function inside the Either[A] structure to another applicative type.
 
-        :param monad: monad contains function
-        :type monad: Box[Function(A) -> B]
-        :returns: new Box with result of contains function
-        :rtype: Box[B]
+        :param applicative: applicative contains function
+        :type applicative: Either[B]
+        :returns: new Either with result of contains function
+        :rtype: Either[A(B)]
         """
-        return monad.map(self.value)
+        return applicative.map(self.value)
 
     def to_box(self):
         """

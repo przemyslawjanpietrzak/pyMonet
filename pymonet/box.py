@@ -35,17 +35,16 @@ class Box:
         """
         return mapper(self.value)
 
-    def ap(self, monad):
+    def ap(self, applicative):
         """
-        It takes as a parameter another Box type which contains a function,
-        and then applies that function to the value contained in the calling Box.
+        Applies the function inside the Box[A] structure to another applicative type.
 
-        :param monad: monad contains function
-        :type monad: Box[Function(A) -> B]
+        :param applicative: applicative contains function
+        :type applicative: Box[B]
         :returns: new Box with result of contains function
-        :rtype: Box[B]
+        :rtype: Box[A(B)]
         """
-        return monad.map(self.value)
+        return applicative.map(self.value)
 
     def to_maybe(self):
         """
