@@ -43,16 +43,17 @@ def test_maybe_bind_should_not_call_mapper_when_monad_has_nothing():
     Maybe.nothing().bind(wrong_mapper)
 
 
-def test_maybe_get_or_else_method_should_return_maybe_value_when_monad_is_not_empy():
+def test_maybe_get_or_else_method_should_return_maybe_value_when_monad_is_not_empty():
     assert Maybe.just(42).get_or_else(0) == 42
 
 
-def test_maybe_get_or_else_method_should_return_argument_when_monad_is_emtpy():
-    assert Maybe.nothing().get_or_else(0) == 0
+@given(integers())
+def test_maybe_get_or_else_method_should_return_argument_when_monad_is_empty(integer):
+    assert Maybe.nothing().get_or_else(integer) is integer
 
-
-def test_maybe_is_nothing_should_return_proper_boolean():
-    assert Maybe.just(42).is_nothing is False
+@given(integers())
+def test_maybe_is_nothing_should_return_proper_boolean(integer):
+    assert Maybe.just(integer).is_nothing is False
     assert Maybe.nothing().is_nothing is True
 
 
@@ -89,7 +90,7 @@ def test_maybe_transform(integer):
 
     assert Maybe.nothing().to_box() == Box(None)
     assert Maybe.nothing().to_either() == Left(None)
-    assert Maybe.nothing().to_lazy().fold(identity) is None
+    assert Maybe.nothing().to_lazy().get() is None
     assert Maybe.nothing().to_try() == Try(None, is_success=False)
     assert Maybe.nothing().to_validation() == Validation.success(None)
 
@@ -102,3 +103,10 @@ def test_maybe_applicative_law(integer):
         mapper1=lambda value: value + 1,
         mapper2=lambda value: value + 2,
     ).test()
+
+
+def test_maybe_ap_on_empty_maybe_should_not_be_applied():
+    def lambda_fn():
+        raise TypeError
+    assert Maybe.nothing().ap(Maybe.just(lambda_fn)) == Maybe.nothing()
+    assert Maybe.just(42).ap(Maybe.nothing()) == Maybe.nothing()

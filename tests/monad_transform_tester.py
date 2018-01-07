@@ -29,7 +29,7 @@ class MonadTransformTester:  # pragma: no cover
             assert self.monad(self.value).to_either() == Right(self.value)
 
     def to_lazy_test(self):
-        assert self.monad(self.value).to_lazy().fold(identity) == self.value
+        assert self.monad(self.value).to_lazy().get() == self.value
 
     def to_try_test(self):
         assert self.monad(self.value).to_try() == Try(self.value, is_success=not self.is_fail)

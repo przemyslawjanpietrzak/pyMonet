@@ -120,3 +120,11 @@ def test_either_applicative_law(integer):
         mapper1=lambda value: value + 1,
         mapper2=lambda value: value + 2
     ).test()
+
+
+@given(integers())
+def test_either_ap_on_left_should_not_be_applied(integer):
+    def lambda_fn():
+        raise TypeError
+    assert Left(integer).ap(Right(lambda_fn)) == Left(integer)
+    assert Left(integer).ap(Left(lambda_fn)) == Left(integer)
