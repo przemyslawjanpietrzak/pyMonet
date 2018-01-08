@@ -14,7 +14,7 @@ class Lazy:
         self.value = None
         
     def __str__(self): # pragma: no cover
-        return 'Lazy[fn={}, value={}, is_evaluated={}'.format(self.constructor_fn, self.value, self.is_evaluated)
+        return 'Lazy[fn={}, value={}, is_evaluated={}]'.format(self.constructor_fn, self.value, self.is_evaluated)
 
     def __eq__(self, other):
         """
@@ -26,6 +26,18 @@ class Lazy:
             and self.value == other.value
             and self.constructor_fn == other.constructor_fn
         )
+    
+    @classmethod
+    def of(cls, value):
+        """
+        Returns Lazy with function returning argument.
+
+        :param value: value to return by Lazy constructor_fn
+        :type value: Any
+        :returns: Lazy with function returning argument
+        :rtype: Lazy[Function() -> A]
+        """
+        return Lazy(lambda: value)
 
     def _compute_value(self, *args):
         self.is_evaluated = True
@@ -81,6 +93,51 @@ class Lazy:
         if self.is_evaluated:
             return self.value
         return self._compute_value(*args)
+
+    def to_box(self, *args):
+        """
+        Transform Lazy into Box with constructor_fn result.
+
+        :returns: Box monad with constructor_fn result
+        :rtype: Box[A]
+        """
+        from pymonet.box import Box
+
+        return Box(self.get(*args))
+
+    def to_either(self, *args):
+        """
+        Transform Lazy into Either (Right) with constructor_fn result.
+
+        :returns: Right monad with constructor_fn result
+        :rtype: Right[A]
+        """
+        from pymonet.either import Right
+
+        return Right(self.get(*args))
+
+    def to_maybe(self, *args):
+        """
+        Transform Lazy into not empty Maybe with constructor_fn result.
+
+        :returns: not empty Maybe monad with constructor_fn result
+        :rtype: Maybe[A]
+        """
+        from pymonet.maybe import Maybe
+
+        return Maybe.just(self.get(*args))
+
+    def to_try(self, *args):
+        """
+        Transform Lazy into Try with constructor_fn result.
+        Try will be successful only when constructor_fn not raise anything.
+
+        :returns: Try with constructor_fn result
+        :rtype: Try[A] | Try[Error]
+        """
+        from pymonet.monad_try import Try
+
+        return Try.of(self.constructor_fn, *args)
 
     def to_validation(self, *args):
         """

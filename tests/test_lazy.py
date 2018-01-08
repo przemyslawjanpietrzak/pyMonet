@@ -1,6 +1,6 @@
 from tests.applicative_law_tester import  ApplicativeLawTester
 from tests.functor_law_tester import FunctorLawTester
-
+from tests.monad_transform_tester import MonadTransformTester
 from pymonet.lazy import Lazy
 from pymonet.validation import Validation
 from pymonet.utils import identity, increase
@@ -56,11 +56,6 @@ def test_applicative_should_not_call_mapper_until_call_get(mocker):
 
     assert lazy_spy.fn.call_count == 0
     assert lazy_spy.mapper.call_count == 0
-
-    # applicative = applicative.bind(lazy_spy.binder)
-    # assert lazy_spy.fn.call_count == 0
-    # assert lazy_spy.mapper.call_count == 0
-    # assert lazy_spy.binder.call_count == 0
 
     assert applicative.get() == 43
     assert lazy_spy.fn.call_count == 1
@@ -148,7 +143,6 @@ def test_lazy_applicative(integer):
     assert Lazy(increase).ap(Lazy(lambda: integer)).get() == increase(integer)
 
 
-
 @given(integers())
 def test_lazy_functor_law(integer):
     FunctorLawTester(
@@ -157,3 +151,11 @@ def test_lazy_functor_law(integer):
         mapper2=lambda value: value + 2,
         get_fn=lambda lazy: lazy.get()
     ).test()
+
+
+@given(integers())
+def test_lazy_transform_monad(integer):
+    MonadTransformTester(
+        monad=Lazy.of,
+        value=integer
+    ).test(run_to_lazy_test=False)

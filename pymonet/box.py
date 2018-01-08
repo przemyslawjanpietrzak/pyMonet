@@ -13,6 +13,9 @@ class Box:
     def __eq__(self, other):
         return self.value == other.value
 
+    def __str__(self): # pragma: no cover
+        return 'Box[value={}]'.format(self.value)
+
     def map(self, mapper):
         """
         Take function (A) -> b and applied this function on current box value and returns new box with mapped value.
