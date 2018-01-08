@@ -1,6 +1,7 @@
 from tests.applicative_law_tester import  ApplicativeLawTester
 from tests.functor_law_tester import FunctorLawTester
 from tests.monad_transform_tester import MonadTransformTester
+
 from pymonet.lazy import Lazy
 from pymonet.validation import Validation
 from pymonet.utils import identity, increase
@@ -8,20 +9,29 @@ from pymonet.utils import identity, increase
 from hypothesis import given
 from hypothesis.strategies import integers
 
+import pytest
 
 from random import random
 
+@pytest.fixture()
+def lazy_spy(mocker):
+    class LazySpy:
 
-class LazySpy:
+        def mapper(self, input):
+            return input + 1
 
-    def mapper(self, input):
-        return input + 1
+        def fn(self):
+            return 42
 
-    def fn(self):
-        return 42
+        def binder(self, value):
+            return Lazy(value + 1)
 
-    def binder(self, value):
-        return Lazy(value + 1)
+    lazy_spy = LazySpy()
+    mocker.spy(lazy_spy, 'fn')
+    mocker.spy(lazy_spy, 'mapper')
+    mocker.spy(lazy_spy, 'binder')
+
+    return lazy_spy
 
 
 def fn():
@@ -32,11 +42,7 @@ def fn1():
     return 43
 
 
-def test_applicative_should_call_stored_function_during_fold_method_call(mocker):
-
-    lazy_spy = LazySpy()
-    mocker.spy(lazy_spy, 'fn')
-
+def test_applicative_should_call_stored_function_during_fold_method_call(lazy_spy):
     applicative = Lazy(lazy_spy.fn)
 
     assert lazy_spy.fn.call_count == 0
@@ -45,13 +51,7 @@ def test_applicative_should_call_stored_function_during_fold_method_call(mocker)
     assert lazy_spy.fn.call_count == 1
 
 
-def test_applicative_should_not_call_mapper_until_call_get(mocker):
-
-    lazy_spy = LazySpy()
-    mocker.spy(lazy_spy, 'fn')
-    mocker.spy(lazy_spy, 'mapper')
-    mocker.spy(lazy_spy, 'binder')
-
+def test_applicative_should_not_call_mapper_until_call_get(lazy_spy):
     applicative = Lazy(lazy_spy.fn).map(lazy_spy.mapper)
 
     assert lazy_spy.fn.call_count == 0
@@ -62,12 +62,7 @@ def test_applicative_should_not_call_mapper_until_call_get(mocker):
     assert lazy_spy.mapper.call_count == 1
 
 
-def test_applicative_should_not_call_binder_until_call_get(mocker):
-
-    lazy_spy = LazySpy()
-    mocker.spy(lazy_spy, 'fn')
-    mocker.spy(lazy_spy, 'binder')
-
+def test_applicative_should_not_call_binder_until_call_get(lazy_spy):
     lazy = Lazy(lazy_spy.fn)
     assert lazy_spy.fn.call_count == 0
     assert lazy_spy.binder.call_count == 0
@@ -82,11 +77,7 @@ def test_applicative_should_not_call_binder_until_call_get(mocker):
     assert result == 43
 
 
-def test_applicative_should_call_memoize_saved_value(mocker):
-
-    lazy_spy = LazySpy()
-    mocker.spy(lazy_spy, 'fn')
-
+def test_applicative_should_call_memoize_saved_value(lazy_spy):
     lazy = Lazy(lazy_spy.fn)
 
     value1 = lazy.get()

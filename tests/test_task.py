@@ -1,5 +1,7 @@
 from pymonet.task import Task
 
+import pytest
+
 
 class TaskSpy:
 
@@ -24,13 +26,19 @@ class TaskSpy:
     def fork_resolved(self, _, resolve):
         resolve(42)
 
-
-def test_task_resolved_fork_should_be_called_only_during_calling_fork(mocker):
+@pytest.fixture
+def task_spy(mocker):
     task_spy = TaskSpy()
     mocker.spy(task_spy, 'resolved')
     mocker.spy(task_spy, 'rejected')
     mocker.spy(task_spy, 'fork_rejected')
     mocker.spy(task_spy, 'fork_resolved')
+    mocker.spy(task_spy, 'mapper')
+
+    return task_spy
+
+
+def test_task_resolved_fork_should_be_called_only_during_calling_fork(task_spy):
 
     task = Task(task_spy.fork_resolved)
     assert task_spy.fork_resolved.call_count == 0
@@ -42,13 +50,7 @@ def test_task_resolved_fork_should_be_called_only_during_calling_fork(mocker):
     assert task_spy.rejected.call_count == 0
 
 
-def test_task_rejected_fork_should_be_called_only_during_calling_fork(mocker):
-    task_spy = TaskSpy()
-    mocker.spy(task_spy, 'resolved')
-    mocker.spy(task_spy, 'rejected')
-    mocker.spy(task_spy, 'fork_rejected')
-    mocker.spy(task_spy, 'fork_resolved')
-
+def test_task_rejected_fork_should_be_called_only_during_calling_fork(task_spy):
     task = Task(task_spy.fork_rejected)
     assert task_spy.fork_resolved.call_count == 0
 
@@ -83,10 +85,7 @@ def test_task_rejected_fork_should_return_resolved_value():
     task.fork(rejected_spy, resolved_spy)
 
 
-def test_task_mapper_should_be_called_during_calling_fork(mocker):
-    task_spy = TaskSpy()
-    mocker.spy(task_spy, 'mapper')
-
+def test_task_mapper_should_be_called_during_calling_fork(task_spy):
     task = Task(task_spy.fork_resolved).map(task_spy.mapper)
     assert task_spy.mapper.call_count == 0
 
@@ -142,21 +141,13 @@ def test_task_resolved_fork_should_applied_fold_on_his_result():
     task.fork(rejected_spy, resolved_spy)
 
 
-def test_task_of_should_applied_only_resolve_callback(mocker):
-    task_spy = TaskSpy()
-    mocker.spy(task_spy, 'resolved')
-    mocker.spy(task_spy, 'rejected')
-
+def test_task_of_should_applied_only_resolve_callback(task_spy):
     assert Task.of(42).fork(task_spy.rejected, task_spy.resolved) is 42
     assert task_spy.resolved.call_count == 1
     assert task_spy.rejected.call_count == 0
 
 
-def test_task_of_should_applied_only_reject_callback(mocker):
-    task_spy = TaskSpy()
-    mocker.spy(task_spy, 'resolved')
-    mocker.spy(task_spy, 'rejected')
-
+def test_task_of_should_applied_only_reject_callback(task_spy):
     assert Task.reject(42).fork(task_spy.rejected, task_spy.resolved) is 42
     assert task_spy.resolved.call_count == 0
     assert task_spy.rejected.call_count == 1
