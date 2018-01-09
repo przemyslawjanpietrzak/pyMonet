@@ -10,11 +10,14 @@ class ApplicativeLawTester:
         self.mapper2 = mapper2
         self.get_fn = get_fn
 
+    def _assert(self, x, y):
+        assert self.get_fn(x) == self.get_fn(y)
+
     def identity_test(self):
         x = self.applicative(identity).ap(self.applicative(self.value))
         y = self.applicative(self.value)
 
-        assert self.get_fn(x) == self.get_fn(y)
+        self._assert(x, y)
 
     def composition_test(self):
         def lambda_fn(fn1):
@@ -27,22 +30,22 @@ class ApplicativeLawTester:
         y = self.applicative(self.mapper1).ap(
             self.applicative(self.mapper2).ap(self.applicative(self.value))
             )
-        print( self.get_fn(x) , self.get_fn(y))
-        assert self.get_fn(x) == self.get_fn(y)
+        
+        self._assert(x, y)
 
     def homomorphism_test(self):
         x = self.applicative(self.mapper1).ap(self.applicative(self.value))
         y = self.applicative(
             self.mapper1(self.value)
         )
-        assert self.get_fn(x) == self.get_fn(y)
+        self._assert(x, y)
 
     def interchange_test(self):
         x = self.applicative(self.mapper1).ap(self.applicative(self.value))
         y = self.applicative(lambda fn: fn(self.value)).ap(
             self.applicative(self.mapper1)
         )
-        assert self.get_fn(x) == self.get_fn(y)
+        self._assert(x, y)
 
     def test(self):
         self.identity_test()

@@ -37,7 +37,7 @@ class Lazy:
         :returns: Lazy with function returning argument
         :rtype: Lazy[Function() -> A]
         """
-        return Lazy(lambda: value)
+        return Lazy(lambda *args: value)
 
     def _compute_value(self, *args):
         self.is_evaluated = True

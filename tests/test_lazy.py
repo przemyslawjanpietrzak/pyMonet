@@ -1,6 +1,7 @@
 from tests.applicative_law_tester import  ApplicativeLawTester
 from tests.functor_law_tester import FunctorLawTester
 from tests.monad_transform_tester import MonadTransformTester
+from tests.monad_law_tester import MonadLawTester
 
 from pymonet.lazy import Lazy
 from pymonet.validation import Validation
@@ -12,6 +13,8 @@ from hypothesis.strategies import integers
 import pytest
 
 from random import random
+import types
+
 
 @pytest.fixture()
 def lazy_spy(mocker):
@@ -150,3 +153,30 @@ def test_lazy_transform_monad(integer):
         monad=Lazy.of,
         value=integer
     ).test(run_to_lazy_test=False)
+
+
+@given(integers())
+def test_lazy_monad_laws(integer):
+    def get_fn(lazy):
+        if isinstance(lazy.constructor_fn, types.FunctionType):
+            return lazy.get()
+        return lazy.constructor_fn
+
+    MonadLawTester(
+        monad=Lazy.of,
+        value=integer,
+        mapper1=lambda value: Lazy(value + 1),
+        mapper2=lambda value: Lazy(value + 2),
+        get_fn=get_fn
+    ).test(run_associativity_law_test=False)
+
+
+@given(integers())
+def test_lazy_applicative_laws(integer):
+    ApplicativeLawTester(
+        applicative=Lazy,
+        value=lambda: integer,
+        mapper1=lambda value: (value + 1),
+        mapper2=lambda value: (value + 2),
+        get_fn=lambda lazy: lazy.get()
+    ).identity_test()
