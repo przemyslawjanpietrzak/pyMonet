@@ -44,7 +44,7 @@ class Try:
             return Try(mapper(self.value), True)
         return Try(self.value, False)
 
-    def fold(self, mapper):
+    def bind(self, mapper):
         """
         Take function and applied this function with monad value and returns function result.
 

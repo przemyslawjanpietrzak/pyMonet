@@ -18,13 +18,13 @@ Maybe
 
     get_index(42)\
         .map(lambda value: value + 1)\
-        .fold(lambda value: Maybe.just(value + 1))\
+        .bind(lambda value: Maybe.just(value + 1))\
         .get_or_else(0)
         # 0
 
     get_index(1)\
         .map(lambda value: value + 1)\
-        .fold(lambda value: Maybe.just(value + 1))\
+        .bind(lambda value: Maybe.just(value + 1))\
         .get_or_else(0)
 
     get_index(42)\

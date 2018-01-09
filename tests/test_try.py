@@ -52,18 +52,18 @@ def test_try_should_appied_map_when_exception_was_thrown():
         .on_fail(fail_callback))
 
 
-def test_try_should_appied_fold_when_exception_not_was_thrown():
+def test_try_should_appied_bind_when_exception_not_was_thrown():
 
     def fail_callback(_):
         assert True is False
 
     (Try.of(divide, 42, 2)
-        .fold(lambda value: Try.of(divide, 42, 3))
+        .bind(lambda value: Try.of(divide, 42, 3))
         .on_success(lambda value: value == 7)
         .on_fail(fail_callback))
 
 
-def test_try_should_not_appied_fold_when_exception_was_thrown():
+def test_try_should_not_appied_bind_when_exception_was_thrown():
 
     def success_callback(_):
         assert True is False
@@ -73,12 +73,12 @@ def test_try_should_not_appied_fold_when_exception_was_thrown():
         assert str(error) == 'division by zero'
 
     (Try.of(divide, 42, 0)
-        .fold(lambda value: Try.of(divide, 42, 3))
+        .bind(lambda value: Try.of(divide, 42, 3))
         .on_success(success_callback)
         .on_fail(fail_callback))
 
 
-def test_when_fold_is_rejected_monad_also_should_be_rejected():
+def test_when_bind_is_rejected_monad_also_should_be_rejected():
 
     def success_callback(_):
         assert True is False
@@ -88,7 +88,7 @@ def test_when_fold_is_rejected_monad_also_should_be_rejected():
         assert str(error) == 'float division by zero'
 
     (Try.of(divide, 42, 2)
-        .fold(lambda value: Try.of(divide, value, 0))
+        .bind(lambda value: Try.of(divide, value, 0))
         .on_success(success_callback)
         .on_fail(fail_callback))
 
