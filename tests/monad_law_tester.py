@@ -1,19 +1,26 @@
+from pymonet.utils import identity
+
+
 class MonadLawTester:  # pragma: no cover
 
-    def __init__(self, monad, value, mapper1, mapper2):
+    def __init__(self, monad, value, mapper1, mapper2, get_fn=identity):
         self.monad = monad
         self.value = value
         self.mapper1 = mapper1
         self.mapper2 = mapper2
+        self.get_fn = get_fn
+
+    def _assert(self, x, y):
+        assert self.get_fn(x) == self.get_fn(y)
 
     def associativity_test(self):
-        value1 = self.monad(self.value).bind(self.mapper1).bind(self.mapper2)
-        value2 = self.monad(self.value).bind(lambda value: self.mapper2(value).bind(self.mapper1))
+        x = self.monad(self.value).bind(self.mapper1).bind(self.mapper2)
+        y = self.monad(self.value).bind(lambda value: self.mapper2(value).bind(self.mapper1))
 
-        assert value1 == value2
+        self._assert(x, y)
 
     def left_unit_test(self):
-        assert self.monad(self.value).bind(self.mapper1) == self.mapper1(self.value)
+        self._assert(self.monad(self.value).bind(self.mapper1), self.mapper1(self.value))
 
     def right_unit_test(self):
         self.monad(self.value).bind(self.mapper1) == self.monad(self.value)

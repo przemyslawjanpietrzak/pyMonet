@@ -9,16 +9,19 @@ class FunctorLawTester:  # pragma: no cover
         self.mapper2 = mapper2
         self.get_fn = get_fn
 
+    def _assert(self, x, y):
+        assert self.get_fn(x) == self.get_fn(y)
+
     def identity_law_test(self):
         x = self.functor.map(identity)
         y = self.functor
 
-        assert self.get_fn(x) == self.get_fn(y)
+        self._assert(x, y)
 
     def composition_law_test(self):
         mapped_functor1 = self.functor.map(self.mapper1).map(self.mapper2)
         mapped_fuctor2 = self.functor.map(lambda value: self.mapper2(self.mapper1(value)))
-        assert self.get_fn(mapped_functor1) == self.get_fn(mapped_fuctor2)
+        self._assert(mapped_functor1, mapped_fuctor2)
 
     def test(self, run_identity_law_test=True, run_composition_law_test=True):
         if run_identity_law_test:

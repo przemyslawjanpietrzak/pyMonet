@@ -37,4 +37,4 @@ Task
     # reject side effect
 
 .. autoclass:: pymonet.task.Task
-    :members: __init__, of, reject, map, fold, to_validation
+    :members: __init__, of, reject, map, bind, to_validation

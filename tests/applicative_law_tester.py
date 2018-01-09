@@ -46,6 +46,6 @@ class ApplicativeLawTester:
 
     def test(self):
         self.identity_test()
-        # self.composition_test()
+        self.composition_test()
         self.homomorphism_test()
         self.interchange_test()
