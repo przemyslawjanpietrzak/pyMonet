@@ -13,7 +13,7 @@ Box
        .map(lambda value: value + 1)  # Box<43>
        .map(lambda value: str(value))  # Box<"43">
        .map(lambda value: value[::-1])  # Box<"34">
-       .fold(lambda value: "output = " + value))  # "output = 34"
+       .bind(lambda value: "output = " + value))  # "output = 34"
 
 .. autoclass:: pymonet.box.Box
     :members: map, bind, ap, to_maybe, to_either, to_lazy, to_try, to_validation

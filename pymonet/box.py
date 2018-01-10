@@ -13,6 +13,9 @@ class Box:
     def __eq__(self, other):
         return self.value == other.value
 
+    def __str__(self):  # pragma: no cover
+        return 'Box[value={}]'.format(self.value)
+
     def map(self, mapper):
         """
         Take function (A) -> b and applied this function on current box value and returns new box with mapped value.
@@ -35,17 +38,16 @@ class Box:
         """
         return mapper(self.value)
 
-    def ap(self, monad):
+    def ap(self, applicative):
         """
-        It takes as a parameter another Box type which contains a function,
-        and then applies that function to the value contained in the calling Box.
+        Applies the function inside the Box[A] structure to another applicative type.
 
-        :param monad: monad contains function
-        :type monad: Box[Function(A) -> B]
+        :param applicative: applicative contains function
+        :type applicative: Box[B]
         :returns: new Box with result of contains function
-        :rtype: Box[B]
+        :rtype: Box[A(B)]
         """
-        return self.map(monad.value)
+        return applicative.map(self.value)
 
     def to_maybe(self):
         """

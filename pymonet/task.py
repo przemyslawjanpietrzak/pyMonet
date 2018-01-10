@@ -53,7 +53,7 @@ class Task:
 
         return Task(result)
 
-    def fold(self, fn):
+    def bind(self, fn):
         """
         Take function, store it and call with Task value during calling fork function.
         Return result of called.

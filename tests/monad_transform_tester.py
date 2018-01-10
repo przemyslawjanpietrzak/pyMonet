@@ -3,7 +3,6 @@ from pymonet.either import Left, Right
 from pymonet.maybe import Maybe
 from pymonet.monad_try import Try
 from pymonet.validation import Validation
-from pymonet.utils import identity
 
 
 class MonadTransformTester:  # pragma: no cover
@@ -29,7 +28,7 @@ class MonadTransformTester:  # pragma: no cover
             assert self.monad(self.value).to_either() == Right(self.value)
 
     def to_lazy_test(self):
-        assert self.monad(self.value).to_lazy().fold(identity) == self.value
+        assert self.monad(self.value).to_lazy().get() == self.value
 
     def to_try_test(self):
         assert self.monad(self.value).to_try() == Try(self.value, is_success=not self.is_fail)
