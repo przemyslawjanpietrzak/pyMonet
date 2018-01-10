@@ -21,13 +21,13 @@ Either
 
     (divide(42, 0)
         .map(lambda value: value + 1)
-        .fold(lambda value: Right(value + 1))
+        .bind(lambda value: Right(value + 1))
         .case(error=handle_error, success=handle_success))
     # error 42
 
     (divide(42, 1)
         .map(identity, lambda value: value + 1)
-        .fold(lambda value: Right(value + 1))
+        .bind(lambda value: Right(value + 1))
         .case(error=handle_error, success=handle_success))
     # success  44
 

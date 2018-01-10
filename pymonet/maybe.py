@@ -1,8 +1,7 @@
 class Maybe():
     """
-    Maybe type is the most common way of representing nothingness (or the null type)
-    with making the possibilities of NullPointer issues disappear.
-    Maybe is effectively abstract and has two concrete subtypes: Some (also Box) and None (also Nothing).
+    Maybe type is the most common way of representing nothingness (or the null type).
+    Maybe is effectively abstract and has two concrete subtypes: Box (also Some) and Nothing.
     """
 
     def __init__(self, value, is_nothing):
@@ -63,6 +62,20 @@ class Maybe():
         if self.is_nothing:
             return Maybe.nothing()
         return mapper(self.value)
+
+    def ap(self, applicative):
+        """
+        Applies the function inside the Maybe[A] structure to another applicative type for notempty Maybe.
+        For empty returns copy of itself
+
+        :param applicative: applicative contains function
+        :type applicative: Maybe[B]
+        :returns: new Maybe with result of contains function
+        :rtype: Maybe[A(B) | None]
+        """
+        if self.is_nothing:
+            return Maybe.nothing()
+        return applicative.map(self.value)
 
     def filter(self, filterer):
         """

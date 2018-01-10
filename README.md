@@ -20,8 +20,8 @@ With MIT licence. [Docs](http://pymonet.readthedocs.io/en/latest/?badge=latest)
 ### [Either](#either-1)
 The Either type represents values with two possibilities: B value of type Either<A, B> is either Left<A> or Right. But not both in the same time.
 ### [Maybe](#maybe-1)
-Maybe type is the most common way of representing nothingness (or the null type) with making the possibilities of NullPointer issues disappear.
-Maybe is effectively abstract and has two concrete subtypes: Some (also Box) and None (also Nothing).
+Maybe type is the most common way of representing nothingness (or the null type).
+Maybe is effectively abstract and has two concrete subtypes: Box (also Some) and Nothing.
 ### [Box](#box-1)
 Boxs are data-types that store values. No restriction is placed on how they store these values, though there may be restrictions on some methods if a Box is also an instance of a sub-class of Box.
 ### [Semigroups](#semigroups-1)
@@ -29,7 +29,7 @@ In mathematics, a semigroup is an algebraic structure consisting of a set togeth
 A semigroup generalizes a monoid in that there might not exist an identity element.
 It also (originally) generalized a group (a monoid with all inverses) to a type where every element did not have to have an inverse, this the name semigroup.
 ### [Lazy](#lazy-1)
-Lazy are data-types that store functions. Stored function will not be called until call of fold method
+Lazy are data-types that store functions. Stored function will not be called until call of bind method
 ### [Task](#task-1)
 Task are data-type for handle execution of functions (in lazy way) transform results of this function and handle errors.
 ### [Try](#try-1)
@@ -41,7 +41,7 @@ Set of functional programming helpers
 
 ## Either
 The Either type represents values with two possibilities: B value of type Either<A, B> is either Left<A> or Right. But not both in the same time.
-Left represents error value so any maps and fold will NOT be applied on it.
+Left represents error value so any maps and bind will NOT be applied on it.
 
 ```python
 from pymonet.either import Left, Right
@@ -60,13 +60,13 @@ def handle_success(value):
 
 (divide(42, 0)
     .map(lambda value: value + 1)
-    .fold(lambda value: Right(value + 1))
+    .bind(lambda value: Right(value + 1))
     .case(error=handle_error, success=handle_success))
 # error 42
 
 (divide(42, 1)
     .map(identity, lambda value: value + 1)
-    .fold(lambda value: Right(value + 1))
+    .bind(lambda value: Right(value + 1))
     .case(error=handle_error, success=handle_success))
 # success  44
 ```
@@ -91,20 +91,20 @@ get_index(1).get_or_else(0)  # 3
 
 ```
 
-Fold and map methods will be applied only when maybe is not empty
+bind and map methods will be applied only when maybe is not empty
 ```python
 from pymonet.Maybe import Maybe
 
 
 get_index(42)\
   .map(lambda value: value + 1)\
-  .fold(lambda value: Maybe.just(value + 1))\
+  .bind(lambda value: Maybe.just(value + 1))\
   .get_or_else(0)
 # 0
 
 get_index(1)\
   .map(lambda value: value + 1)\
-  .fold(lambda value: Maybe.just(value + 1))\
+  .bind(lambda value: Maybe.just(value + 1))\
   .get_or_else(0)
 # 3
 ```
@@ -140,7 +140,7 @@ box = Box(42)  # Box<42>
     .map(lambda value: value + 1)  # Box<43>
     .map(lambda value: str(value))  # Box<"43">
     .map(lambda value: value[::-1])  # Box<"34">
-    .fold(lambda value: "output = " + value))  # "output = 34"
+    .bind(lambda value: "output = " + value))  # "output = 34"
 ```
 
 ## Semigroups
@@ -170,7 +170,7 @@ Sum(42).concat(Sum(1))  # Sum<43>
 Sum(42).concat(Sum(1)).concat(Sum(1))  # Sum<44>
 Sum(42).concat(Sum(1).concat(Sum(1)))  # Sum<44>
 
-Sum(42).fold(lambda value: value)  # 42
+Sum(42).bind(lambda value: value)  # 42
 ```
 
 #### First
@@ -178,7 +178,7 @@ Sum(42).fold(lambda value: value)  # 42
 from pymonet.semigroups import First
 
 First('first').concat(First('Second'))  # First<"first">
-First('first').fold(lambda value: value[::-1])  # "tsrif"
+First('first').bind(lambda value: value[::-1])  # "tsrif"
 ```
 
 #### Map
@@ -190,7 +190,7 @@ ingredient1.concat(ingredient2)  # Map<{'score': Sum(3), 'won': All(True), 'capt
 ```
 
 ## Lazy
-Lazy are data-types that store functions. Stored function will not be called until call of fold method
+Lazy are data-types that store functions. Stored function will not be called until call of bind method
 ```python
 from pymonet.lazy import Lazy
 
@@ -207,7 +207,7 @@ def side_effect(value):
 
 lazy = Lazy(fn)
 mapped_lazy = lazy.map(mapper)
-mapped_lazy.fold(side_effect)  
+mapped_lazy.bind(side_effect)  
 # fn call
 # mapper side effect of 42
 # side effect of 42
@@ -239,22 +239,22 @@ def rejectable_fn(reject, resolve):
 resolvable_task = Task.of(resolvable_fn)
 rejectable_task = Task.of(rejectable_fn)
 ```
-map method will be applied only on resolvable tasks during calling fold method
+map method will be applied only on resolvable tasks during calling bind method
 ```python
 resolvable_task.map(lambda value: value + 1)  # Task<() -> 43>
 rejectable_task.map(lambda value: value + 1)  # Task<() -> 0>
 ```
-fold method will be applied only on resolvable tasks. Fold also will call stored function
+bind method will be applied only on resolvable tasks. bind also will call stored function
 ```python
 def mapper(value):
     print('mapper side effect ' + value)
     return value + 1
 
-resolvable_task.fold(mapper)
+resolvable_task.bind(mapper)
 # resolve side effect
 # mapper side effect 42
 
-rejectable_task.fold(mapper)
+rejectable_task.bind(mapper)
 # reject side effect
 ```
 
