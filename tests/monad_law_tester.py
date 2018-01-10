@@ -11,9 +11,6 @@ class MonadLawTester:  # pragma: no cover
         self.get_fn = get_fn
 
     def _assert(self, x, y):
-        print(
-            self.get_fn(x), self.get_fn(y)
-        )
         assert self.get_fn(x) == self.get_fn(y)
 
     def associativity_test(self):

@@ -158,10 +158,20 @@ def test_try_functor_laws(integer):
 
 
 @given(integers())
-def test_try_monad_laws(integer):
+def test_try_monad_associativity_law(integer):
     MonadLawTester(
         monad=Try.of,
         value=lambda: integer,
         mapper1=lambda value: Try.of(lambda: value + 1),
         mapper2=lambda value: Try.of(lambda: value + 2),
     ).test(run_left_law_test=False, run_right_law_test=False)
+
+
+@given(integers())
+def test_try_monad_left_unit_law(integer):
+    assert Try(integer, True).bind(lambda value: Try(value + 1, True)) == Try(increase(integer), True)
+
+
+@given(integers())
+def test_try_monad_right_unit_law(integer):
+    assert Try(integer, True).bind(lambda value: Try(value, True)) == Try(integer, True)
