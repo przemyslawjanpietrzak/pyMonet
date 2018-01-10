@@ -1,8 +1,11 @@
+from tests.functor_law_tester import FunctorLawTester
+from tests.monad_law_tester import MonadLawTester
+
 from pymonet.monad_try import Try
 from pymonet.utils import increase
 
 from hypothesis import given
-from hypothesis.strategies import integers
+from hypothesis.strategies import text, integers
 
 import pytest
 
@@ -19,8 +22,14 @@ class TrySpy:
     def fail(self):
         return 42 / 0
 
+    def mapper(self, value):
+        return value + 1
+
     def binder(self, value):
         return Try.of(divide, value, 2)
+
+    def fail_binder(self, value):
+        return Try.of(divide, value, 0)
 
     def success_callback(self, value):
         pass
@@ -37,12 +46,13 @@ def try_spy(mocker):
     mocker.spy(spy, 'fail')
     mocker.spy(spy, 'fail_callback')
     mocker.spy(spy, 'binder')
+    mocker.spy(spy, 'fail_binder')
+    mocker.spy(spy, 'mapper')
 
     return spy
 
 
 def test_try_should_call_success_callback_with_result_of_function_when_exception_was_not_thrown(try_spy):
-
     (Try.of(try_spy.fn)
         .on_success(try_spy.success_callback)
         .on_fail(try_spy.fail_callback))
@@ -53,7 +63,6 @@ def test_try_should_call_success_callback_with_result_of_function_when_exception
     try_spy.success_callback.assert_called_once_with(42)
 
 def test_try_should_call_fail_callback_with_result_of_function_when_exception_was_thrown(try_spy):
-
     (Try.of(try_spy.fail)
         .on_success(try_spy.success_callback)
         .on_fail(try_spy.fail_callback))
@@ -78,78 +87,81 @@ def test_try_should_appied_map_when_exception_was_thrown(try_spy):
 
 def test_try_should_appied_bind_when_exception_not_was_thrown(try_spy):
     (Try.of(try_spy.fn)
-        .bind(lambda value: Try.of(divide, value, 2))
+        .bind(try_spy.binder)
         .on_success(try_spy.success_callback)
         .on_fail(try_spy.fail_callback))
 
     assert try_spy.fail_callback.call_count == 0
     assert try_spy.success_callback.call_count == 1
-
+    assert try_spy.binder.call_count == 1
+    
     try_spy.success_callback.assert_called_once_with(21)
+    try_spy.binder.assert_called_once_with(42)
 
 def test_try_should_not_appied_bind_when_exception_was_thrown(try_spy):
     (Try.of(try_spy.fail)
-        .bind(lambda value: Try.of(divide, value, 2))
+        .bind(try_spy.binder)
         .on_success(try_spy.success_callback)
         .on_fail(try_spy.fail_callback))
 
     assert try_spy.fail_callback.call_count == 1
+    assert try_spy.binder.call_count == 0
     assert try_spy.success_callback.call_count == 0
 
-    try_spy.fail_callback.assert_called_once_with(ZeroDivisionError('division by zero',))
 
-def test_when_bind_is_rejected_monad_also_should_be_rejected():
+def test_when_bind_is_rejected_monad_also_should_be_rejected(try_spy):
+    (Try.of(try_spy.fn)
+        .bind(try_spy.fail_binder)
+        .on_success(try_spy.success_callback)
+        .on_fail(try_spy.fail_callback))
 
-    def success_callback(_):
-        assert True is False
-
-    def fail_callback(error):
-        assert isinstance(error, ZeroDivisionError)
-        assert str(error) == 'float division by zero'
-
-    (Try.of(divide, 42, 2)
-        .bind(lambda value: Try.of(divide, value, 0))
-        .on_success(success_callback)
-        .on_fail(fail_callback))
+    assert try_spy.fail_callback.call_count == 1
+    assert try_spy.fail_binder.call_count == 1
+    assert try_spy.success_callback.call_count == 0
 
 
-def test_try_should_not_applied_map_when_exception_thrown():
+def test_try_should_not_applied_map_when_exception_thrown(try_spy):
+    (Try.of(try_spy.fail)
+        .map(try_spy.mapper)
+        .on_success(try_spy.success_callback)
+        .on_fail(try_spy.fail_callback))
 
-    def success_callback(_):
-        assert True is False
-
-    def fail_callback(error):
-        assert isinstance(error, ZeroDivisionError)
-        assert str(error) == 'division by zero'
-
-    def mapper(_):
-        assert True is False
-
-    (Try.of(divide, 42, 0)
-        .map(mapper)
-        .on_success(success_callback)
-        .on_fail(fail_callback))
+    assert try_spy.fail_callback.call_count == 1
+    assert try_spy.fail_binder.call_count == 0
+    assert try_spy.mapper.call_count == 0
 
 
-def test_get_or_default_method_should_return_value_when_exception_was_not_thrown():
-    assert Try.of(divide, 42, 2).get_or_else('Holy Grail') == 21
+@given(text())
+def test_get_or_default_method_should_return_value_when_exception_was_not_thrown(try_spy, text):
+    assert Try.of(try_spy.fn).get_or_else(text) == 42
 
 
-def test_get_or_default_method_should_return_default_value_when_exception_was_thrown():
-    assert Try.of(divide, 42, 0).get_or_else('Holy Grail') == 'Holy Grail'
+def test_get_or_default_method_should_return_default_value_when_exception_was_thrown(try_spy):
+    assert Try.of(try_spy.fail).get_or_else(text) is text
 
 
-def test_get_method_should_return_value_with_or_without_exception_thrown():
-    assert Try.of(divide, 42, 2).get() == 21
-
-    failed_value = Try.of(divide, 42, 0).get()
-    assert isinstance(failed_value, ZeroDivisionError)
-    assert str(failed_value) == 'division by zero'
-
-
-def test_filer_should_converts_to_fail_when_predicate_returns_false():
-    filtered = Try.of(divide, 42, 2).filter(lambda value: value % 2 == 0.0)
+def test_filer_should_converts_to_fail_when_predicate_returns_false(try_spy):
+    filtered = Try.of(try_spy.fn).filter(lambda value: value % 4 == 0.0)
     assert not filtered.is_success
 
-    not_filtered = Try.of(divide, 42, 2).filter(lambda value: value % 3 == 0.0)
+    not_filtered = Try.of(try_spy.fn).filter(lambda value: value % 3 == 0.0)
     assert not_filtered.is_success
+
+
+@given(integers())
+def test_try_functor_laws(integer):
+    FunctorLawTester(
+        functor=Try.of(integer),
+        mapper1=lambda value: value + 1,
+        mapper2=lambda value: value + 1,
+    ).test()
+
+
+@given(integers())
+def test_try_monad_laws(integer):
+    MonadLawTester(
+        monad=Try.of,
+        value=lambda: integer,
+        mapper1=lambda value: Try.of(lambda: value + 1),
+        mapper2=lambda value: Try.of(lambda: value + 2),
+    ).test(run_left_law_test=False, run_right_law_test=False)

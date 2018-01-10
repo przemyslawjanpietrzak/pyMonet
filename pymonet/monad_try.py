@@ -13,6 +13,9 @@ class Try:
             and self.value == other.value\
             and self.is_success == other.is_success
 
+    def __str__(self):
+        return 'Try[value={}, is_success={}]'.format(self.value, self.is_success)
+
     @classmethod
     def of(cls, fn, *args):
         """
@@ -44,17 +47,17 @@ class Try:
             return Try(mapper(self.value), True)
         return Try(self.value, False)
 
-    def bind(self, mapper):
+    def bind(self, binder):
         """
         Take function and applied this function with monad value and returns function result.
 
-        :params mapper: function to apply on monad value
-        :type mapper: Function(A) -> Try[B]
-        :returns: for successfully result of mapper, othercase copy of self
+        :params binder: function to apply on monad value
+        :type binder: Function(A) -> Try[B]
+        :returns: for successfully result of binder, othercase copy of self
         :rtype: Try[B]
         """
         if self.is_success:
-            return mapper(self.value)
+            return binder(self.value)
         return self
 
     def on_success(self, success_callback):

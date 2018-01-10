@@ -11,6 +11,9 @@ class MonadLawTester:  # pragma: no cover
         self.get_fn = get_fn
 
     def _assert(self, x, y):
+        print(
+            self.get_fn(x), self.get_fn(y)
+        )
         assert self.get_fn(x) == self.get_fn(y)
 
     def associativity_test(self):
@@ -23,7 +26,7 @@ class MonadLawTester:  # pragma: no cover
         self._assert(self.monad(self.value).bind(self.mapper1), self.mapper1(self.value))
 
     def right_unit_test(self):
-        self.monad(self.value).bind(self.mapper1) == self.monad(self.value)
+        self._assert(self.monad(self.value).bind(lambda value: self.monad(value)), self.monad(self.value))
 
     def test(self, run_associativity_law_test=True, run_left_law_test=True, run_right_law_test=True):
         if run_associativity_law_test:

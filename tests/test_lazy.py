@@ -168,7 +168,7 @@ def test_lazy_monad_laws(integer):
         mapper1=lambda value: Lazy(value + 1),
         mapper2=lambda value: Lazy(value + 2),
         get_fn=get_fn
-    ).test(run_associativity_law_test=False)
+    ).test(run_associativity_law_test=False, run_right_law_test=False)
 
 
 @given(integers())
