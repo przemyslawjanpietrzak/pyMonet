@@ -12,8 +12,8 @@ class Lazy:
         self.constructor_fn = constructor_fn
         self.is_evaluated = False
         self.value = None
-        
-    def __str__(self): # pragma: no cover
+
+    def __str__(self):  # pragma: no cover
         return 'Lazy[fn={}, value={}, is_evaluated={}]'.format(self.constructor_fn, self.value, self.is_evaluated)
 
     def __eq__(self, other):
@@ -26,7 +26,7 @@ class Lazy:
             and self.value == other.value
             and self.constructor_fn == other.constructor_fn
         )
-    
+
     @classmethod
     def of(cls, value):
         """

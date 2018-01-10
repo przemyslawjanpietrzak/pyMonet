@@ -3,7 +3,6 @@ from pymonet.either import Left, Right
 from pymonet.maybe import Maybe
 from pymonet.monad_try import Try
 from pymonet.validation import Validation
-from pymonet.utils import identity
 
 
 class MonadTransformTester:  # pragma: no cover

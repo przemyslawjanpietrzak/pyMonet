@@ -8,7 +8,7 @@ from pymonet.box import Box
 from pymonet.either import Left
 from pymonet.monad_try import Try
 from pymonet.validation import Validation
-from pymonet.utils import increase, identity
+from pymonet.utils import increase
 
 from hypothesis import given
 from hypothesis.strategies import integers
@@ -50,6 +50,7 @@ def test_maybe_get_or_else_method_should_return_maybe_value_when_monad_is_not_em
 @given(integers())
 def test_maybe_get_or_else_method_should_return_argument_when_monad_is_empty(integer):
     assert Maybe.nothing().get_or_else(integer) is integer
+
 
 @given(integers())
 def test_maybe_is_nothing_should_return_proper_boolean(integer):

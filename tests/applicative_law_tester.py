@@ -30,7 +30,7 @@ class ApplicativeLawTester:
         y = self.applicative(self.mapper1).ap(
             self.applicative(self.mapper2).ap(self.applicative(self.value))
             )
-        
+
         self._assert(x, y)
 
     def homomorphism_test(self):

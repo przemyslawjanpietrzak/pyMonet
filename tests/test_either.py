@@ -11,6 +11,7 @@ from hypothesis.strategies import integers
 
 import pytest
 
+
 class EitherSpy:
 
     def error_handler(value, *args):
@@ -52,6 +53,7 @@ def test_mapper_should_be_applied_only_on_current_value(integer):
 def test_is_right_should_return_suitable_value(integer):
     assert Right(integer).is_right()
     assert not Left(integer).is_right()
+
 
 @given(integers())
 def test_is_left_should_return_suitable_value(integer):

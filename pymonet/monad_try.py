@@ -13,7 +13,7 @@ class Try:
             and self.value == other.value\
             and self.is_success == other.is_success
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return 'Try[value={}, is_success={}]'.format(self.value, self.is_success)
 
     @classmethod

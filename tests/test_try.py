@@ -62,6 +62,7 @@ def test_try_should_call_success_callback_with_result_of_function_when_exception
 
     try_spy.success_callback.assert_called_once_with(42)
 
+
 def test_try_should_call_fail_callback_with_result_of_function_when_exception_was_thrown(try_spy):
     (Try.of(try_spy.fail)
         .on_success(try_spy.success_callback)
@@ -70,9 +71,11 @@ def test_try_should_call_fail_callback_with_result_of_function_when_exception_wa
     assert try_spy.fail_callback.call_count == 1
     assert try_spy.success_callback.call_count == 0
 
+
 def test_try_eq_should_compare_value_and_result_of_try(try_spy):
     assert Try.of(try_spy.fn) == Try.of(try_spy.fn)
     assert Try.of(try_spy.fail) != Try.of(try_spy.fail)
+
 
 def test_try_should_appied_map_when_exception_was_thrown(try_spy):
     (Try.of(try_spy.fn)
@@ -85,6 +88,7 @@ def test_try_should_appied_map_when_exception_was_thrown(try_spy):
 
     try_spy.success_callback.assert_called_once_with(43)
 
+
 def test_try_should_appied_bind_when_exception_not_was_thrown(try_spy):
     (Try.of(try_spy.fn)
         .bind(try_spy.binder)
@@ -94,9 +98,10 @@ def test_try_should_appied_bind_when_exception_not_was_thrown(try_spy):
     assert try_spy.fail_callback.call_count == 0
     assert try_spy.success_callback.call_count == 1
     assert try_spy.binder.call_count == 1
-    
+
     try_spy.success_callback.assert_called_once_with(21)
     try_spy.binder.assert_called_once_with(42)
+
 
 def test_try_should_not_appied_bind_when_exception_was_thrown(try_spy):
     (Try.of(try_spy.fail)

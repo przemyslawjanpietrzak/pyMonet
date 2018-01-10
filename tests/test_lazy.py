@@ -1,4 +1,4 @@
-from tests.applicative_law_tester import  ApplicativeLawTester
+from tests.applicative_law_tester import ApplicativeLawTester
 from tests.functor_law_tester import FunctorLawTester
 from tests.monad_transform_tester import MonadTransformTester
 from tests.monad_law_tester import MonadLawTester

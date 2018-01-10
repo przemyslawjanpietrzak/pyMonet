@@ -13,7 +13,7 @@ class Box:
     def __eq__(self, other):
         return self.value == other.value
 
-    def __str__(self): # pragma: no cover
+    def __str__(self):  # pragma: no cover
         return 'Box[value={}]'.format(self.value)
 
     def map(self, mapper):
