@@ -1,5 +1,5 @@
 from hypothesis import given
-from hypothesis.strategies import text, integers, booleans
+from hypothesis.strategies import text, integers, booleans, dictionaries
 
 from testers.semigroup_law_tester import SemigroupLawTester
 
@@ -44,24 +44,26 @@ def test_first(text1, text2, text3):
     ).test()
 
 
-def test_map():
-    assert ingredient1.concat(ingredient2) == Map(
-        {'score': Sum(3), 'won': All(True), 'captain': First('captain america')}
-    )
+@given(
+    integers(), integers(), integers(),
+    booleans(), booleans(), booleans(),
+    text(), text(), text()
+)
+def test_map(integer1, integer2, integer3, boolean1, boolean2, boolean3, text1, text2, text3):
+    SemigroupLawTester(
+        semigroup=Map,
+        value1={ 'sum': Sum(integer1), 'all': All(boolean1), 'first': First(text1) },
+        value2={ 'sum': Sum(integer2), 'all': All(boolean2), 'first': First(text2) },
+        value3={ 'sum': Sum(integer3), 'all': All(boolean3), 'first': First(text3) },
+        result=Map({
+            'sum': Sum(integer1 + integer2 + integer3),
+            'all': All(boolean1 and boolean2 and boolean3),
+            'first': First(text1)
+        })
+    ).test()
 
-    assert ingredient1.concat(ingredient2).concat(ingredient3) == Map(
-        {'score': Sum(6), 'won': All(False), 'captain': First('captain america')}
-    )
-
-    assert ingredient1.concat(ingredient2.concat(ingredient3)) == Map(
-        {'score': Sum(6), 'won': All(False), 'captain': First('captain america')}
-    )
-
-
-@given(integers(), text(), booleans())
-def test_fold(integer, text, boolean):
-
-    dictionary = {'key': 'value'}
+@given(integers(), text(), booleans(), dictionaries(keys=text(), values=integers()))
+def test_fold(integer, text, boolean, dictionary):
 
     assert First(text).fold(identity) is text
     assert All(boolean).fold(identity) is boolean
