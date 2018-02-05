@@ -1,7 +1,7 @@
-from tests.monad_law_tester import MonadLawTester
-from tests.functor_law_tester import FunctorLawTester
-from tests.monad_transform_tester import MonadTransformTester
-from tests.applicative_law_tester import ApplicativeLawTester
+from testers.monad_law_tester import MonadLawTester
+from testers.functor_law_tester import FunctorLawTester
+from testers.monad_transform_tester import MonadTransformTester
+from testers.applicative_law_tester import ApplicativeLawTester
 
 from pymonet.box import Box
 from pymonet.utils import increase

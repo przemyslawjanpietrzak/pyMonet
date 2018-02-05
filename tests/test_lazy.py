@@ -1,7 +1,7 @@
-from tests.applicative_law_tester import ApplicativeLawTester
-from tests.functor_law_tester import FunctorLawTester
-from tests.monad_transform_tester import MonadTransformTester
-from tests.monad_law_tester import MonadLawTester
+from testers.applicative_law_tester import ApplicativeLawTester
+from testers.functor_law_tester import FunctorLawTester
+from testers.monad_transform_tester import MonadTransformTester
+from testers.monad_law_tester import MonadLawTester
 
 from pymonet.lazy import Lazy
 from pymonet.validation import Validation

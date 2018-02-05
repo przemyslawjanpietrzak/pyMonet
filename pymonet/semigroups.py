@@ -19,11 +19,17 @@ class Semigroup:
 
 class Sum(Semigroup):
 
+    def __str__(self):  # pragma: no cover
+        return 'Sum[value={}]'.format(self.value)
+
     def concat(self, semigroup):
         return Sum(self.value + semigroup.value)
 
 
 class All(Semigroup):
+
+    def __str__(self):  # pragma: no cover
+        return 'All[value={}]'.format(self.value)
 
     def concat(self, semigroup):
         return All(self.value and semigroup.value)
@@ -31,11 +37,17 @@ class All(Semigroup):
 
 class First(Semigroup):
 
+    def __str__(self):  # pragma: no cover
+        return 'Fist[value={}]'.format(self.value)
+
     def concat(self, semigroup):
         return First(self.value)
 
 
 class Map(Semigroup):
+
+    def __str__(self):  # pragma: no cover
+        return 'Map[value={}]'.format(self.value)
 
     def concat(self, semigroup):
         return Map(
