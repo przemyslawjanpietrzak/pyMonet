@@ -1,5 +1,5 @@
-from tests.functor_law_tester import FunctorLawTester
-from tests.monad_law_tester import MonadLawTester
+from testers.functor_law_tester import FunctorLawTester
+from testers.monad_law_tester import MonadLawTester
 
 from pymonet.monad_try import Try
 from pymonet.utils import increase
