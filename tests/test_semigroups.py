@@ -2,13 +2,10 @@ from hypothesis import given
 from hypothesis.strategies import text, integers, booleans, dictionaries
 
 from testers.semigroup_law_tester import SemigroupLawTester
+from testers.monoid_law_tester import MonoidLawTester
 
 from pymonet.semigroups import Sum, All, First, Map
 from pymonet.utils import identity
-
-ingredient1 = Map({'score': Sum(1), 'won': All(True), 'captain': First('captain america')})
-ingredient2 = Map({'score': Sum(2), 'won': All(True), 'captain': First('iron man')})
-ingredient3 = Map({'score': Sum(3), 'won': All(False), 'captain': First('Batman')})
 
 
 @given(integers(), integers(), integers())
@@ -19,6 +16,14 @@ def test_sum(x, y, z):
         value2=y,
         value3=z,
         result=Sum(x + y + z)
+    ).test()
+
+
+@given(integers())
+def test_sum_monoid(integer):
+    MonoidLawTester(
+        monoid=Sum,
+        value=integer
     ).test()
 
 

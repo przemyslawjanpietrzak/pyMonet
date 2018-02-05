@@ -16,8 +16,14 @@ class Semigroup:
     def fold(self, fn):
         return fn(self.value)
 
+    @classmethod
+    def neutral(cls):
+        return cls(cls.neutral_element)
+
 
 class Sum(Semigroup):
+
+    neutral_element = 0
 
     def __str__(self):  # pragma: no cover
         return 'Sum[value={}]'.format(self.value)
@@ -27,6 +33,8 @@ class Sum(Semigroup):
 
 
 class All(Semigroup):
+
+    neutral_element = True
 
     def __str__(self):  # pragma: no cover
         return 'All[value={}]'.format(self.value)
