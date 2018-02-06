@@ -43,6 +43,17 @@ class All(Semigroup):
         return All(self.value and semigroup.value)
 
 
+class One(Semigroup):
+
+    neutral_element = False
+
+    def __str__(self):  # pragma: no cover
+        return 'One[value={}]'.format(self.value)
+
+    def concat(self, semigroup):
+        return One(self.value or semigroup.value)
+
+
 class First(Semigroup):
 
     def __str__(self):  # pragma: no cover

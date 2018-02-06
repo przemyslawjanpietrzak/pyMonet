@@ -4,7 +4,7 @@ from hypothesis.strategies import text, integers, booleans, dictionaries
 from testers.semigroup_law_tester import SemigroupLawTester
 from testers.monoid_law_tester import MonoidLawTester
 
-from pymonet.semigroups import Sum, All, First, Map
+from pymonet.semigroups import Sum, All, One, First, Map
 from pymonet.utils import identity
 
 
@@ -38,11 +38,30 @@ def test_all(bool1, bool2, bool3):
     ).test()
 
 
-@given(integers())
-def test_all_monoid(integer):
+@given(booleans())
+def test_all_monoid(boolean):
     MonoidLawTester(
         monoid=All,
-        value=integer
+        value=boolean
+    ).test()
+
+
+@given(booleans(), booleans(), booleans())
+def test_one(bool1, bool2, bool3):
+    SemigroupLawTester(
+        semigroup=One,
+        value1=bool1,
+        value2=bool2,
+        value3=bool3,
+        result=One(bool1 or bool2 or bool3)
+    ).test()
+
+
+@given(booleans())
+def test_one_monoid(boolean):
+    MonoidLawTester(
+        monoid=One,
+        value=boolean
     ).test()
 
 
