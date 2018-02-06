@@ -15,4 +15,3 @@ class MonoidLawTester:
     def test(self):
         self.left_identity_test()
         self.right_identity_test()
-
