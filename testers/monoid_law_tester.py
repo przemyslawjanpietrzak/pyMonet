@@ -6,11 +6,11 @@ class MonoidLawTester:
 
     def left_identity_test(self):
         monoid = self.monoid(self.value)
-        assert monoid.concat(monoid.neutral) == monoid
+        assert monoid.concat(monoid.neutral()) == monoid
 
     def right_identity_test(self):
         monoid = self.monoid(self.value)
-        assert monoid.neutral.concat(monoid) == monoid
+        assert monoid.neutral().concat(monoid) == monoid
 
     def test(self):
         self.left_identity_test()
