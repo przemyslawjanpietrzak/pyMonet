@@ -38,6 +38,14 @@ def test_all(bool1, bool2, bool3):
     ).test()
 
 
+@given(integers())
+def test_all_monoid(integer):
+    MonoidLawTester(
+        monoid=All,
+        value=integer
+    ).test()
+
+
 @given(text(), text(), text())
 def test_first(text1, text2, text3):
     SemigroupLawTester(
