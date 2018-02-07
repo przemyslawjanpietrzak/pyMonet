@@ -2,8 +2,8 @@ Task
 *********
 
 .. code-block:: python
-    :caption: example_box.py
-    :name: example_box-py
+    :caption: example_task.py
+    :name: example_task-py
 
     from pymonet.task import Task
 
