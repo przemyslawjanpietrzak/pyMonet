@@ -18,7 +18,15 @@ Semigroups
     ingredient1.concat(ingredient2)  # Map<{'score': Sum(3), 'won': All(True), 'captain': First('captain america')}>
 
 .. autoclass:: pymonet.semigroups.All
+    :members: __init__, concat, fold
+
 .. autoclass:: pymonet.semigroups.One
+    :members: __init__, concat, fold
+
 .. autoclass:: pymonet.semigroups.First
+    :members: __init__, concat, fold
+
 .. autoclass:: pymonet.semigroups.Map
+    :members: __init__, concat, fold
+
 
