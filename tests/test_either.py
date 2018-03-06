@@ -1,12 +1,15 @@
-from tests.monad_law_tester import MonadLawTester
-from tests.functor_law_tester import FunctorLawTester
-from tests.monad_transform_tester import MonadTransformTester
+from testers.monad_law_tester import MonadLawTester
+from testers.functor_law_tester import FunctorLawTester
+from testers.monad_transform_tester import MonadTransformTester
+from testers.applicative_law_tester import ApplicativeLawTester
 
 from pymonet.either import Left, Right
 from pymonet.utils import increase
 
 from hypothesis import given
 from hypothesis.strategies import integers
+
+import pytest
 
 
 class EitherSpy:
@@ -18,39 +21,44 @@ class EitherSpy:
         pass
 
 
-def test_either_eq_operator_should_compare_values():
+@pytest.fixture()
+def either_spy(mocker):
+    spy = EitherSpy()
+    mocker.spy(spy, 'error_handler')
+    mocker.spy(spy, 'success_handler')
 
-    assert Right(42) == Right(42)
-    assert Right(42) != Right(43)
-
-    assert Left(42) == Left(42)
-    assert Left(42) != Left(43)
-
-    assert Right(42) != Left(42)
+    return spy
 
 
-def test_mapper_should_be_applied_only_on_current_value():
+@given(integers())
+def test_either_eq_operator_should_compare_values(integer):
 
-    assert Left(42).map(increase) == Left(42)
-    assert Right(42).map(increase) == Right(43)
+    assert Right(integer) == Right(integer)
+    assert Right(integer) != Right(integer + 1)
 
+    assert Left(integer) == Left(integer)
+    assert Left(integer) != Left(integer + 1)
 
-def test_ap_method_should_be_call_on_only_right():
-
-    assert Left(42).ap(Left(increase)) == Left(42)
-    assert Right(42).ap(Left(increase)) == Right(43)
-    assert Left(42).ap(Right(increase)) == Left(42)
-    assert Right(42).ap(Right(increase)) == Right(43)
+    assert Right(integer) != Left(integer)
 
 
-def test_is_right_should_return_suitable_value():
-    assert Right(42).is_right()
-    assert not Left(42).is_right()
+@given(integers())
+def test_mapper_should_be_applied_only_on_current_value(integer):
+
+    assert Left(integer).map(increase) == Left(integer)
+    assert Right(integer).map(increase) == Right(increase(integer))
 
 
-def test_is_left_should_return_suitable_value():
-    assert Left(42).is_left()
-    assert not Right(42).is_left()
+@given(integers())
+def test_is_right_should_return_suitable_value(integer):
+    assert Right(integer).is_right()
+    assert not Left(integer).is_right()
+
+
+@given(integers())
+def test_is_left_should_return_suitable_value(integer):
+    assert Left(integer).is_left()
+    assert not Right(integer).is_left()
 
 
 def test_bind_should_be_applied_only_on_current_value_and_return_value():
@@ -59,11 +67,7 @@ def test_bind_should_be_applied_only_on_current_value_and_return_value():
     assert Right(42).bind(lambda value: Left(value + 1)).value == 43
 
 
-def test_case_method_should_call_proper_handler(mocker):
-    either_spy = EitherSpy()
-    mocker.spy(either_spy, 'error_handler')
-    mocker.spy(either_spy, 'success_handler')
-
+def test_case_method_should_call_proper_handler(either_spy):
     Left(42).case(
         success=either_spy.success_handler,
         error=either_spy.error_handler
@@ -117,3 +121,21 @@ def test_either_functor_law(integer):
 def test_either_transform(integer):
     MonadTransformTester(monad=Right, value=integer).test(run_to_either_test=False)
     MonadTransformTester(monad=Left, value=integer, is_fail=True).test(run_to_either_test=False)
+
+
+@given(integers())
+def test_either_applicative_law(integer):
+    ApplicativeLawTester(
+        applicative=Right,
+        value=integer,
+        mapper1=lambda value: value + 1,
+        mapper2=lambda value: value + 2
+    ).test()
+
+
+@given(integers())
+def test_either_ap_on_left_should_not_be_applied(integer):
+    def lambda_fn():
+        raise TypeError
+    assert Left(integer).ap(Right(lambda_fn)) == Left(integer)
+    assert Left(integer).ap(Left(lambda_fn)) == Left(integer)

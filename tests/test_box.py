@@ -1,6 +1,7 @@
-from tests.monad_law_tester import MonadLawTester
-from tests.functor_law_tester import FunctorLawTester
-from tests.monad_transform_tester import MonadTransformTester
+from testers.monad_law_tester import MonadLawTester
+from testers.functor_law_tester import FunctorLawTester
+from testers.monad_transform_tester import MonadTransformTester
+from testers.applicative_law_tester import ApplicativeLawTester
 
 from pymonet.box import Box
 from pymonet.utils import increase
@@ -33,14 +34,6 @@ def test_fold_should_return_result_of_fold_function_called_with_box_value():
     assert box.bind(increase) == 43
 
 
-def test_ap_should_return_result_of_function_in_box():
-
-    box = Box(42)
-    assert (box.ap(
-        Box(increase)
-    )) == Box(43)
-
-
 @given(integers())
 def test_box_monad_law(integer):
     MonadLawTester(
@@ -66,3 +59,13 @@ def test_box_transform_monad(integer):
         monad=Box,
         value=integer
     ).test(run_to_box_test=False)
+
+
+@given(integers())
+def test_box_applicative_law(integer):
+    ApplicativeLawTester(
+        applicative=Box,
+        value=integer,
+        mapper1=lambda value: value + 1,
+        mapper2=lambda value: value + 2,
+    ).test()
