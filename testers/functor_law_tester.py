@@ -3,7 +3,6 @@ from pymonet.utils import identity
 
 class FunctorLawTester:  # pragma: no cover
 
-
     def __init__(self, functor, mapper1, mapper2, get_fn=identity):
         self.functor = functor
         self.mapper1 = mapper1

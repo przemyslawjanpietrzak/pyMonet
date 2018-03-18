@@ -1,6 +1,5 @@
-from tests.monad_law_tester import MonadLawTester
-from tests.functor_law_tester import FunctorLawTester
-from tests.monad_transform_tester import MonadTransformTester
+from testers.monad_law_tester import MonadLawTester
+from testers.functor_law_tester import FunctorLawTester
 
 from pymonet.reader import Reader
 
@@ -60,6 +59,7 @@ def test_reader_should_call_binder_during_get_method(mocker, integer):
     assert result == integer + 2
     assert reader_spy.binder.call_count == 1
 
+
 @given(integers())
 def test_reader_should_apply_get_arguments_to_constructor_function(integer):
     def constructor_fn_spy(arg):
@@ -67,17 +67,12 @@ def test_reader_should_apply_get_arguments_to_constructor_function(integer):
         return integer
 
     value = Reader(constructor_fn_spy).get(integer)
-    assert value is integer  
+    assert value is integer
 
 
 @given(integers())
 def test_reader_of_should_return_reader_with_function_returning_of_argument(integer):
     assert Reader.of(integer).get() == integer
-
-
-# @given(integers())
-# def test_reader_transform(integer):
-#     MonadTransformTester(monad=Reader.of, value=integer).test(run_to_reader_test=False)
 
 
 @given(integers())
@@ -87,7 +82,7 @@ def test_reader_monad_law(integer):
         value=integer,
         mapper1=lambda value: Reader.of(value + 1),
         mapper2=lambda value: Reader.of(value + 2),
-        call_fn=lambda reader: reader.get(integer)
+        get_fn=lambda reader: reader.get(integer)
     ).test()
 
 
@@ -97,5 +92,5 @@ def test_maybe_functor_law(integer):
         functor=Reader.of(integer),
         mapper1=lambda value: value + 1,
         mapper2=lambda value: value + 2,
-        call_fn=lambda reader: reader.get(integer)
+        get_fn=lambda reader: reader.get(integer)
     ).test()
