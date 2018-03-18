@@ -1,5 +1,6 @@
 from testers.monad_law_tester import MonadLawTester
 from testers.functor_law_tester import FunctorLawTester
+from testers.monad_transform_tester import MonadTransformTester
 
 from pymonet.reader import Reader
 
@@ -87,10 +88,15 @@ def test_reader_monad_law(integer):
 
 
 @given(integers())
-def test_maybe_functor_law(integer):
+def test_READER_functor_law(integer):
     FunctorLawTester(
         functor=Reader.of(integer),
         mapper1=lambda value: value + 1,
         mapper2=lambda value: value + 2,
         get_fn=lambda reader: reader.get(integer)
     ).test()
+
+
+@given(integers())
+def test_READER_transform(integer):
+    MonadTransformTester(monad=Reader.of, value=integer).test()

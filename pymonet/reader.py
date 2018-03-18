@@ -25,10 +25,24 @@ class Reader:
     def get(self, *args):
         return self.fn(*args)
 
-    def ap(self, applicative):
-        def lambda_fn(fn):
-            return Reader(lambda value: fn(self.get(value)))
-        # def lambda_fn(*args):
-        #     return applicative.get(self.get(*args)
+    # def ap(self, applicative):
+    #     def lambda_fn(fn):
+    #         return Reader(lambda value: fn(self.get(value)))
+    #     # def lambda_fn(*args):
+    #     #     return applicative.get(self.get(*args)
+    # return applicative.bind(lambda_fn)
 
-        return applicative.bind(lambda_fn)
+    def to_box(self, *args):
+        from pymonet.box import Box
+
+        return Box(self.fn(args))
+
+    def to_maybe(self, *args):
+        from pymonet.maybe import Maybe
+
+        return Maybe.just(self.fn(args))
+    
+    def to_either(self, *args):
+        from pymonet.either import Right
+
+        return Right(self.fn(*args))
