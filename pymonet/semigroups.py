@@ -22,6 +22,9 @@ class Semigroup:
 
 
 class Sum(Semigroup):
+    """
+    Sum is a Monoid that will combine 2 numbers under addition.
+    """
 
     neutral_element = 0
 
@@ -33,6 +36,9 @@ class Sum(Semigroup):
 
 
 class All(Semigroup):
+    """
+    All is a Monoid that will combine 2 values of any type using logical conjunction on their coerced Boolean values.
+    """
 
     neutral_element = True
 
@@ -44,6 +50,9 @@ class All(Semigroup):
 
 
 class One(Semigroup):
+    """
+    One is a Monoid that will combine (2) values of any type using logical disjunction (OR) on their coerced Boolean values.
+    """
 
     neutral_element = False
 
@@ -55,6 +64,9 @@ class One(Semigroup):
 
 
 class First(Semigroup):
+    """
+    First is a Monoid that will always return the first, value when 2 First instances are combined.
+    """
 
     def __str__(self):  # pragma: no cover
         return 'Fist[value={}]'.format(self.value)
@@ -75,6 +87,9 @@ class Map(Semigroup):
 
 
 class Max(Semigroup):
+    """
+    Max is a Monoid that will combines 2 numbers, resulting in the largest of the two.
+    """
 
     neutral_element = -float("inf")
 
@@ -86,6 +101,9 @@ class Max(Semigroup):
 
 
 class Min(Semigroup):
+    """
+    Min is a Monoid that will combines 2 numbers, resulting in the smallest of the two.
+    """
 
     neutral_element = float("inf")
 
