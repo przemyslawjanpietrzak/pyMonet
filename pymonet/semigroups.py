@@ -32,6 +32,12 @@ class Sum(Semigroup):
         return 'Sum[value={}]'.format(self.value)
 
     def concat(self, semigroup):
+        """
+        :param semigroup: other semigroup to concat
+        :type semigroup: Sum[B]
+        :returns: new Sum with sum of concat semigroups values
+        :rtype: Sum[A]
+        """
         return Sum(self.value + semigroup.value)
 
 
@@ -46,12 +52,18 @@ class All(Semigroup):
         return 'All[value={}]'.format(self.value)
 
     def concat(self, semigroup):
+        """
+        :param semigroup: other semigroup to concat
+        :type semigroup: All[B]
+        :returns: new All with last truly value or first falsy 
+        :rtype: All[A | B]
+        """
         return All(self.value and semigroup.value)
 
 
 class One(Semigroup):
     """
-    One is a Monoid that will combine (2) values of any type using logical disjunction (OR) on their coerced Boolean values.
+    One is a Monoid that will combine (2) values of any type using logical disjunction OR on their coerced Boolean values.
     """
 
     neutral_element = False
@@ -60,6 +72,12 @@ class One(Semigroup):
         return 'One[value={}]'.format(self.value)
 
     def concat(self, semigroup):
+        """
+        :param semigroup: other semigroup to concat
+        :type semigroup: One[B]
+        :returns: new One with first truly value or last falsy 
+        :rtype: One[A | B]
+        """
         return One(self.value or semigroup.value)
 
 
@@ -72,6 +90,12 @@ class First(Semigroup):
         return 'Fist[value={}]'.format(self.value)
 
     def concat(self, semigroup):
+        """
+        :param semigroup: other semigroup to concat
+        :type semigroup: First[B]
+        :returns: new First with first value
+        :rtype: First[A]
+        """
         return First(self.value)
 
 
@@ -97,6 +121,12 @@ class Max(Semigroup):
         return 'Max[value={}]'.format(self.value)
 
     def concat(self, semigroup):
+        """
+        :param semigroup: other semigroup to concat
+        :type semigroup: Max[B]
+        :returns: new Max with largest value
+        :rtype: Max[A | B]
+        """
         return Max(self.value if self.value > semigroup.value else semigroup.value)
 
 
@@ -111,4 +141,10 @@ class Min(Semigroup):
         return 'Min[value={}]'.format(self.value)
 
     def concat(self, semigroup):
+        """
+        :param semigroup: other semigroup to concat
+        :type semigroup: Min[B]
+        :returns: new Min with smallest value
+        :rtype: Min[A | B]
+        """
         return Min(self.value if self.value <= semigroup.value else semigroup.value)
