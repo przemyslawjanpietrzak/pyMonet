@@ -55,7 +55,7 @@ class All(Semigroup):
         """
         :param semigroup: other semigroup to concat
         :type semigroup: All[B]
-        :returns: new All with last truly value or first falsy 
+        :returns: new All with last truly value or first falsy
         :rtype: All[A | B]
         """
         return All(self.value and semigroup.value)
@@ -63,7 +63,7 @@ class All(Semigroup):
 
 class One(Semigroup):
     """
-    One is a Monoid that will combine (2) values of any type using logical disjunction OR on their coerced Boolean values.
+    One is a Monoid that will combine 2 values of any type using logical disjunction OR on their coerced Boolean values.
     """
 
     neutral_element = False
@@ -75,7 +75,7 @@ class One(Semigroup):
         """
         :param semigroup: other semigroup to concat
         :type semigroup: One[B]
-        :returns: new One with first truly value or last falsy 
+        :returns: new One with first truly value or last falsy
         :rtype: One[A | B]
         """
         return One(self.value or semigroup.value)
