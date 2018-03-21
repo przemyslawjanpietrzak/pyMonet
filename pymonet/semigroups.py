@@ -100,11 +100,20 @@ class First(Semigroup):
 
 
 class Map(Semigroup):
+    """
+    Map is a Semigroup that will always return contated all values inside Map value
+    """
 
     def __str__(self):  # pragma: no cover
         return 'Map[value={}]'.format(self.value)
 
     def concat(self, semigroup):
+        """
+        :param semigroup: other semigroup to concat
+        :type semigroup: Map[B]
+        :returns: new Map with concated all values
+        :rtype: Map[A]
+        """
         return Map(
             {key: value.concat(semigroup.value[key]) for key, value in self.value.items()}
         )
