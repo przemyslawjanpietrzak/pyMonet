@@ -4,12 +4,12 @@ from hypothesis.strategies import text, integers, booleans, dictionaries
 from testers.semigroup_law_tester import SemigroupLawTester
 from testers.monoid_law_tester import MonoidLawTester
 
-from pymonet.semigroups import Sum, All, One, First, Map
+from pymonet.semigroups import Sum, All, One, First, Map, Max, Min
 from pymonet.utils import identity
 
 
 @given(integers(), integers(), integers())
-def test_sum(x, y, z):
+def test_sum_semigroup(x, y, z):
     SemigroupLawTester(
         semigroup=Sum,
         value1=x,
@@ -23,6 +23,44 @@ def test_sum(x, y, z):
 def test_sum_monoid(integer):
     MonoidLawTester(
         monoid=Sum,
+        value=integer
+    ).test()
+
+
+@given(integers(), integers(), integers())
+def test_max_semigroup(x, y, z):
+    SemigroupLawTester(
+        semigroup=Max,
+        value1=x,
+        value2=y,
+        value3=z,
+        result=Max(max([x, y, z]))
+    ).test()
+
+
+@given(integers())
+def test_max_monoid(integer):
+    MonoidLawTester(
+        monoid=Max,
+        value=integer
+    ).test()
+
+
+@given(integers(), integers(), integers())
+def test_min_semigroup(x, y, z):
+    SemigroupLawTester(
+        semigroup=Min,
+        value1=x,
+        value2=y,
+        value3=z,
+        result=Min(min([x, y, z]))
+    ).test()
+
+
+@given(integers())
+def test_min_monoid(integer):
+    MonoidLawTester(
+        monoid=Min,
         value=integer
     ).test()
 

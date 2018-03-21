@@ -72,3 +72,25 @@ class Map(Semigroup):
         return Map(
             {key: value.concat(semigroup.value[key]) for key, value in self.value.items()}
         )
+
+
+class Max(Semigroup):
+
+    neutral_element = -float("inf")
+
+    def __str__(self):  # pragma: no cover
+        return 'Max[value={}]'.format(self.value)
+
+    def concat(self, semigroup):
+        return Max(self.value if self.value > semigroup.value else semigroup.value)
+
+
+class Min(Semigroup):
+
+    neutral_element = float("inf")
+
+    def __str__(self):  # pragma: no cover
+        return 'Min[value={}]'.format(self.value)
+
+    def concat(self, semigroup):
+        return Min(self.value if self.value <= semigroup.value else semigroup.value)
