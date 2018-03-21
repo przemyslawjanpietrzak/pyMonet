@@ -99,6 +99,24 @@ class First(Semigroup):
         return First(self.value)
 
 
+class Last(Semigroup):
+    """
+    Last is a Monoid that will always return the lastest, value when 2 Last instances are combined.
+    """
+
+    def __str__(self):  # pragma: no cover
+        return 'Last[value={}]'.format(self.value)
+
+    def concat(self, semigroup):
+        """
+        :param semigroup: other semigroup to concat
+        :type semigroup: Last[B]
+        :returns: new Last with last value
+        :rtype: Last[A]
+        """
+        return Last(semigroup.value)
+
+
 class Map(Semigroup):
     """
     Map is a Semigroup that will always return contated all values inside Map value
