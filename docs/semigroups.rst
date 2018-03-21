@@ -26,7 +26,15 @@ Semigroups
 .. autoclass:: pymonet.semigroups.First
     :members: __init__, concat, fold
 
+.. autoclass:: pymonet.semigroups.Last
+    :members: __init__, concat, fold
+
 .. autoclass:: pymonet.semigroups.Map
     :members: __init__, concat, fold
 
+.. autoclass:: pymonet.semigroups.Max
+    :members: __init__, concat, fold
+
+.. autoclass:: pymonet.semigroups.Min
+    :members: __init__, concat, fold
 
