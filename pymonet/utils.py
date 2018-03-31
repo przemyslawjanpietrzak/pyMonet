@@ -138,5 +138,12 @@ def memoize(fn, key=eq):
     return memoized_fn
 
 
-def curry(*args):
-    pass
+def curry(x, args_count=None):
+    if args_count is None:
+        args_count = x.__code__.co_argcount
+
+    def fn(*args):
+        if len(args) == args_count:
+            return x(*args)
+        return curry(lambda *args1: x(*(args + args1)), args_count - len(args))
+    return fn
