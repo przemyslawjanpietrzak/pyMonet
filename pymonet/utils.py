@@ -136,3 +136,7 @@ def memoize(fn, key=eq):
         return fn_result
 
     return memoized_fn
+
+
+def curry(*args):
+    pass

@@ -68,3 +68,7 @@ def test_find_should_return_none_when_item_is_not_in_collection_otherwise_should
 
     assert find(lst_copy, eq(integer)) == integer
     assert find(lst[1:], eq(lst[0])) is None
+
+
+def test_curry_2_arguments():
+    
