@@ -1,6 +1,22 @@
 from functools import reduce
 
 
+def curry(x, args_count=None):
+    """
+    In mathematics and computer science, currying is the technique of translating the evaluation of a function.
+    It that takes multiple arguments (or a tuple of arguments) into evaluating a sequence of functions.
+    each with a single argument.
+    """
+    if args_count is None:
+        args_count = x.__code__.co_argcount
+
+    def fn(*args):
+        if len(args) == args_count:
+            return x(*args)
+        return curry(lambda *args1: x(*(args + args1)), args_count - len(args))
+    return fn
+
+
 def identity(value):
     """
     Return first argument.
@@ -25,20 +41,22 @@ def increase(value):
     return value + 1
 
 
-def eq(value, *args):
-    if args:
-        return value == args[0]
-    return lambda other: value == other
+@curry
+def eq(value, value1):
+    return value == value1
 
 
-def curried_map(mapper):
-    return lambda collection: [mapper(item) for item in collection]
+@curry
+def curried_map(mapper, collection):
+    return [mapper(item) for item in collection]
 
 
-def curried_filter(filterer):
-    return lambda collection: [item for item in collection if filterer(item)]
+@curry
+def curried_filter(filterer, collection):
+    return [item for item in collection if filterer(item)]
 
 
+@curry
 def find(collection, key):
     """
     Return the first element of the list which matches the keys, or None if no element matches.
