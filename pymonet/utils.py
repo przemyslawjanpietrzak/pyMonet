@@ -35,6 +35,7 @@ def increase(value):
     """
     return value + 1
 
+
 @curry
 def eq(value, value1):
     return value == value1
@@ -148,5 +149,3 @@ def memoize(fn, key=eq):
         return fn_result
 
     return memoized_fn
-
-
