@@ -34,6 +34,23 @@ Utils
     pipe(42, increase, lambda value: value * 2)
     #86
 
+.. autofunction:: pymonet.utils.curry
+.. code-block:: python
+    :caption: example_curry.py
+    :name: example_curry-py
+
+    from pymonet.utils import curry
+
+    @curry
+    def fn(arg1, arg2, arg3):
+        return arg1 + arg2 + arg3
+
+    fn(1)(2)(3) # 6
+    fn(1, 2)(3) # 6
+    fn(1)(2, 3) # 6
+    fn(1, 2, 3) # 6
+
+
 .. autofunction:: pymonet.utils.cond
 .. code-block:: python
     :caption: example_cond.py
