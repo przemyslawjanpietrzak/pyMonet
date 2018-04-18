@@ -2,6 +2,11 @@ from functools import reduce
 
 
 def curry(x, args_count=None):
+    """
+    In mathematics and computer science, currying is the technique of translating the evaluation of a function.
+    It that takes multiple arguments (or a tuple of arguments) into evaluating a sequence of functions.
+    each with a single argument.
+    """
     if args_count is None:
         args_count = x.__code__.co_argcount
 
