@@ -4,9 +4,25 @@ class ImmutableList:
         self.head = head
         self.tail = tail
 
+    def __eq__(self, other):
+        return isinstance(other, ImmutableList) \
+            and self.head == other.head\
+            and self.tail == self.tail
+
     @classmethod
-    def on(cls, head, tail=None):
-        return ImmutableList(head, tail)
+    def of(cls, head, *elements):
+        if len(elements) == 0:
+            return ImmutableList(head)
+        return ImmutableList(
+            head,
+            ImmutableList.of(elements[0], *elements[1:])
+        )
+
+    @property
+    def length(self):
+        if self.tail is None:
+            return 1
+        return self.tail.length + 1
 
     def to_list(self):
         if self.tail is None:
@@ -15,12 +31,12 @@ class ImmutableList:
         return [self.head, *self.tail.to_list()]
 
     def append(self, new_element):
-        def acc(element, head, tail):
+        def acc(elemet, head, tail):
             if tail is None:
-                return ImmutableList(head, ImmutableList(element))
-            return acc(
-                
-            )
+                return ImmutableList(head, ImmutableList(elemet))
+            return ImmutableList(elemet, acc(head, tail))
+
+        return acc(new_element, self.head, self.tail)
 
     def unshift(self, new_elemet):
         def acc(elemet, head, tail):
@@ -29,9 +45,3 @@ class ImmutableList:
             return ImmutableList(elemet, acc(head, tail))
 
         return acc(new_elemet, self.head, self.tail)
-
-    @property
-    def length(self):
-        if self.tail is None:
-            return 1
-        return self.tail.length + 1

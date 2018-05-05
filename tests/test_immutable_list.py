@@ -7,3 +7,6 @@ def test():
 
 def test_to_list():
     assert ImmutableList(1).unshift(0).to_list() == [0,1]
+
+def test_of():
+    assert ImmutableList.of(1,2,3,4).to_list() == [1,2,3,4]
