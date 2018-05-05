@@ -1,3 +1,7 @@
+class EmptyImmutableList:
+    pass
+
+
 class ImmutableList:
 
     def __init__(self, head, tail=None):
@@ -42,6 +46,7 @@ class ImmutableList:
         def acc(elemet, head, tail):
             if tail is None:
                 return ImmutableList(elemet, ImmutableList(head))
+
             return ImmutableList(elemet, acc(head, tail))
 
         return acc(new_elemet, self.head, self.tail)
@@ -49,9 +54,14 @@ class ImmutableList:
     def map(self, fn):
         if self.tail is None:
             return ImmutableList(fn(self.head))
+
         return ImmutableList(fn(self.head), self.tail.map(fn))
 
     def filter(self, fn):
+        if self.tail is None:
+            return ImmutableList(self.head if fn(self.head) else None)  # TODO empty
+
         if fn(self.head):
-            return self.tail.filter(fn).unshift(self.head)
-        return self.tail.filter(fn)
+            self.tail.filter(fn)
+
+        return ImmutableList(fn(self.head), self.tail.filter(fn))

@@ -18,5 +18,5 @@ def test_map():
     assert ImmutableList.of(1, 2, 3, 4).map(lambda item: item + 1) == ImmutableList.of(2, 3, 4, 5)
 
 
-# def test_filter():
-#     assert ImmutableList.of(1, 2, 3, 4).filter(lambda item: item % 2 == 0) == ImmutableList.of(2, 4)
+def test_filter():
+    assert ImmutableList.of(1, 2, 3, 4).filter(lambda item: item % 2 == 0) == ImmutableList.of(2, 4)
