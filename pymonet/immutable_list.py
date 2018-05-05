@@ -8,8 +8,14 @@ class ImmutableList:
     def on(cls, head, tail=None):
         return ImmutableList(head, tail)
 
-    def append(self, element):
-        def acc(new_element, head, tail):
+    def to_list(self):
+        if self.tail is None:
+            return [self.head]
+
+        return [self.head, *self.tail.to_list()]
+
+    def append(self, new_element):
+        def acc(element, head, tail):
             if tail is None:
                 return ImmutableList(head, ImmutableList(element))
             return acc(
@@ -29,4 +35,3 @@ class ImmutableList:
         if self.tail is None:
             return 1
         return self.tail.length + 1
-    
