@@ -45,3 +45,13 @@ class ImmutableList:
             return ImmutableList(elemet, acc(head, tail))
 
         return acc(new_elemet, self.head, self.tail)
+
+    def map(self, fn):
+        if self.tail is None:
+            return ImmutableList(fn(self.head))
+        return ImmutableList(fn(self.head), self.tail.map(fn))
+
+    def filter(self, fn):
+        if fn(self.head):
+            return self.tail.filter(fn).unshift(self.head)
+        return self.tail.filter(fn)
