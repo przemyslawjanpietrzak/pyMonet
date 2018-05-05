@@ -13,6 +13,9 @@ class ImmutableList:
             and self.head == other.head\
             and self.tail == self.tail
 
+    def __str__(self):
+        return 'ImmutableList{}'.format(self.to_list())
+
     @classmethod
     def of(cls, head, *elements):
         if len(elements) == 0:
@@ -62,6 +65,6 @@ class ImmutableList:
             return ImmutableList(self.head if fn(self.head) else None)  # TODO empty
 
         if fn(self.head):
-            self.tail.filter(fn)
+            return ImmutableList(self.head, self.tail.filter(fn))
 
-        return ImmutableList(fn(self.head), self.tail.filter(fn))
+        return self.tail.filter(fn)
