@@ -14,6 +14,18 @@ class ImmutableList:
     def __str__(self):
         return 'ImmutableList{}'.format(self.to_list())
 
+    def __add__(self, other):
+        if not isinstance(other, ImmutableList):
+            raise ValueError()
+        
+        if self.tail is None:
+            return ImmutableList(self.head, other)
+        
+        return ImmutableList(
+            self.head,
+            self.tail.__add__(other)
+        )
+
     @classmethod
     def of(cls, head, *elements):
         if len(elements) == 0:
