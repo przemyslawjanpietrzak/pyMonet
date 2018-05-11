@@ -8,7 +8,7 @@ class Semigroup:
     """
 
     def __init__(self, value):
-        self.value = valuex
+        self.value = value
 
     def __eq__(self, other) -> bool:
         return self.value == other.value

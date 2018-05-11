@@ -1,7 +1,5 @@
 from functools import reduce
 
-
-
 from typing import TypeVar, Callable, List, Tuple
 
 
