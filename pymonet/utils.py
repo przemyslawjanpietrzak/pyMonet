@@ -1,6 +1,13 @@
 from functools import reduce
 
 
+
+from typing import TypeVar, Callable, List, Tuple
+
+
+T = TypeVar('T')
+
+
 def curry(x, args_count=None):
     """
     In mathematics and computer science, currying is the technique of translating the evaluation of a function.
@@ -17,7 +24,7 @@ def curry(x, args_count=None):
     return fn
 
 
-def identity(value):
+def identity(value: T) -> T:
     """
     Return first argument.
 
@@ -29,7 +36,7 @@ def identity(value):
     return value
 
 
-def increase(value):
+def increase(value: int) -> int:
     """
     Return increased by 1 argument.
 
@@ -42,7 +49,7 @@ def increase(value):
 
 
 @curry
-def eq(value, value1):
+def eq(value, value1) -> bool:
     return value == value1
 
 
@@ -57,7 +64,7 @@ def curried_filter(filterer, collection):
 
 
 @curry
-def find(collection, key):
+def find(collection: List[T], key: Callable[[T], bool]) -> T:
     """
     Return the first element of the list which matches the keys, or None if no element matches.
 
@@ -109,7 +116,10 @@ def pipe(value, *functions):
     )
 
 
-def cond(condition_list):
+def cond(condition_list: List[Tuple[
+    Callable[[T], bool],
+    Callable,
+]]):
     """
     Function for return function depended on first function argument
     cond get list of two-item tuples,
@@ -129,7 +139,7 @@ def cond(condition_list):
     return result
 
 
-def memoize(fn, key=eq):
+def memoize(fn: Callable, key=eq) -> Callable:
     """
     Create a new function that, when invoked,
     caches the result of calling fn for a given argument set and returns the result.
@@ -151,6 +161,7 @@ def memoize(fn, key=eq):
             return cached_result[1]
         fn_result = fn(argument)
         cache.append((argument, fn_result))
+
         return fn_result
 
     return memoized_fn
