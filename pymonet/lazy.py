@@ -13,10 +13,10 @@ class Lazy:
         self.is_evaluated = False
         self.value = None
 
-    def __str__(self):  # pragma: no cover
+    def __str__(self) -> str:  # pragma: no cover
         return 'Lazy[fn={}, value={}, is_evaluated={}]'.format(self.constructor_fn, self.value, self.is_evaluated)
 
-    def __eq__(self, other):
+    def __eq__(self, other)-> bool:
         """
         Two Lazy are equals where both are evaluated both have the same value and constructor functions.
         """
@@ -42,6 +42,7 @@ class Lazy:
     def _compute_value(self, *args):
         self.is_evaluated = True
         self.value = self.constructor_fn(*args)
+
         return self.value
 
     def map(self, mapper):
