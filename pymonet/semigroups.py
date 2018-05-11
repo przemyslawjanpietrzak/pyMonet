@@ -8,9 +8,9 @@ class Semigroup:
     """
 
     def __init__(self, value):
-        self.value = value
+        self.value = valuex
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return self.value == other.value
 
     def fold(self, fn):
@@ -28,10 +28,10 @@ class Sum(Semigroup):
 
     neutral_element = 0
 
-    def __str__(self):  # pragma: no cover
+    def __str__(self) -> str:  # pragma: no cover
         return 'Sum[value={}]'.format(self.value)
 
-    def concat(self, semigroup):
+    def concat(self, semigroup: 'Sum') -> 'Sum':
         """
         :param semigroup: other semigroup to concat
         :type semigroup: Sum[B]
@@ -48,10 +48,10 @@ class All(Semigroup):
 
     neutral_element = True
 
-    def __str__(self):  # pragma: no cover
+    def __str__(self) -> str:  # pragma: no cover
         return 'All[value={}]'.format(self.value)
 
-    def concat(self, semigroup):
+    def concat(self, semigroup: 'All') -> 'All':
         """
         :param semigroup: other semigroup to concat
         :type semigroup: All[B]
@@ -68,7 +68,7 @@ class One(Semigroup):
 
     neutral_element = False
 
-    def __str__(self):  # pragma: no cover
+    def __str__(self) -> str:  # pragma: no cover
         return 'One[value={}]'.format(self.value)
 
     def concat(self, semigroup):
@@ -86,7 +86,7 @@ class First(Semigroup):
     First is a Monoid that will always return the first, value when 2 First instances are combined.
     """
 
-    def __str__(self):  # pragma: no cover
+    def __str__(self) -> str:  # pragma: no cover
         return 'Fist[value={}]'.format(self.value)
 
     def concat(self, semigroup):
@@ -104,7 +104,7 @@ class Last(Semigroup):
     Last is a Monoid that will always return the lastest, value when 2 Last instances are combined.
     """
 
-    def __str__(self):  # pragma: no cover
+    def __str__(self) -> str:  # pragma: no cover
         return 'Last[value={}]'.format(self.value)
 
     def concat(self, semigroup):
@@ -122,7 +122,7 @@ class Map(Semigroup):
     Map is a Semigroup that will always return contated all values inside Map value
     """
 
-    def __str__(self):  # pragma: no cover
+    def __str__(self) -> str:  # pragma: no cover
         return 'Map[value={}]'.format(self.value)
 
     def concat(self, semigroup):
@@ -144,7 +144,7 @@ class Max(Semigroup):
 
     neutral_element = -float("inf")
 
-    def __str__(self):  # pragma: no cover
+    def __str__(self) -> str:  # pragma: no cover
         return 'Max[value={}]'.format(self.value)
 
     def concat(self, semigroup):
@@ -164,7 +164,7 @@ class Min(Semigroup):
 
     neutral_element = float("inf")
 
-    def __str__(self):  # pragma: no cover
+    def __str__(self) -> str:  # pragma: no cover
         return 'Min[value={}]'.format(self.value)
 
     def concat(self, semigroup):
