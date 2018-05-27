@@ -7,7 +7,7 @@ class Try:
     without focusing on try-catch blocks in the presence of exceptions.
     """
 
-    def __init__(self, value, is_success: bool):
+    def __init__(self, value, is_success: bool) -> None:
         self.value = value
         self.is_success = is_success
 

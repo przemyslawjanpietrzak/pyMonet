@@ -1,4 +1,4 @@
-from typing import TypeVar, Generic, Callable
+from typing import TypeVar, Generic, Callable, Union
 
 
 T = TypeVar('T')
@@ -11,12 +11,12 @@ class Maybe(Generic[T]):
     Maybe is effectively abstract and has two concrete subtypes: Box (also Some) and Nothing.
     """
 
-    def __init__(self, value: T, is_nothing: bool):
+    def __init__(self, value: T, is_nothing: bool) -> None:
         self.is_nothing = is_nothing
         if not is_nothing:
             self.value = value
 
-    def __eq__(self, other: 'Maybe[U]') -> bool:
+    def __eq__(self, other: object) -> bool:
         return isinstance(other, Maybe) and \
             self.is_nothing == other.is_nothing and \
             (self.is_nothing or self.value == other.value)
@@ -41,7 +41,7 @@ class Maybe(Generic[T]):
         """
         return Maybe(None, True)
 
-    def map(self, mapper: Callable[[T], U]) -> 'Maybe[U]':
+    def map(self, mapper: Callable[[T], U]) -> Union['Maybe[U]', 'Maybe[None]']:
         """
         If Maybe is empty return new empty Maybe, in other case
         takes mapper function and returns new instance of Maybe
@@ -57,7 +57,7 @@ class Maybe(Generic[T]):
             mapper(self.value)
         )
 
-    def bind(self, mapper: Callable[[T], 'Maybe[U]']) -> U:
+    def bind(self, mapper: Callable[[T], 'Maybe[U]']) -> Union['Maybe[U]', 'Maybe[None]']:
         """
         If Maybe is empty return new empty Maybe, in other case
         takes mapper function and returns result of mapper.
@@ -84,7 +84,7 @@ class Maybe(Generic[T]):
             return Maybe.nothing()
         return applicative.map(self.value)
 
-    def filter(self, filterer: Callable[[T], bool]) -> 'Maybe[T]':
+    def filter(self, filterer: Callable[[T], bool]) -> Union['Maybe[T]', 'Maybe[None]']:
         """
         If Maybe is empty or filterer returns False return default_value, in other case
         return new instance of Maybe with the same value.
@@ -124,7 +124,7 @@ class Maybe(Generic[T]):
             return Left(None)
         return Right(self.value)
 
-    def to_box(self) -> 'Box[T]':
+    def to_box(self):
         """
         Transform Maybe to Box.
 
