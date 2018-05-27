@@ -10,6 +10,6 @@ install:
 script:
   - make lint
   - make lint-docs
-  - make type-check
+  - if [ $TRAVIS_PYTHON_VERSION -eq "3.6" ] ; then make type-check fi
   - make test-with-coverage
   - coveralls
