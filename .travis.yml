@@ -10,5 +10,6 @@ install:
 script:
   - make lint
   - make lint-docs
+  - make type-check
   - make test-with-coverage
   - coveralls

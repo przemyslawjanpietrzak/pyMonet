@@ -10,15 +10,15 @@ class Box(Generic[T]):
     Data type for storage any type of data
     """
 
-    def __init__(self, value: T):
+    def __init__(self, value: T) -> None:
         """
         :param value: value to store in Box
         :type value: Any
         """
         self.value = value
 
-    def __eq__(self, other: 'Box') -> bool:
-        return self.value == other.value
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, Box) and self.value == other.value
 
     def __str__(self) -> str:  # pragma: no cover
         return 'Box[value={}]'.format(self.value)

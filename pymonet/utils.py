@@ -1,6 +1,6 @@
 from functools import reduce
 
-from typing import TypeVar, Callable, List, Tuple
+from typing import TypeVar, Callable, List, Tuple, Any
 
 
 T = TypeVar('T')
@@ -62,7 +62,7 @@ def curried_filter(filterer, collection):
 
 
 @curry
-def find(collection: List[T], key: Callable[[T], bool]) -> T:
+def find(collection: List[T], key: Callable[[T], bool]):
     """
     Return the first element of the list which matches the keys, or None if no element matches.
 
@@ -151,7 +151,7 @@ def memoize(fn: Callable, key=eq) -> Callable:
     :returns: new function invoking old one
     :rtype: Function(A) -> B
     """
-    cache = []
+    cache: List[Any] = []
 
     def memoized_fn(argument):
         cached_result = find(cache, lambda cacheItem: key(cacheItem[0], argument))

@@ -11,7 +11,7 @@ class Either(Generic[T]):
     But not both in the same time.
     """
 
-    def __init__(self, value: T):
+    def __init__(self, value: T) -> None:
         self.value = value
 
     def __eq__(self, other) -> bool:
@@ -45,7 +45,7 @@ class Either(Generic[T]):
         """
         return applicative.map(self.value)
 
-    def to_box(self) -> 'Box[T]':
+    def to_box(self):
         """
         Transform Either to Box.
 
@@ -78,11 +78,14 @@ class Either(Generic[T]):
 
         return Lazy(lambda: self.value)
 
+    def is_right(self):
+        pass
+
 
 class Left(Either):
     """Not successfully Either"""
 
-    def map(self, _) -> 'Left[None]':
+    def map(self, _):
         """
         Take mapper function and return new instance of Left with the same value.
 
@@ -147,7 +150,7 @@ class Left(Either):
 class Right(Either):
     """Not successfully Either"""
 
-    def map(self, mapper: Callable[[T], U]) -> 'Right[U]':
+    def map(self, mapper: Callable[[T], U]):
         """
         Take mapper function and return new instance of Right with mapped value.
 

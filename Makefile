@@ -13,6 +13,9 @@ lint:
 lint-docs:
 	pydocstyle ./pymonet --add-ignore=D100,D101,D102,D103,D104,D105,D107,D200,D205,D400,D401
 
+type-check:
+	mypy pymonet
+
 check:
 	(make lint & make lint-docs & make test) && echo "Success!"
 
