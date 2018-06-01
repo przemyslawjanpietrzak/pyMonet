@@ -2,6 +2,8 @@ pytest==3.2.3
 pytest-mock==1.6.3
 hypothesis==3.36.0
 
+mypy==0.600
+
 flake8==3.5.0
 pydocstyle==2.1.1
 

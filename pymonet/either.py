@@ -1,18 +1,25 @@
-class Either:
+from typing import TypeVar, Generic, Callable, Any
+
+
+T = TypeVar('T')
+U = TypeVar('U')
+
+
+class Either(Generic[T]):
     """
     The Either type represents values with two possibilities: B value of type Either[A, B] is either Left[A or Right[B]
     But not both in the same time.
     """
 
-    def __init__(self, value):
+    def __init__(self, value: T) -> None:
         self.value = value
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         return isinstance(other, Either) and\
             self.value == other.value and\
             self.is_right() == other.is_right()
 
-    def case(self, error, success):
+    def case(self, error: Callable[[T], U], success: Callable[[T], U]) -> U:
         """
         Take 2 functions call only one of then with either value and return her result.
 
@@ -71,11 +78,14 @@ class Either:
 
         return Lazy(lambda: self.value)
 
+    def is_right(self):
+        pass
 
-class Left(Either):
+
+class Left(Either, Generic[T]):
     """Not successfully Either"""
 
-    def map(self, _):
+    def map(self, _: Callable[[Any], Any]) -> 'Left[T]':
         """
         Take mapper function and return new instance of Left with the same value.
 
@@ -84,7 +94,7 @@ class Left(Either):
         """
         return Left(self.value)
 
-    def bind(self, _):
+    def bind(self, _) -> 'Left[T]':
         """
         Take mapper function and return value of Left.
 
@@ -100,14 +110,14 @@ class Left(Either):
         """
         return Left(self.value)
 
-    def is_left(self):
+    def is_left(self) -> bool:
         """
         :returns: True
         :rtype: Boolean
         """
         return True
 
-    def is_right(self):
+    def is_right(self) -> bool:
         """
         :returns: False
         :rtype: Boolean
@@ -140,7 +150,7 @@ class Left(Either):
 class Right(Either):
     """Not successfully Either"""
 
-    def map(self, mapper):
+    def map(self, mapper: Callable[[T], U]) -> Either[U]:
         """
         Take mapper function and return new instance of Right with mapped value.
 
@@ -151,7 +161,7 @@ class Right(Either):
         """
         return Right(mapper(self.value))
 
-    def bind(self, mapper):
+    def bind(self, mapper: Callable[[T], U]) -> U:
         """
         Take mapper function and returns result of them called with Right value.
 
@@ -162,14 +172,14 @@ class Right(Either):
         """
         return mapper(self.value)
 
-    def is_right(self):
+    def is_right(self) -> bool:
         """
         :returns: True
         :rtype: Boolean
         """
         return True
 
-    def is_left(self):
+    def is_left(self) -> bool:
         """
         :returns: False
         :rtype: Boolean
