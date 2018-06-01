@@ -1,4 +1,4 @@
-from typing import TypeVar, Generic, Callable, Any
+from typing import TypeVar, Generic, Callable
 
 
 T = TypeVar('T')
@@ -36,7 +36,7 @@ class Lazy(Generic[T, U]):
         )
 
     @classmethod
-    def of(cls, value: U) -> 'Lazy[Any, U]':
+    def of(cls, value: U) -> 'Lazy[T, U]':
         """
         Returns Lazy with function returning argument.
 
@@ -77,7 +77,7 @@ class Lazy(Generic[T, U]):
         """
         return Lazy(lambda *args: self.constructor_fn(applicative.get(*args)))
 
-    def bind(self, fn):
+    def bind(self, fn: 'Callable[[U], Lazy[U, W]]') -> 'Lazy[T, W]':
         """
         Take function and call constructor function passing returned value to fn function.
 

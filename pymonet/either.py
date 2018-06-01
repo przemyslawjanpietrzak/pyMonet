@@ -1,4 +1,4 @@
-from typing import TypeVar, Generic, Callable
+from typing import TypeVar, Generic, Callable, Any
 
 
 T = TypeVar('T')
@@ -14,7 +14,7 @@ class Either(Generic[T]):
     def __init__(self, value: T) -> None:
         self.value = value
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: object) -> bool:
         return isinstance(other, Either) and\
             self.value == other.value and\
             self.is_right() == other.is_right()
@@ -82,10 +82,10 @@ class Either(Generic[T]):
         pass
 
 
-class Left(Either):
+class Left(Either, Generic[T]):
     """Not successfully Either"""
 
-    def map(self, _):
+    def map(self, _: Callable[[Any], Any]) -> 'Left[T]':
         """
         Take mapper function and return new instance of Left with the same value.
 
@@ -94,7 +94,7 @@ class Left(Either):
         """
         return Left(self.value)
 
-    def bind(self, _):
+    def bind(self, _) -> 'Left[T]':
         """
         Take mapper function and return value of Left.
 
@@ -150,7 +150,7 @@ class Left(Either):
 class Right(Either):
     """Not successfully Either"""
 
-    def map(self, mapper: Callable[[T], U]):
+    def map(self, mapper: Callable[[T], U]) -> Either[U]:
         """
         Take mapper function and return new instance of Right with mapped value.
 
