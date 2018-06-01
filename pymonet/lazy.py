@@ -1,10 +1,18 @@
-class Lazy:
+from typing import TypeVar, Generic, Callable
+
+
+T = TypeVar('T')
+U = TypeVar('U')
+W = TypeVar('W')
+
+
+class Lazy(Generic[T, U]):
     """
     Data type for storage any type of function.
     This function (and all his mappers) will be called only during calling fold method
     """
 
-    def __init__(self, constructor_fn):
+    def __init__(self, constructor_fn: Callable[[T], U]) -> None:
         """
         :param constructor_fn: function to call during fold method call
         :type constructor_fn: Function() -> A
@@ -16,7 +24,7 @@ class Lazy:
     def __str__(self) -> str:  # pragma: no cover
         return 'Lazy[fn={}, value={}, is_evaluated={}]'.format(self.constructor_fn, self.value, self.is_evaluated)
 
-    def __eq__(self, other)-> bool:
+    def __eq__(self, other: object) -> bool:
         """
         Two Lazy are equals where both are evaluated both have the same value and constructor functions.
         """
@@ -28,7 +36,7 @@ class Lazy:
         )
 
     @classmethod
-    def of(cls, value):
+    def of(cls, value: U) -> 'Lazy[T, U]':
         """
         Returns Lazy with function returning argument.
 
@@ -45,7 +53,7 @@ class Lazy:
 
         return self.value
 
-    def map(self, mapper):
+    def map(self, mapper: Callable[[U], W]) -> 'Lazy[T, W]':
         """
         Take function Function(A) -> B and returns new Lazy with mapped result of Lazy constructor function.
         Both mapper end constructor will be called only during calling fold method.
@@ -69,7 +77,7 @@ class Lazy:
         """
         return Lazy(lambda *args: self.constructor_fn(applicative.get(*args)))
 
-    def bind(self, fn):
+    def bind(self, fn: 'Callable[[U], Lazy[U, W]]') -> 'Lazy[T, W]':
         """
         Take function and call constructor function passing returned value to fn function.
 

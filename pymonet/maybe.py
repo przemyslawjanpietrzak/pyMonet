@@ -98,7 +98,7 @@ class Maybe(Generic[T]):
             return Maybe.nothing()
         return Maybe.just(self.value)
 
-    def get_or_else(self, default_value):
+    def get_or_else(self, default_value: U) -> Union[T, U]:
         """
         If Maybe is empty return default_value, in other case.
 
