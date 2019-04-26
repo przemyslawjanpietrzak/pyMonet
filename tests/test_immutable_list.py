@@ -19,12 +19,24 @@ def test_map():
 
 
 def test_filter():
-    ImmutableList.of(1, 2, 3, 4).filter(lambda item: item % 2 == 0) == ImmutableList.of(2, 4)
+    assert ImmutableList.of(1, 2, 3, 4).filter(lambda item: item % 2 == 0) == ImmutableList.of(2, 4)
 
 
 def test_empty_filter():
-    ImmutableList.of(1, 2, 3, 4).filter(lambda item: False) == ImmutableList.empty()
+    assert ImmutableList.of(1, 2, 3, 4).filter(lambda item: False) == ImmutableList.empty()
 
 
 def test_plus_operator():
-    ImmutableList.of(1, 2) + ImmutableList.of(3, 4) == ImmutableList.of(1, 2, 3, 4)
+    assert ImmutableList.of(1, 2) + ImmutableList.of(3, 4) == ImmutableList.of(1, 2, 3, 4)
+
+
+def test_find_positive():
+    assert ImmutableList.of(1, 2, 3, 4).find(lambda item: item % 2 == 0) == 2
+
+
+def test_find_negative():
+    assert ImmutableList.of(1, 2, 3, 4).find(lambda item: item < 0) == None
+
+
+def test_unshift():
+    assert ImmutableList.of(1, 2).unshift(0) == ImmutableList.of(0, 1, 2)

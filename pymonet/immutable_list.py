@@ -95,13 +95,7 @@ class ImmutableList(Generic[T]):
         :type fn: A
         :returns: ImmutableList[A]
         """
-        def acc(element, head, tail):
-            if tail is None:
-                return ImmutableList(element, ImmutableList(head))
-
-            return ImmutableList(element, acc(head, tail))
-
-        return acc(new_element, self.head, self.tail)
+        return ImmutableList(new_element) + self;
 
     def map(self, fn: Callable[[Optional[T]], U]) -> 'ImmutableList[U]':
         """
