@@ -1,5 +1,7 @@
 class ImmutableList:
-
+    """
+    Immutable list is data structure that doesn't allow to mutate instances
+    """
     def __init__(self, head=None, tail=None, is_empty=False):
         self.head = head
         self.tail = tail
@@ -17,10 +19,10 @@ class ImmutableList:
     def __add__(self, other):
         if not isinstance(other, ImmutableList):
             raise ValueError()
-        
+
         if self.tail is None:
             return ImmutableList(self.head, other)
-        
+
         return ImmutableList(
             self.head,
             self.tail.__add__(other)
@@ -53,22 +55,22 @@ class ImmutableList:
         return [self.head, *self.tail.to_list()]
 
     def append(self, new_element):
-        def acc(elemet, head, tail):
+        def acc(element, head, tail):
             if tail is None:
-                return ImmutableList(head, ImmutableList(elemet))
+                return ImmutableList(head, ImmutableList(element))
 
-            return ImmutableList(elemet, acc(head, tail))
+            return ImmutableList(element, acc(head, tail))
 
         return acc(new_element, self.head, self.tail)
 
-    def unshift(self, new_elemet):
-        def acc(elemet, head, tail):
+    def unshift(self, new_element):
+        def acc(element, head, tail):
             if tail is None:
-                return ImmutableList(elemet, ImmutableList(head))
+                return ImmutableList(element, ImmutableList(head))
 
-            return ImmutableList(elemet, acc(head, tail))
+            return ImmutableList(element, acc(head, tail))
 
-        return acc(new_elemet, self.head, self.tail)
+        return acc(new_element, self.head, self.tail)
 
     def map(self, fn):
         if self.tail is None:
@@ -90,7 +92,7 @@ class ImmutableList:
     def find(self, fn):
         if self.tail is None:
             return self.head if fn(self.head) else None
-        
+
         if fn(self.head):
             return self.head
 
