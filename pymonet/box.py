@@ -1,22 +1,29 @@
-class Box:
+from typing import TypeVar, Generic, Callable
+
+
+T = TypeVar('T')
+U = TypeVar('U')
+
+
+class Box(Generic[T]):
     """
     Data type for storage any type of data
     """
 
-    def __init__(self, value):
+    def __init__(self, value: T) -> None:
         """
         :param value: value to store in Box
         :type value: Any
         """
         self.value = value
 
-    def __eq__(self, other):
-        return self.value == other.value
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, Box) and self.value == other.value
 
-    def __str__(self):  # pragma: no cover
+    def __str__(self) -> str:  # pragma: no cover
         return 'Box[value={}]'.format(self.value)
 
-    def map(self, mapper):
+    def map(self, mapper: Callable[[T], U]) -> 'Box[U]':
         """
         Take function (A) -> b and applied this function on current box value and returns new box with mapped value.
 
@@ -27,7 +34,7 @@ class Box:
         """
         return Box(mapper(self.value))
 
-    def bind(self, mapper):
+    def bind(self, mapper: Callable[[T], U]) -> U:
         """
         Take function and applied this function on current box value and returns mapped value.
 

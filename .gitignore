@@ -4,6 +4,7 @@
 .coverage
 .hypothesis
 .vscode
+.mypy_cache
 pymonet.egg-info
 dist
 docs/dist

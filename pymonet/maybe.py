@@ -1,21 +1,28 @@
-class Maybe():
+from typing import TypeVar, Generic, Callable, Union
+
+
+T = TypeVar('T')
+U = TypeVar('U')
+
+
+class Maybe(Generic[T]):
     """
     Maybe type is the most common way of representing nothingness (or the null type).
     Maybe is effectively abstract and has two concrete subtypes: Box (also Some) and Nothing.
     """
 
-    def __init__(self, value, is_nothing):
+    def __init__(self, value: T, is_nothing: bool) -> None:
         self.is_nothing = is_nothing
         if not is_nothing:
             self.value = value
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         return isinstance(other, Maybe) and \
             self.is_nothing == other.is_nothing and \
             (self.is_nothing or self.value == other.value)
 
     @classmethod
-    def just(cls, value):
+    def just(cls, value: T) -> 'Maybe[T]':
         """
         Create not empty maybe.
 
@@ -26,7 +33,7 @@ class Maybe():
         return Maybe(value, False)
 
     @classmethod
-    def nothing(cls):
+    def nothing(cls) -> 'Maybe[None]':
         """
         Create empty maybe.
 
@@ -34,7 +41,7 @@ class Maybe():
         """
         return Maybe(None, True)
 
-    def map(self, mapper):
+    def map(self, mapper: Callable[[T], U]) -> Union['Maybe[U]', 'Maybe[None]']:
         """
         If Maybe is empty return new empty Maybe, in other case
         takes mapper function and returns new instance of Maybe
@@ -50,7 +57,7 @@ class Maybe():
             mapper(self.value)
         )
 
-    def bind(self, mapper):
+    def bind(self, mapper: Callable[[T], 'Maybe[U]']) -> Union['Maybe[U]', 'Maybe[None]']:
         """
         If Maybe is empty return new empty Maybe, in other case
         takes mapper function and returns result of mapper.
@@ -77,7 +84,7 @@ class Maybe():
             return Maybe.nothing()
         return applicative.map(self.value)
 
-    def filter(self, filterer):
+    def filter(self, filterer: Callable[[T], bool]) -> Union['Maybe[T]', 'Maybe[None]']:
         """
         If Maybe is empty or filterer returns False return default_value, in other case
         return new instance of Maybe with the same value.
@@ -91,7 +98,7 @@ class Maybe():
             return Maybe.nothing()
         return Maybe.just(self.value)
 
-    def get_or_else(self, default_value):
+    def get_or_else(self, default_value: U) -> Union[T, U]:
         """
         If Maybe is empty return default_value, in other case.
 

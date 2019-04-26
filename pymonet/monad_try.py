@@ -1,23 +1,26 @@
+from typing import Callable
+
+
 class Try:
     """
     The Try control gives us the ability write safe code
     without focusing on try-catch blocks in the presence of exceptions.
     """
 
-    def __init__(self, value, is_success):
+    def __init__(self, value, is_success: bool) -> None:
         self.value = value
         self.is_success = is_success
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return isinstance(other, type(self))\
             and self.value == other.value\
             and self.is_success == other.is_success
 
-    def __str__(self):  # pragma: no cover
+    def __str__(self) -> str:  # pragma: no cover
         return 'Try[value={}, is_success={}]'.format(self.value, self.is_success)
 
     @classmethod
-    def of(cls, fn, *args):
+    def of(cls, fn: Callable, *args):
         """
         Call argument function with args in try-catch.
         when function don't raise exception, not successfully when raise.
