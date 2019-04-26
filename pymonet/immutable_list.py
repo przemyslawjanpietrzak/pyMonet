@@ -1,7 +1,9 @@
-from typing import TypeVar, Generic, Callable, Union
+from typing import TypeVar, Generic, Callable
+
 
 T = TypeVar('T')
 U = TypeVar('U')
+
 
 class ImmutableList(Generic[T]):
     """
@@ -150,4 +152,3 @@ class ImmutableList(Generic[T]):
             return self.head
 
         return self.tail.find(fn)
-
