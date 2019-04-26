@@ -1,4 +1,4 @@
-from typing import TypeVar, Generic, Callable
+from typing import TypeVar, Generic, Callable, Optional
 
 
 T = TypeVar('T')
@@ -9,12 +9,12 @@ class ImmutableList(Generic[T]):
     """
     Immutable list is data structure that doesn't allow to mutate instances
     """
-    def __init__(self, head: T=None, tail: 'ImmutableList[T]'=None, is_empty: bool=False) -> 'ImmutableList[T]':
+    def __init__(self, head: T=None, tail: 'ImmutableList[T]'=None, is_empty: bool=False) -> None:
         self.head = head
         self.tail = tail
         self.is_empty = is_empty
 
-    def __eq__(self, other: 'ImmutableList[T]'):
+    def __eq__(self, other: object) -> bool:
         return isinstance(other, ImmutableList) \
             and self.head == other.head\
             and self.tail == other.tail\
@@ -103,7 +103,7 @@ class ImmutableList(Generic[T]):
 
         return acc(new_element, self.head, self.tail)
 
-    def map(self, fn: Callable[[T], U]) -> 'ImmutableList[U]':
+    def map(self, fn: Callable[[Optional[T]], U]) -> 'ImmutableList[U]':
         """
         Returns new ImmutableList with each element mapped into
         result of argument called with each element of ImmutableList
@@ -117,7 +117,7 @@ class ImmutableList(Generic[T]):
 
         return ImmutableList(fn(self.head), self.tail.map(fn))
 
-    def filter(self, fn: Callable[[T], bool]) -> 'ImmutableList[T]':
+    def filter(self, fn: Callable[[Optional[T]], bool]) -> 'ImmutableList[T]':
         """
         Returns new ImmutableList with only this elements that passed
         info argument returns True
@@ -136,7 +136,7 @@ class ImmutableList(Generic[T]):
 
         return self.tail.filter(fn)
 
-    def find(self, fn: Callable[[T], bool]) -> T:
+    def find(self, fn: Callable[[Optional[T]], bool]) -> Optional[T]:
         """
         Returns new first element of ImmutableList that passed
         info argument returns True
