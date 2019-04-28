@@ -1,9 +1,17 @@
+import pytest
+
 from pymonet.immutable_list import ImmutableList
 
 
-def test():
+def test_eq():
     assert ImmutableList(1).length == 1
     assert ImmutableList(1).unshift(0).length == 2
+
+
+def test_immutable():
+    lst = ImmutableList(1)
+    lst2 = lst.append(2)
+    assert lst is not lst2
 
 
 def test_to_list():
@@ -30,6 +38,11 @@ def test_plus_operator():
     assert ImmutableList.of(1, 2) + ImmutableList.of(3, 4) == ImmutableList.of(1, 2, 3, 4)
 
 
+def test_plus_operator_exception():
+    with pytest.raises(ValueError):
+        ImmutableList.of(0) + [1]
+
+
 def test_find_positive():
     assert ImmutableList.of(1, 2, 3, 4).find(lambda item: item % 2 == 0) == 2
 
@@ -40,3 +53,7 @@ def test_find_negative():
 
 def test_unshift():
     assert ImmutableList.of(1, 2).unshift(0) == ImmutableList.of(0, 1, 2)
+
+
+def test_append():
+    assert ImmutableList.of(1, 2).append(3) == ImmutableList.of(1, 2, 3)

@@ -21,7 +21,7 @@ class ImmutableList(Generic[T]):
             and self.tail == other.tail\
             and self.is_empty == other.is_empty
 
-    def __str__(self) -> str:
+    def __str__(self) -> str:  # pragma: no cover
         return 'ImmutableList{}'.format(self.to_list())
 
     def __add__(self, other: 'ImmutableList[T]') -> 'ImmutableList[T]':
@@ -34,7 +34,7 @@ class ImmutableList(Generic[T]):
         :returns: Maybe[B | None]
         """
         if not isinstance(other, ImmutableList):
-            raise ValueError()
+            raise ValueError('ImmutableList: you can not add any other instace than ImmutableList')
 
         if self.tail is None:
             return ImmutableList(self.head, other)
@@ -48,6 +48,7 @@ class ImmutableList(Generic[T]):
     def of(cls, head: T, *elements) -> 'ImmutableList[T]':
         if len(elements) == 0:
             return ImmutableList(head)
+
         return ImmutableList(
             head,
             ImmutableList.of(elements[0], *elements[1:])
@@ -79,13 +80,7 @@ class ImmutableList(Generic[T]):
         :type fn: A
         :returns: ImmutableList[A]
         """
-        def acc(element, head, tail):
-            if tail is None:
-                return ImmutableList(head, ImmutableList(element))
-
-            return ImmutableList(element, acc(head, tail))
-
-        return acc(new_element, self.head, self.tail)
+        return self + ImmutableList(new_element)
 
     def unshift(self, new_element: T) -> 'ImmutableList[T]':
         """
