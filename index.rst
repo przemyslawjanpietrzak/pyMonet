@@ -30,5 +30,6 @@ High abstract python library for functional programming. Contains algebraic data
     ./docs/try
     ./docs/task
     ./docs/validation
+    ./docs/immutable_list
     ./docs/semigroups
     ./docs/utils
