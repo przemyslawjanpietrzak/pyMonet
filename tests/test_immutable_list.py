@@ -35,7 +35,7 @@ def test_find_positive():
 
 
 def test_find_negative():
-    assert ImmutableList.of(1, 2, 3, 4).find(lambda item: item < 0) == None
+    assert ImmutableList.of(1, 2, 3, 4).find(lambda item: item < 0) is None
 
 
 def test_unshift():

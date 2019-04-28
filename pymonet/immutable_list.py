@@ -9,6 +9,7 @@ class ImmutableList(Generic[T]):
     """
     Immutable list is data structure that doesn't allow to mutate instances
     """
+
     def __init__(self, head: T=None, tail: 'ImmutableList[T]'=None, is_empty: bool=False) -> None:
         self.head = head
         self.tail = tail
@@ -95,7 +96,7 @@ class ImmutableList(Generic[T]):
         :type fn: A
         :returns: ImmutableList[A]
         """
-        return ImmutableList(new_element) + self;
+        return ImmutableList(new_element) + self
 
     def map(self, fn: Callable[[Optional[T]], U]) -> 'ImmutableList[U]':
         """
