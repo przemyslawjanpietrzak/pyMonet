@@ -10,7 +10,7 @@ class ImmutableList(Generic[T]):
     Immutable list is data structure that doesn't allow to mutate instances
     """
 
-    def __init__(self, head: T=None, tail: 'ImmutableList[T]'=None, is_empty: bool=False) -> None:
+    def __init__(self, head: T = None, tail: 'ImmutableList[T]' = None, is_empty: bool = False) -> None:
         self.head = head
         self.tail = tail
         self.is_empty = is_empty
