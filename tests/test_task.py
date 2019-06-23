@@ -150,13 +150,13 @@ def test_task_resolved_fork_should_applied_bind_on_his_result():
 
 
 def test_task_of_should_applied_only_resolve_callback(task_spy):
-    assert Task.of(42).fork(task_spy.rejected, task_spy.resolved) is 42
+    assert Task.of(42).fork(task_spy.rejected, task_spy.resolved) == 42
     assert task_spy.resolved.call_count == 1
     assert task_spy.rejected.call_count == 0
 
 
 def test_task_of_should_applied_only_reject_callback(task_spy):
-    assert Task.reject(42).fork(task_spy.rejected, task_spy.resolved) is 42
+    assert Task.reject(42).fork(task_spy.rejected, task_spy.resolved) == 42
     assert task_spy.resolved.call_count == 0
     assert task_spy.rejected.call_count == 1
 
