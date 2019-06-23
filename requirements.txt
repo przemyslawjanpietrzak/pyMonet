@@ -1,15 +1,15 @@
-pytest==3.2.3
-pytest-mock==1.6.3
+pytest==4.6.3
+pytest-mock==1.10.4
 hypothesis==3.36.0
 
-mypy==0.600
+mypy==0.710
 
-flake8==3.5.0
+flake8==3.7.7
 pydocstyle==2.1.1
 
-pytest-cov==2.5.1
-coverage==4.4.2
-coveralls==1.2
+pytest-cov==2.7.1
+coverage==4.5.3
+coveralls==1.8.1
 
-sphinx==1.6.5
-sphinx_rtd_theme==0.2.4
+sphinx==2.1.2
+sphinx_rtd_theme==0.4.3
