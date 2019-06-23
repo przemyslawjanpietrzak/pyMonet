@@ -2,8 +2,7 @@ language: python
 cache: pip
 python:
   - "3.6"
-  - "3.7-dev"
-  - "nightly"
+  - "3.7"
 install:
   - make install
 script:
