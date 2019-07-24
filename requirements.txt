@@ -1,6 +1,6 @@
 pytest==4.6.3
 pytest-mock==1.10.4
-hypothesis==3.36.0
+hypothesis==4.28.2
 
 mypy==0.710
 

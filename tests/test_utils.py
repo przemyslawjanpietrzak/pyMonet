@@ -58,7 +58,7 @@ def test_pipe_should_appield_functions_from_first_to_last(integer):
 
 
 @given(
-    lists(elements=integers(), min_size=1, average_size=100, max_size=1000, unique=True),
+    lists(elements=integers(), min_size=1, max_size=1000, unique=True),
     integers()
 )
 def test_find_should_return_none_when_item_is_not_in_collection_otherwise_should_return_item(lst, integer):
