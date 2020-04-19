@@ -4,9 +4,9 @@ from pymonet.immutable_list import ImmutableList
 
 
 def test_eq():
-    assert len(ImmutableList()) == 0
-    assert len(ImmutableList(1)) == 1
-    assert len(ImmutableList(1).unshift(0)) == 2
+    assert len(ImmutableList.empty()) == 0
+    assert len(ImmutableList.of(1)) == 1
+    assert len(ImmutableList.of(1).unshift(0)) == 2
 
 
 def test_immutable():
@@ -58,3 +58,15 @@ def test_unshift():
 
 def test_append():
     assert ImmutableList.of(1, 2).append(3) == ImmutableList.of(1, 2, 3)
+
+def test_reduce_addition():
+    assert ImmutableList.empty().reduce(lambda acc, curr: acc + curr, 0) == 0
+    assert ImmutableList.of(1).reduce(lambda acc, curr: acc + curr, 0) == 1
+    assert ImmutableList.of(1, 2).reduce(lambda acc, curr: acc + curr, 0) == 3
+    assert ImmutableList.of(1, 2, 3).reduce(lambda acc, curr: acc + curr, 0) == 6
+
+def test_reduce_multiplication():
+    assert ImmutableList.empty().reduce(lambda acc, curr: acc * curr, 1) == 1
+    assert ImmutableList.of(1).reduce(lambda acc, curr: acc * curr, 1) == 1
+    assert ImmutableList.of(1, 2).reduce(lambda acc, curr: acc * curr, 1) == 2
+    assert ImmutableList.of(1, 2, 3).reduce(lambda acc, curr: acc * curr, 1) == 6
