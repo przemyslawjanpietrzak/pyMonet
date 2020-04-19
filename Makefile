@@ -5,7 +5,7 @@ test:
 	pytest ./tests
 
 test-with-coverage:
-	py.test ./tests --cov=./pymonet/
+	py.test tests --cov=pymonet
 
 lint:
 	flake8 ./pymonet ./tests ./testers --max-line-length=120
