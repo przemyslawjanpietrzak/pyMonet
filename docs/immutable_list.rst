@@ -7,7 +7,7 @@ ImmutableList
 
     from pymonet.immutable_list import ImmutableList
     from pymonet.utils import increase
-=
+
     lst = ImmutableList.of(1, 2, 3)
 
     lst.map(increase) # ImmutableList.of(2, 3, 4)
@@ -17,4 +17,4 @@ ImmutableList
 
 
 .. autoclass:: pymonet.immutable_list.ImmutableList
-    :members: __add__, of, empty, to_list, length, append, map, filter, unshift, find
+    :members: __add__, of, empty, to_list, length, append, map, filter, unshift, find, reduce

@@ -30,6 +30,8 @@ A semigroup generalizes a monoid in that there might not exist an identity eleme
 It also (originally) generalized a group (a monoid with all inverses) to a type where every element did not have to have an inverse, this the name semigroup.
 ### [Lazy](#lazy-1)
 Lazy are data-types that store functions. Stored function will not be called until call of bind method
+### [ImmutableList](#immutable-list-1)
+Implementation of list data structures with immutable methods
 ### [Task](#task-1)
 Task are data-type for handle execution of functions (in lazy way) transform results of this function and handle errors.
 ### [Try](#try-1)
@@ -220,6 +222,18 @@ value1 = lazy.get()
 value2 = lazy.get()
 print(value1, value2)
 # 42, 42
+```
+
+## ImmutableList
+Implementation of list data structures with immutable methods
+```python
+lst = ImmutableList.of(1, 2, 3)
+
+lst.map(increase) # ImmutableList.of(2, 3, 4)
+lst.filter(lambda item: item % 2 == 0) # ImmutableList.of(2)
+lst.find(lambda item: item % 2 == 0) # 2
+lst.map(increase) # ImmutableList.of(2, 3, 4)
+lst.reduce(lambda acc, curr: acc + curr, 0) # 6
 ```
 
 
