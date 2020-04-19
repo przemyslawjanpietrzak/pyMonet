@@ -138,6 +138,9 @@ class ImmutableList(Generic[T]):
         :type fn: Function(A) -> bool
         :returns: A
         """
+        if self.head is None:
+            return None
+
         if self.tail is None:
             return self.head if fn(self.head) else None
 
@@ -146,7 +149,7 @@ class ImmutableList(Generic[T]):
 
         return self.tail.find(fn)
 
-    def reduce(self, fn: Callable[[U, T], U]) -> U:
+    def reduce(self, fn: Callable[[U, T], U], acc: U) -> U:
         """
         Method executes a reducer function
         on each element of the array, resulting in a single output value.
@@ -155,5 +158,11 @@ class ImmutableList(Generic[T]):
         :type fn: Function(A, B) -> A
         :returns: A
         """
+        if self.head is None:
+            return acc
 
-        return self.tail.find(fn)
+        if self.tail is None:
+            return fn(self.head, acc)
+
+        
+        return self.tail.reduce(fn, fn(acc, self.head))
