@@ -4,8 +4,9 @@ from pymonet.immutable_list import ImmutableList
 
 
 def test_eq():
-    assert ImmutableList(1).length == 1
-    assert ImmutableList(1).unshift(0).length == 2
+    assert len(ImmutableList()) == 0
+    assert len(ImmutableList(1)) == 1
+    assert len(ImmutableList(1).unshift(0)) == 2
 
 
 def test_immutable():

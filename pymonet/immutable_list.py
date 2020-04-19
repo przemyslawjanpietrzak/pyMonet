@@ -44,6 +44,15 @@ class ImmutableList(Generic[T]):
             self.tail.__add__(other)
         )
 
+    def __len__(self):
+        if self.head is None:
+            return 0
+
+        if self.tail is None:
+            return 1
+
+        return len(self.tail) + 1
+
     @classmethod
     def of(cls, head: T, *elements) -> 'ImmutableList[T]':
         if len(elements) == 0:
@@ -58,12 +67,6 @@ class ImmutableList(Generic[T]):
     def empty(cls):
         return ImmutableList(is_empty=True)
 
-    @property
-    def length(self):
-        if self.tail is None:
-            return 1
-
-        return self.tail.length + 1
 
     def to_list(self):
         if self.tail is None:
@@ -128,7 +131,7 @@ class ImmutableList(Generic[T]):
 
     def find(self, fn: Callable[[Optional[T]], bool]) -> Optional[T]:
         """
-        Returns new first element of ImmutableList that passed
+        Returns first element of ImmutableList that passed
         info argument returns True
 
         :param fn: function to call with ImmutableList value
@@ -140,5 +143,17 @@ class ImmutableList(Generic[T]):
 
         if fn(self.head):
             return self.head
+
+        return self.tail.find(fn)
+
+    def reduce(self, fn: Callable[[U, T], U]) -> U:
+        """
+        Method executes a reducer function
+        on each element of the array, resulting in a single output value.
+
+        :param fn: function to call with ImmutableList value
+        :type fn: Function(A, B) -> A
+        :returns: A
+        """
 
         return self.tail.find(fn)
