@@ -67,7 +67,6 @@ class ImmutableList(Generic[T]):
     def empty(cls):
         return ImmutableList(is_empty=True)
 
-
     def to_list(self):
         if self.tail is None:
             return [self.head]
@@ -162,7 +161,6 @@ class ImmutableList(Generic[T]):
             return acc
 
         if self.tail is None:
-            return fn(self.head, acc)
+            return fn(acc, self.head)
 
-        
         return self.tail.reduce(fn, fn(acc, self.head))

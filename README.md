@@ -1,6 +1,6 @@
 # pyMonet
 
-[![Build Status](https://travis-ci.org/przemyslawjanpietrzak/pyMonet.svg?branch=develop)](https://travis-ci.org/przemyslawjanpietrzak/pyMonet)
+[![Build Status](https://github.com/przemyslawjanpietrzak/pyMonet/workflows/Python%20package/badge.svg)](https://github.com/przemyslawjanpietrzak/pyMonet/workflows/ci/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/przemyslawjanpietrzak/pyMonet/badge.svg?branch=develop)](https://coveralls.io/github/przemyslawjanpietrzak/pyMonet?branch=develop)
 [![Documentation Status](https://readthedocs.org/projects/pymonet/badge/?version=develop)](https://pymonet.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/pymonet.svg)](https://badge.fury.io/py/pymonet)
